@@ -3558,13 +3558,14 @@
         <button class="cloud-btn cloud-btn-primary" onclick="saveSupabaseConfig()">💾 Salvar credenciais</button>
       </div>
 
-      <div class="cloud-card" id="sbAuthCard" style="display:none">
+      <div class="cloud-card" id="sbAuthCard">
         <div class="cloud-section-title">👤 Login / Conta</div>
         <div id="sbUserInfo" style="font-size:.8rem;color:var(--muted);margin-bottom:10px"></div>
         <input class="cloud-input" id="sbEmail" placeholder="seu@email.com" type="email"/>
         <input class="cloud-input" id="sbPassword" placeholder="senha" type="password"/>
         <button class="cloud-btn cloud-btn-primary" id="sbLoginBtn" onclick="supabaseLogin()">🔑 Entrar</button>
         <button class="cloud-btn cloud-btn-danger" id="sbLogoutBtn" style="display:none" onclick="supabaseLogout()">Sair da conta</button>
+        <div id="sbLoginStatus" style="display:none;margin-top:8px;padding:8px 10px;border-radius:8px;font-size:.78rem;font-weight:600"></div>
       </div>
 
       <div id="sbSyncCard" style="display:none">
@@ -8733,7 +8734,7 @@ function refreshCloudUI() {
   const logoutBtn= document.getElementById('sbLogoutBtn');
   const userInfo = document.getElementById('sbUserInfo');
 
-  if (authCard) authCard.style.display = hasCfg ? 'block' : 'none';
+  if (authCard) authCard.style.display = 'block'; // sempre visível
 
   if (_sbUser) {
     if (badge)    { badge.textContent = '● Conectado'; badge.className = 'cloud-badge connected'; }
@@ -8753,21 +8754,45 @@ function refreshCloudUI() {
 }
 
 // ── AUTH ────────────────────────────────────
+function setLoginStatus(msg, type) {
+  const el = document.getElementById('sbLoginStatus');
+  if (!el) return;
+  el.style.display = 'block';
+  el.style.background = type === 'err' ? '#7f1d1d' : type === 'ok' ? '#14532d' : '#1e3a5f';
+  el.style.color = '#fff';
+  el.textContent = msg;
+}
+
 async function supabaseLogin() {
-  if (!_sbClient) { setSbStatus('Salve as credenciais primeiro.', 'err'); return; }
+  // Se _sbClient não existe, tenta inicializar com credenciais salvas
+  if (!_sbClient) {
+    try {
+      const cfg = JSON.parse(localStorage.getItem(SB_CONFIG_KEY) || '{}');
+      if (cfg.url && cfg.key) {
+        initSupabase(cfg.url, cfg.key);
+        await new Promise(r => setTimeout(r, 800));
+      }
+    } catch(e) {}
+  }
+  if (!_sbClient) {
+    setLoginStatus('❌ Salve as credenciais (URL + Chave) primeiro.', 'err');
+    return;
+  }
   const email    = document.getElementById('sbEmail')?.value.trim();
   const password = document.getElementById('sbPassword')?.value;
-  if (!email || !email.includes('@')) { setSbStatus('Digite um e-mail válido.', 'err'); return; }
-  if (!password || password.length < 6) { setSbStatus('Digite a senha (mínimo 6 caracteres).', 'err'); return; }
-  setSbStatus('Entrando…', 'info');
+  if (!email || !email.includes('@')) { setLoginStatus('❌ Digite um e-mail válido.', 'err'); return; }
+  if (!password || password.length < 6) { setLoginStatus('❌ Senha precisa ter mínimo 6 caracteres.', 'err'); return; }
+  setLoginStatus('⏳ Entrando…', 'info');
   try {
     const { data, error } = await _sbClient.auth.signInWithPassword({ email, password });
     if (error) throw error;
     _sbUser = data.user;
     refreshCloudUI();
-    setSbStatus('✅ Login realizado com sucesso!', 'ok');
+    setLoginStatus('✅ Login realizado com sucesso!', 'ok');
+    setSbStatus('✅ Conectado como ' + (_sbUser.email || ''), 'ok');
   } catch(e) {
-    setSbStatus('❌ ' + (e.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : e.message), 'err');
+    const msg = e.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : e.message;
+    setLoginStatus('❌ ' + msg, 'err');
   }
 }
 
