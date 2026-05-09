@@ -1515,7 +1515,31 @@
   }
   .dd-goto-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
 
-  /* ── LIGHT THEME ── */
+  
+/* ── WEEKLY SUMMARY CARD ── */
+.weekly-summary-card {
+  background: var(--card); border-radius: 14px; padding: 14px 16px;
+  margin-bottom: 14px; border: 1px solid rgba(255,255,255,.07);
+}
+.ws-title { font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:12px; }
+.ws-grid  { display:grid;grid-template-columns:repeat(3,1fr);gap:10px; }
+.ws-item  { text-align:center; }
+.ws-val   { display:block;font-size:1.2rem;font-weight:900; }
+.ws-label { font-size:.62rem;color:var(--muted); }
+
+/* ── HEALTH PANEL ── */
+.health-panel {
+  background: var(--card); border-radius: 14px; padding: 14px 16px;
+  margin-bottom: 14px; border: 1px solid rgba(248,113,113,.2);
+}
+.hp-title { font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#f87171;margin-bottom:12px; }
+.hp-grid  { display:grid;grid-template-columns:repeat(2,1fr);gap:10px; }
+.hp-item  { background:var(--card2);border-radius:10px;padding:10px;text-align:center; }
+.hp-val   { display:block;font-size:1.3rem;font-weight:900; }
+.hp-label { display:block;font-size:.62rem;color:var(--muted);margin:2px 0; }
+.hp-hint  { font-size:.6rem;color:var(--muted);font-style:italic; }
+
+/* ── LIGHT THEME ── */
   body.light {
     --bg: #f0f0f5;
     --card: #ffffff;
@@ -3413,6 +3437,9 @@
     <strong>Leite:</strong> use leite em pó desnatado (30g = 250ml reconstituído) — menos gordura saturada que integral.
   </div>
 
+  <!-- HEALTH PANEL -->
+  <div id="healthPanel" style="margin-top:4px"></div>
+
   <!-- TOGGLE DIA TREINO / DESCANSO -->
   <div class="diet-section-title">📋 Plano alimentar</div>
   <div class="diet-day-toggle">
@@ -3456,6 +3483,7 @@
     <div class="meal-progress-bar" id="mealProgressBar"></div>
   </div>
   <div class="meal-progress-label" id="mealProgressLabel">0/6 refeições registradas</div>
+  <div id="dietKcalProgress" style="margin-bottom:10px"></div>
 
   <!-- WATER TRACKER -->
   <div class="water-tracker-wrap">
@@ -3679,6 +3707,8 @@
 
 <!-- ===================== DASHBOARD / PROJEÇÃO ===================== -->
 <div class="tab-content" id="tab-g">
+  <!-- WEEKLY SUMMARY -->
+  <div id="weeklySummaryCard"></div>
 
   <!-- HOJE -->
   <div class="dash-section" id="today-section">
@@ -6209,6 +6239,8 @@ function saveBioEntry() {
    'bioProtein','bioBone'].forEach(id => document.getElementById(id).value = '');
 
   renderBioTab();
+  recalcTargetsByWeight(entry.weight, entry.metab);
+  autoSync();
   showToast('📊 Medição registrada!');
 }
 
@@ -6948,10 +6980,14 @@ function saveMeal(key) {
     const hhmm = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
     all[date][key] = val;
     all[date][key + '_ts'] = hhmm;
+    // save kcal if filled
+    const kcalEl = document.getElementById('ml-kcal-' + key);
+    if (kcalEl && kcalEl.value) all[date][key + '_kcal'] = parseInt(kcalEl.value) || 0;
     localStorage.setItem(DIET_LOG_KEY, JSON.stringify(all));
     renderMealCards();
     renderDietLogHistory();
     updateHeaderStats();
+    autoSync();
     showToast('✅ Refeição registrada!');
   } catch(e) { showToast('Erro ao salvar!'); }
 }
@@ -7003,6 +7039,11 @@ function renderMealCards() {
              <button class="mcs-del-btn" onclick="deleteMeal('${m.key}')">🗑</button>
            </div>`
         : `<textarea class="mcs-textarea" id="ml-${m.key}" rows="2" placeholder="${m.placeholder}"></textarea>
+           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+             <input type="number" id="ml-kcal-${m.key}" min="0" max="2000" placeholder="kcal (opcional)"
+               style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);font-size:.82rem;outline:none"/>
+             <span style="font-size:.72rem;color:var(--muted)">kcal</span>
+           </div>
            <button class="mcs-save-btn" onclick="saveMeal('${m.key}')">✅ Registrar ${m.name}</button>`
       }
     </div>`;
@@ -7010,6 +7051,8 @@ function renderMealCards() {
 
   container.innerHTML = cards;
 
+  renderDietKcalProgress();
+  renderHealthPanel();
   // Progress
   const pct = Math.round(doneCount / MEALS_DEF.length * 100);
   const bar = document.getElementById('mealProgressBar');
@@ -7075,6 +7118,7 @@ function addWater(ml) {
   log[today].entries.push({ ml, time: hhmm });
   saveWaterLog(log);
   renderWaterTracker();
+  autoSync();
 }
 
 function removeWater() {
@@ -8805,6 +8849,287 @@ function copySql() {
     const el = document.getElementById('sqlCode');
     if (el) { el.select(); document.execCommand('copy'); showToast('SQL copiado!'); }
   });
+}
+
+
+// ═══════════════════════════════════════════════════════════
+//  FEATURE 1 — AUTO SYNC
+// ═══════════════════════════════════════════════════════════
+let _syncDebounce = null;
+function autoSync() {
+  if (!_sbClient || !_sbUser) return;
+  clearTimeout(_syncDebounce);
+  _syncDebounce = setTimeout(async () => {
+    updateSyncDot('syncing');
+    try {
+      const rows = BACKUP_KEYS.map(k => {
+        const v = localStorage.getItem(k);
+        return v !== null ? { user_id: _sbUser.id, key: k, value: v, updated_at: new Date().toISOString() } : null;
+      }).filter(Boolean);
+      const { error } = await _sbClient.from('tatame_store').upsert(rows, { onConflict: 'user_id,key' });
+      if (error) throw error;
+      updateSyncDot('synced');
+    } catch(e) {
+      updateSyncDot('error');
+    }
+  }, 1500); // debounce 1.5s para não sobrecarregar
+}
+
+// ═══════════════════════════════════════════════════════════
+//  FEATURE 2 — WEIGHT-BASED TARGET RECALCULATION
+// ═══════════════════════════════════════════════════════════
+const PROFILE_KEY = 'projeto_tatame_profile';
+
+function getProfile() {
+  try { return JSON.parse(localStorage.getItem(PROFILE_KEY) || '{}'); } catch(e) { return {}; }
+}
+
+function recalcTargetsByWeight(weight, tmb) {
+  if (!weight || isNaN(weight)) return;
+  const profile = getProfile();
+  const height = profile.height || 170;
+  const age    = profile.age    || 30;
+  const sex    = profile.sex    || 'm';
+
+  // TMB Mifflin-St Jeor
+  const calcTMB = tmb && !isNaN(tmb) ? tmb :
+    (sex === 'm' ? 10*weight + 6.25*height - 5*age + 5 : 10*weight + 6.25*height - 5*age - 161);
+  const tdee   = calcTMB * 1.55; // moderadamente ativo
+  const deficit = 400;
+
+  const trainKcal = Math.round(tdee - deficit);
+  const restKcal  = Math.round(tdee - deficit - 300);
+  const trainProt = Math.round(weight * 2.2);
+  const restProt  = Math.round(weight * 2.0);
+  const trainFat  = Math.round(trainKcal * 0.25 / 9);
+  const restFat   = Math.round(restKcal  * 0.25 / 9);
+  const trainCarb = Math.round((trainKcal - trainProt*4 - trainFat*9) / 4);
+  const restCarb  = Math.round((restKcal  - restProt*4  - restFat*9)  / 4);
+
+  DIET_TARGETS.train = { kcal: trainKcal, prot: trainProt, carb: Math.max(50, trainCarb), fat: trainFat };
+  DIET_TARGETS.rest  = { kcal: restKcal,  prot: restProt,  carb: Math.max(50, restCarb),  fat: restFat  };
+
+  // Atualiza macros na tela se a aba dieta estiver aberta
+  if (typeof renderDietMacros === 'function') renderDietMacros();
+
+  showToast(`🎯 Metas atualizadas! Treino: ${trainKcal} kcal · Descanso: ${restKcal} kcal`);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  FEATURE 3 — DIET KCAL PROGRESS BAR (daily total)
+// ═══════════════════════════════════════════════════════════
+function renderDietKcalProgress() {
+  const container = document.getElementById('dietKcalProgress');
+  if (!container) return;
+  const date = document.getElementById('dietLogDate')?.value || todayStr();
+  const log  = getDietLogForDate(date);
+  const mealKeys = ['cafe','lanche1','almoco','pre','pos','jantar'];
+  let totalKcal = 0;
+  mealKeys.forEach(k => { if (log[k + '_kcal']) totalKcal += log[k + '_kcal']; });
+
+  const target = DIET_TARGETS[currentDietDay]?.kcal || 1950;
+  const pct    = Math.min(100, Math.round(totalKcal / target * 100));
+  const color  = pct > 105 ? '#f87171' : pct >= 80 ? '#81c784' : '#40c4ff';
+
+  container.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <span style="font-size:.78rem;font-weight:800;color:${color}">🔥 ${totalKcal} kcal registradas</span>
+      <span style="font-size:.72rem;color:var(--muted)">meta: ${target} kcal (${pct}%)</span>
+    </div>
+    <div style="height:8px;background:rgba(255,255,255,.08);border-radius:8px;overflow:hidden">
+      <div style="height:100%;width:${pct}%;background:${color};border-radius:8px;transition:width .4s ease"></div>
+    </div>
+    ${pct > 105 ? '<div style="font-size:.7rem;color:#f87171;margin-top:4px">⚠️ Acima da meta calórica</div>' : ''}`;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  FEATURE 4 — DIET STREAK
+// ═══════════════════════════════════════════════════════════
+function calcDietStreak() {
+  try {
+    const all = JSON.parse(localStorage.getItem(DIET_LOG_KEY) || '{}');
+    const mealKeys = ['cafe','lanche1','almoco','pre','pos','jantar'];
+    let streak = 0;
+    let d = brDate();
+    for (let i = 0; i < 365; i++) {
+      const dateStr = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      const entry   = all[dateStr] || {};
+      const count   = mealKeys.filter(k => entry[k]).length;
+      if (count >= 4) {
+        streak++;
+        d = new Date(d.getTime() - 86400000);
+      } else if (i === 0) {
+        // hoje não registrou ainda — não quebra streak
+        d = new Date(d.getTime() - 86400000);
+      } else {
+        break;
+      }
+    }
+    return streak;
+  } catch(e) { return 0; }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  FEATURE 7 — WEEKLY SUMMARY CARD
+// ═══════════════════════════════════════════════════════════
+function renderWeeklySummaryCard() {
+  const el = document.getElementById('weeklySummaryCard');
+  if (!el) return;
+
+  const weekStart = getWeekStart();
+  const weekEnd   = (() => {
+    const d = new Date(weekStart + 'T12:00:00');
+    d.setDate(d.getDate() + 6);
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  })();
+
+  const gymSess = getSessions().filter(s => s.date >= weekStart && s.date <= weekEnd);
+  const jjSess  = (typeof getJJSessions === 'function' ? getJJSessions() : []).filter(s => s.date >= weekStart && s.date <= weekEnd);
+  const total   = gymSess.length + jjSess.length;
+  const goal    = getWeeklyGoal();
+
+  // Diet compliance
+  const all = JSON.parse(localStorage.getItem(DIET_LOG_KEY) || '{}');
+  const mealKeys = ['cafe','lanche1','almoco','pre','pos','jantar'];
+  let dietDays = 0, totalKcalWeek = 0, kcalDays = 0;
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart + 'T12:00:00');
+    d.setDate(d.getDate() + i);
+    const ds = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    const entry = all[ds] || {};
+    const count = mealKeys.filter(k => entry[k]).length;
+    if (count >= 4) dietDays++;
+    const dayKcal = mealKeys.reduce((sum,k) => sum + (entry[k+'_kcal'] || 0), 0);
+    if (dayKcal > 0) { totalKcalWeek += dayKcal; kcalDays++; }
+  }
+  const avgKcal = kcalDays ? Math.round(totalKcalWeek / kcalDays) : 0;
+
+  // Water avg
+  const wlog = JSON.parse(localStorage.getItem(WATER_KEY) || '{}');
+  let wTotal = 0, wDays = 0;
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart + 'T12:00:00');
+    d.setDate(d.getDate() + i);
+    const ds = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    const ml = (wlog[ds] || {}).ml || 0;
+    if (ml > 0) { wTotal += ml; wDays++; }
+  }
+  const avgWater = wDays ? Math.round(wTotal / wDays) : 0;
+
+  // Weight change
+  const bios = getBioEntries().filter(e => e.date >= weekStart && e.date <= weekEnd);
+  const lastBio = getBioEntries().slice(-1)[0];
+  const prevBio = getBioEntries().slice(-2, -1)[0];
+  const weightDiff = (lastBio && prevBio) ? (lastBio.weight - prevBio.weight).toFixed(1) : null;
+
+  const trainColor = total >= goal ? '#81c784' : total >= goal*0.6 ? '#fbbf24' : '#f87171';
+  const dietColor  = dietDays >= 5 ? '#81c784' : dietDays >= 3 ? '#fbbf24' : '#f87171';
+
+  el.innerHTML = `
+    <div class="weekly-summary-card">
+      <div class="ws-title">📅 Resumo da Semana</div>
+      <div class="ws-grid">
+        <div class="ws-item">
+          <span class="ws-val" style="color:${trainColor}">${total}/${goal}</span>
+          <span class="ws-label">treinos</span>
+        </div>
+        <div class="ws-item">
+          <span class="ws-val" style="color:${dietColor}">${dietDays}/7</span>
+          <span class="ws-label">dias dieta ok</span>
+        </div>
+        <div class="ws-item">
+          <span class="ws-val" style="color:#40c4ff">${avgWater >= 1000 ? (avgWater/1000).toFixed(1)+'L' : avgWater+'ml'}</span>
+          <span class="ws-label">água/dia</span>
+        </div>
+        ${avgKcal ? `<div class="ws-item"><span class="ws-val" style="color:var(--accent)">${avgKcal}</span><span class="ws-label">kcal/dia</span></div>` : ''}
+        ${weightDiff !== null ? `<div class="ws-item"><span class="ws-val" style="color:${parseFloat(weightDiff)<0?'#81c784':'#f87171'}">${parseFloat(weightDiff)>0?'+':''}${weightDiff}kg</span><span class="ws-label">variação peso</span></div>` : ''}
+        <div class="ws-item">
+          <span class="ws-val" style="color:#a855f7">🥋 ${calcDietStreak()}</span>
+          <span class="ws-label">streak dieta</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  FEATURE 8 — HEALTH PANEL (LDL Focus)
+// ═══════════════════════════════════════════════════════════
+function renderHealthPanel() {
+  const el = document.getElementById('healthPanel');
+  if (!el) return;
+
+  const all = JSON.parse(localStorage.getItem(DIET_LOG_KEY) || '{}');
+  const mealKeys = ['cafe','lanche1','almoco','pre','pos','jantar'];
+  const fishWords = ['sardinha','atum','salmão','salmon','peixe','tilapia','tilápia','bacalhau'];
+  const fiberWords = ['aveia','feijão','lentilha','feijao','arroz integral','salada','brocolis','brócolis','cenoura','maçã','banana'];
+  const badFatWords = ['queijo gordo','manteiga','fritura','frito','bacon','embutido','salsicha','linguiça'];
+
+  let fishDaysWeek = 0, fiberDays = 0, badFatDays = 0, completeDays = 0;
+  let waterGoalDays = 0;
+  const wlog = JSON.parse(localStorage.getItem(WATER_KEY) || '{}');
+
+  const weekStart = getWeekStart();
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart + 'T12:00:00');
+    d.setDate(d.getDate() + i);
+    const ds = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    const entry = all[ds] || {};
+    const text  = mealKeys.map(k => (entry[k] || '').toLowerCase()).join(' ');
+    if (fishWords.some(w => text.includes(w)))   fishDaysWeek++;
+    if (fiberWords.some(w => text.includes(w)))  fiberDays++;
+    if (badFatWords.some(w => text.includes(w))) badFatDays++;
+    if (mealKeys.filter(k => entry[k]).length >= 4) completeDays++;
+    const ml = (wlog[ds] || {}).ml || 0;
+    if (ml >= 2500) waterGoalDays++;
+  }
+
+  // LDL risk score (lower = better)
+  let ldlScore = 50; // neutral start
+  ldlScore -= fishDaysWeek * 8;    // fish is great
+  ldlScore -= fiberDays * 5;       // fiber helps
+  ldlScore += badFatDays * 10;     // bad fats hurt
+  ldlScore -= waterGoalDays * 3;   // hydration helps
+  ldlScore = Math.max(0, Math.min(100, ldlScore));
+
+  const ldlColor = ldlScore < 30 ? '#81c784' : ldlScore < 60 ? '#fbbf24' : '#f87171';
+  const ldlLabel = ldlScore < 30 ? 'Ótimo controle' : ldlScore < 60 ? 'Atenção' : 'Alto risco';
+
+  el.innerHTML = `
+    <div class="health-panel">
+      <div class="hp-title">❤️ Painel de Saúde — LDL</div>
+      <div class="hp-grid">
+        <div class="hp-item">
+          <span class="hp-val" style="color:${fishDaysWeek>=3?'#81c784':'#f87171'}">${fishDaysWeek}/7</span>
+          <span class="hp-label">🐟 dias c/ peixe</span>
+          <span class="hp-hint">${fishDaysWeek>=3?'✅ meta atingida':'meta: 3-4x/sem'}</span>
+        </div>
+        <div class="hp-item">
+          <span class="hp-val" style="color:${fiberDays>=5?'#81c784':'#fbbf24'}">${fiberDays}/7</span>
+          <span class="hp-label">🌾 dias c/ fibra</span>
+          <span class="hp-hint">${fiberDays>=5?'✅ ótimo':'aveia, feijão, salada'}</span>
+        </div>
+        <div class="hp-item">
+          <span class="hp-val" style="color:${badFatDays===0?'#81c784':badFatDays<=2?'#fbbf24':'#f87171'}">${badFatDays}</span>
+          <span class="hp-label">⚠️ dias c/ gord. ruim</span>
+          <span class="hp-hint">${badFatDays===0?'✅ perfeito':'reduza queijo/frito'}</span>
+        </div>
+        <div class="hp-item">
+          <span class="hp-val" style="color:${waterGoalDays>=5?'#81c784':'#40c4ff'}">${waterGoalDays}/7</span>
+          <span class="hp-label">💧 dias 2,5L atingidos</span>
+          <span class="hp-hint">${waterGoalDays>=5?'✅ hidratado':'beba mais água'}</span>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:.78rem;font-weight:800;color:${ldlColor}">Índice LDL estimado esta semana</span>
+          <span style="font-size:.78rem;color:${ldlColor};font-weight:900">${ldlLabel}</span>
+        </div>
+        <div style="height:10px;background:rgba(255,255,255,.08);border-radius:8px;overflow:hidden">
+          <div style="height:100%;width:${ldlScore}%;background:linear-gradient(90deg,#81c784,#fbbf24,#f87171);border-radius:8px;transition:width .5s ease"></div>
+        </div>
+        <p style="font-size:.68rem;color:var(--muted);margin-top:6px;text-align:center">Baseado nos alimentos registrados esta semana. Não substitui exame médico.</p>
+      </div>
+    </div>`;
 }
 
 // ── AUTO INIT on load ────────────────────────
