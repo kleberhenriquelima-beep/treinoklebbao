@@ -3534,8 +3534,8 @@
         <div class="cloud-section-title">👤 Login / Conta</div>
         <div id="sbUserInfo" style="font-size:.8rem;color:var(--muted);margin-bottom:10px"></div>
         <input class="cloud-input" id="sbEmail" placeholder="seu@email.com" type="email"/>
-        <button class="cloud-btn cloud-btn-primary" id="sbLoginBtn" onclick="supabaseLogin()">🔗 Enviar Magic Link (sem senha)</button>
-        <p style="font-size:.7rem;color:var(--muted);text-align:center">Você receberá um link por e-mail para entrar. Sem senha necessária.</p>
+        <input class="cloud-input" id="sbPassword" placeholder="senha" type="password"/>
+        <button class="cloud-btn cloud-btn-primary" id="sbLoginBtn" onclick="supabaseLogin()">🔑 Entrar</button>
         <button class="cloud-btn cloud-btn-danger" id="sbLogoutBtn" style="display:none" onclick="supabaseLogout()">Sair da conta</button>
       </div>
 
@@ -8711,15 +8711,19 @@ function refreshCloudUI() {
 // ── AUTH ────────────────────────────────────
 async function supabaseLogin() {
   if (!_sbClient) { setSbStatus('Salve as credenciais primeiro.', 'err'); return; }
-  const email = document.getElementById('sbEmail')?.value.trim();
+  const email    = document.getElementById('sbEmail')?.value.trim();
+  const password = document.getElementById('sbPassword')?.value;
   if (!email || !email.includes('@')) { setSbStatus('Digite um e-mail válido.', 'err'); return; }
-  setSbStatus('Enviando magic link para ' + email + '…', 'info');
+  if (!password || password.length < 6) { setSbStatus('Digite a senha (mínimo 6 caracteres).', 'err'); return; }
+  setSbStatus('Entrando…', 'info');
   try {
-    const { error } = await _sbClient.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+    const { data, error } = await _sbClient.auth.signInWithPassword({ email, password });
     if (error) throw error;
-    setSbStatus('✅ Magic link enviado! Verifique seu e-mail e clique no link para entrar.', 'ok');
+    _sbUser = data.user;
+    refreshCloudUI();
+    setSbStatus('✅ Login realizado com sucesso!', 'ok');
   } catch(e) {
-    setSbStatus('❌ ' + e.message, 'err');
+    setSbStatus('❌ ' + (e.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : e.message), 'err');
   }
 }
 
