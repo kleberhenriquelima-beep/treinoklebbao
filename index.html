@@ -8652,15 +8652,28 @@ function loadSupabaseConfig() {
 
 function initSupabase(url, key) {
   try {
-    _sbClient = supabase.createClient(url, key);
+    _sbClient = supabase.createClient(url, key, {
+      auth: {
+        detectSessionInUrl: true,
+        persistSession: true,
+        autoRefreshToken: true
+      }
+    });
     _sbClient.auth.onAuthStateChange((event, session) => {
       _sbUser = session?.user || null;
       refreshCloudUI();
       updateSyncDot(_sbUser ? 'synced' : 'disconnected');
+      // Limpa o hash da URL após login para não expor o token
+      if (event === 'SIGNED_IN' && window.location.hash.includes('access_token')) {
+        history.replaceState(null, '', window.location.pathname);
+        setSbStatus('✅ Login realizado com sucesso!', 'ok');
+      }
     });
-    _sbClient.auth.getUser().then(({ data }) => {
-      _sbUser = data?.user || null;
+    // Tenta recuperar sessão existente (incluindo do hash da URL após magic link)
+    _sbClient.auth.getSession().then(({ data }) => {
+      _sbUser = data?.session?.user || null;
       refreshCloudUI();
+      if (_sbUser) updateSyncDot('synced');
     });
   } catch(e) {
     setSbStatus('❌ Erro ao conectar: ' + e.message, 'err');
@@ -8791,12 +8804,22 @@ function copySql() {
 }
 
 // ── AUTO INIT on load ────────────────────────
-(function() {
+// Aguarda o SDK carregar antes de iniciar
+function tryInitSupabase() {
   try {
     const cfg = JSON.parse(localStorage.getItem(SB_CONFIG_KEY) || '{}');
-    if (cfg.url && cfg.key && typeof supabase !== 'undefined') initSupabase(cfg.url, cfg.key);
+    if (cfg.url && cfg.key && typeof supabase !== 'undefined') {
+      initSupabase(cfg.url, cfg.key);
+    }
   } catch(e) {}
-})();
+}
+
+if (typeof supabase !== 'undefined') {
+  tryInitSupabase();
+} else {
+  // SDK ainda carregando — tenta após carregamento da página
+  window.addEventListener('load', tryInitSupabase);
+}
 </script>
 </body>
 </html>
