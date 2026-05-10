@@ -8557,15 +8557,7 @@ if (_dlDate) _dlDate.value = todayStr();
 </script>
 
 <!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.js" onerror="loadSupabaseFallback()"></script>
-<script>
-function loadSupabaseFallback() {
-  var s = document.createElement('script');
-  s.src = 'https://unpkg.com/@supabase/supabase-js@2.45.0/dist/umd/supabase.js';
-  s.onerror = function() { console.warn('Supabase SDK não carregou. Nuvem indisponível.'); };
-  document.head.appendChild(s);
-}
-</script>
+<!-- Supabase via fetch() nativo — sem SDK externo -->
 
 <script>
 // ═══════════════════════════════════════════════════════════
@@ -8605,8 +8597,8 @@ create policy "Usuário vê apenas seus dados"
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);`;
 
-let _sbClient = null;
-let _sbUser   = null;
+let _sbAuth = null; // { url, key, access_token, refresh_token, user_id, user_email, expires_at }
+const SB_SESSION_KEY = 'projeto_tatame_sbsession';
 
 // ── MODAL ──────────────────────────────────
 function openCloudModal() {
@@ -8685,9 +8677,9 @@ function saveSupabaseConfig() {
   if (!url || !key) { setSbStatus('Preencha a URL e a chave anon.', 'err'); return; }
   if (!url.startsWith('https://')) { setSbStatus('URL inválida — deve começar com https://', 'err'); return; }
   localStorage.setItem(SB_CONFIG_KEY, JSON.stringify({ url, key }));
-  initSupabase(url, key);
-  setSbStatus('✅ Credenciais salvas! Verificando conexão…', 'info');
-  setTimeout(refreshCloudUI, 1000);
+  if (_sbAuth) { _sbAuth.url = url; _sbAuth.key = key; }
+  setSbStatus('✅ Credenciais salvas! Faça o login abaixo.', 'ok');
+  refreshCloudUI();
 }
 
 function loadSupabaseConfig() {
@@ -8698,48 +8690,91 @@ function loadSupabaseConfig() {
       const keyEl = document.getElementById('sbKey');
       if (urlEl) urlEl.value = cfg.url;
       if (keyEl) keyEl.value = cfg.key;
-      if (!_sbClient) initSupabase(cfg.url, cfg.key);
+      if (!_sbAuth) _loadSbSession();
     }
   } catch(e) {}
 }
 
-function initSupabase(url, key) {
+// ── SUPABASE REST (sem SDK) ─────────────────────────────────────────
+async function _sbFetch(path, options) {
+  options = options || {};
+  const url = _sbAuth.url + path;
+  const headers = Object.assign({
+    'apikey': _sbAuth.key,
+    'Authorization': 'Bearer ' + _sbAuth.access_token,
+    'Content-Type': 'application/json'
+  }, options.headers || {});
+  const res = await fetch(url, Object.assign({}, options, { headers }));
+  const text = await res.text();
+  const data = text ? JSON.parse(text) : null;
+  if (!res.ok) throw new Error((data && (data.message || data.error_description || data.msg)) || ('HTTP ' + res.status));
+  return data;
+}
+
+function _saveSbSession() {
+  if (_sbAuth && _sbAuth.access_token) localStorage.setItem(SB_SESSION_KEY, JSON.stringify(_sbAuth));
+  else localStorage.removeItem(SB_SESSION_KEY);
+}
+
+function _loadSbSession() {
   try {
-    if (typeof supabase === 'undefined') {
-      setSbStatus('❌ SDK do Supabase não carregou. Verifique sua conexão e recarregue a página.', 'err');
-      setLoginStatus('❌ SDK não carregou. Recarregue a página.', 'err');
-      return;
+    const s = JSON.parse(localStorage.getItem(SB_SESSION_KEY) || 'null');
+    if (s && s.url && s.key && s.access_token) {
+      _sbAuth = s;
+      // Se expirou, tenta refresh
+      if (_sbAuth.expires_at && Date.now() > _sbAuth.expires_at - 60000) {
+        _sbRefreshSession().then(ok => { if (!ok) { _sbAuth = null; _saveSbSession(); } refreshCloudUI(); });
+      } else {
+        refreshCloudUI();
+        updateSyncDot('synced');
+      }
+      return true;
     }
-    _sbClient = supabase.createClient(url, key, {
-      auth: {
-        detectSessionInUrl: true,
-        persistSession: true,
-        autoRefreshToken: true
-      }
+  } catch(e) {}
+  return false;
+}
+
+async function _sbRefreshSession() {
+  if (!_sbAuth || !_sbAuth.refresh_token) return false;
+  try {
+    const res = await fetch(_sbAuth.url + '/auth/v1/token?grant_type=refresh_token', {
+      method: 'POST',
+      headers: { 'apikey': _sbAuth.key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: _sbAuth.refresh_token })
     });
-    _sbClient.auth.onAuthStateChange((event, session) => {
-      _sbUser = session?.user || null;
-      refreshCloudUI();
-      updateSyncDot(_sbUser ? 'synced' : 'disconnected');
-      // Limpa o hash da URL após login para não expor o token
-      if (event === 'SIGNED_IN' && window.location.hash.includes('access_token')) {
-        history.replaceState(null, '', window.location.pathname);
-        setSbStatus('✅ Login realizado com sucesso!', 'ok');
-      }
-    });
-    // Tenta recuperar sessão existente (incluindo do hash da URL após magic link)
-    _sbClient.auth.getSession().then(({ data }) => {
-      _sbUser = data?.session?.user || null;
-      refreshCloudUI();
-      if (_sbUser) updateSyncDot('synced');
-    });
-  } catch(e) {
-    setSbStatus('❌ Erro ao conectar: ' + e.message, 'err');
-  }
+    if (!res.ok) return false;
+    const data = await res.json();
+    _sbAuth.access_token = data.access_token;
+    _sbAuth.refresh_token = data.refresh_token;
+    _sbAuth.expires_at = Date.now() + (data.expires_in || 3600) * 1000;
+    _saveSbSession();
+    return true;
+  } catch(e) { return false; }
+}
+
+let _syncDebounce = null;
+function autoSync() {
+  if (!_sbAuth || !_sbAuth.access_token) return;
+  clearTimeout(_syncDebounce);
+  _syncDebounce = setTimeout(async () => {
+    updateSyncDot('syncing');
+    try {
+      const rows = BACKUP_KEYS.map(k => {
+        const v = localStorage.getItem(k);
+        return v !== null ? { user_id: _sbAuth.user_id, key: k, value: v, updated_at: new Date().toISOString() } : null;
+      }).filter(Boolean);
+      if (!rows.length) { updateSyncDot('synced'); return; }
+      await _sbFetch('/rest/v1/tatame_store', {
+        method: 'POST',
+        headers: { 'Prefer': 'resolution=merge-duplicates' },
+        body: JSON.stringify(rows)
+      });
+      updateSyncDot('synced');
+    } catch(e) { updateSyncDot('error'); }
+  }, 1500);
 }
 
 function refreshCloudUI() {
-  const hasCfg  = !!localStorage.getItem(SB_CONFIG_KEY);
   const authCard = document.getElementById('sbAuthCard');
   const syncCard = document.getElementById('sbSyncCard');
   const badge    = document.getElementById('cloudConnBadge');
@@ -8747,11 +8782,11 @@ function refreshCloudUI() {
   const logoutBtn= document.getElementById('sbLogoutBtn');
   const userInfo = document.getElementById('sbUserInfo');
 
-  if (authCard) authCard.style.display = 'block'; // sempre visível
+  if (authCard) authCard.style.display = 'block';
 
-  if (_sbUser) {
+  if (_sbAuth && _sbAuth.access_token) {
     if (badge)    { badge.textContent = '● Conectado'; badge.className = 'cloud-badge connected'; }
-    if (userInfo) userInfo.textContent = '👤 ' + (_sbUser.email || 'Usuário autenticado');
+    if (userInfo) userInfo.textContent = '👤 ' + (_sbAuth.user_email || 'Usuário autenticado');
     if (loginBtn) loginBtn.style.display  = 'none';
     if (logoutBtn)logoutBtn.style.display = 'block';
     if (syncCard) syncCard.style.display  = 'block';
@@ -8777,32 +8812,35 @@ function setLoginStatus(msg, type) {
 }
 
 async function supabaseLogin() {
-  // Se _sbClient não existe, tenta inicializar com credenciais salvas
-  if (!_sbClient) {
-    try {
-      const cfg = JSON.parse(localStorage.getItem(SB_CONFIG_KEY) || '{}');
-      if (cfg.url && cfg.key) {
-        initSupabase(cfg.url, cfg.key);
-        await new Promise(r => setTimeout(r, 800));
-      }
-    } catch(e) {}
-  }
-  if (!_sbClient) {
-    setLoginStatus('❌ Salve as credenciais (URL + Chave) primeiro.', 'err');
-    return;
-  }
+  const cfg = JSON.parse(localStorage.getItem(SB_CONFIG_KEY) || '{}');
+  const url = cfg.url || document.getElementById('sbUrl')?.value.trim();
+  const key = cfg.key || document.getElementById('sbKey')?.value.trim();
+  if (!url || !key) { setLoginStatus('❌ Salve as credenciais (URL + Chave) primeiro.', 'err'); return; }
   const email    = document.getElementById('sbEmail')?.value.trim();
   const password = document.getElementById('sbPassword')?.value;
   if (!email || !email.includes('@')) { setLoginStatus('❌ Digite um e-mail válido.', 'err'); return; }
   if (!password || password.length < 6) { setLoginStatus('❌ Senha precisa ter mínimo 6 caracteres.', 'err'); return; }
   setLoginStatus('⏳ Entrando…', 'info');
   try {
-    const { data, error } = await _sbClient.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-    _sbUser = data.user;
+    const res = await fetch(url + '/auth/v1/token?grant_type=password', {
+      method: 'POST',
+      headers: { 'apikey': key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error_description || data.msg || data.message || 'Erro de login');
+    _sbAuth = {
+      url, key,
+      access_token: data.access_token,
+      refresh_token: data.refresh_token,
+      user_id: data.user && data.user.id,
+      user_email: data.user && data.user.email,
+      expires_at: Date.now() + (data.expires_in || 3600) * 1000
+    };
+    _saveSbSession();
     refreshCloudUI();
     setLoginStatus('✅ Login realizado com sucesso!', 'ok');
-    setSbStatus('✅ Conectado como ' + (_sbUser.email || ''), 'ok');
+    setSbStatus('✅ Conectado como ' + (_sbAuth.user_email || ''), 'ok');
   } catch(e) {
     const msg = e.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : e.message;
     setLoginStatus('❌ ' + msg, 'err');
@@ -8810,28 +8848,37 @@ async function supabaseLogin() {
 }
 
 async function supabaseLogout() {
-  if (!_sbClient) return;
-  await _sbClient.auth.signOut();
-  _sbUser = null;
+  if (!_sbAuth) return;
+  try {
+    await fetch(_sbAuth.url + '/auth/v1/logout', {
+      method: 'POST',
+      headers: { 'apikey': _sbAuth.key, 'Authorization': 'Bearer ' + _sbAuth.access_token }
+    });
+  } catch(e) {}
+  _sbAuth = null;
+  _saveSbSession();
   refreshCloudUI();
   setSbStatus('Sessão encerrada.', 'info');
 }
 
 // ── SYNC ────────────────────────────────────
 async function pushToCloud() {
-  if (!_sbClient || !_sbUser) { setSbStatus('Conecte sua conta primeiro.', 'err'); return; }
+  if (!_sbAuth || !_sbAuth.access_token) { setSbStatus('Conecte sua conta primeiro.', 'err'); return; }
   updateSyncDot('syncing');
   setSbStatus('⬆️ Enviando dados para a nuvem…', 'info');
   try {
     const rows = [];
     BACKUP_KEYS.forEach(k => {
       const v = localStorage.getItem(k);
-      if (v !== null) rows.push({ user_id: _sbUser.id, key: k, value: v, updated_at: new Date().toISOString() });
+      if (v !== null) rows.push({ user_id: _sbAuth.user_id, key: k, value: v, updated_at: new Date().toISOString() });
     });
     if (!rows.length) { setSbStatus('Nenhum dado local para enviar.', 'warn'); updateSyncDot('synced'); return; }
-    const { error } = await _sbClient.from('tatame_store').upsert(rows, { onConflict: 'user_id,key' });
-    if (error) throw error;
-    setSbStatus('✅ ' + rows.length + ' registros enviados com sucesso! Última sync: ' + new Date().toLocaleTimeString('pt-BR'), 'ok');
+    await _sbFetch('/rest/v1/tatame_store', {
+      method: 'POST',
+      headers: { 'Prefer': 'resolution=merge-duplicates' },
+      body: JSON.stringify(rows)
+    });
+    setSbStatus('✅ ' + rows.length + ' registros enviados! Última sync: ' + new Date().toLocaleTimeString('pt-BR'), 'ok');
     updateSyncDot('synced');
   } catch(e) {
     setSbStatus('❌ Erro ao enviar: ' + e.message, 'err');
@@ -8840,13 +8887,12 @@ async function pushToCloud() {
 }
 
 async function pullFromCloud() {
-  if (!_sbClient || !_sbUser) { setSbStatus('Conecte sua conta primeiro.', 'err'); return; }
+  if (!_sbAuth || !_sbAuth.access_token) { setSbStatus('Conecte sua conta primeiro.', 'err'); return; }
   if (!confirm('Baixar dados da nuvem? Isso substituirá os dados locais atuais.')) return;
   updateSyncDot('syncing');
   setSbStatus('⬇️ Baixando dados da nuvem…', 'info');
   try {
-    const { data, error } = await _sbClient.from('tatame_store').select('key, value').eq('user_id', _sbUser.id);
-    if (error) throw error;
+    const data = await _sbFetch('/rest/v1/tatame_store?user_id=eq.' + _sbAuth.user_id + '&select=key,value');
     if (!data || !data.length) { setSbStatus('Nenhum dado encontrado na nuvem para esta conta.', 'warn'); updateSyncDot('synced'); return; }
     data.forEach(row => { if (row.value !== null) localStorage.setItem(row.key, row.value); });
     setSbStatus('✅ ' + data.length + ' registros restaurados! Recarregando em 2s…', 'ok');
@@ -8893,25 +8939,7 @@ function copySql() {
 // ═══════════════════════════════════════════════════════════
 //  FEATURE 1 — AUTO SYNC
 // ═══════════════════════════════════════════════════════════
-let _syncDebounce = null;
-function autoSync() {
-  if (!_sbClient || !_sbUser) return;
-  clearTimeout(_syncDebounce);
-  _syncDebounce = setTimeout(async () => {
-    updateSyncDot('syncing');
-    try {
-      const rows = BACKUP_KEYS.map(k => {
-        const v = localStorage.getItem(k);
-        return v !== null ? { user_id: _sbUser.id, key: k, value: v, updated_at: new Date().toISOString() } : null;
-      }).filter(Boolean);
-      const { error } = await _sbClient.from('tatame_store').upsert(rows, { onConflict: 'user_id,key' });
-      if (error) throw error;
-      updateSyncDot('synced');
-    } catch(e) {
-      updateSyncDot('error');
-    }
-  }, 1500); // debounce 1.5s para não sobrecarregar
-}
+// (implementado acima junto ao cliente REST)
 
 // ═══════════════════════════════════════════════════════════
 //  FEATURE 2 — WEIGHT-BASED TARGET RECALCULATION
@@ -9176,7 +9204,7 @@ function tryInitSupabase() {
   try {
     const cfg = JSON.parse(localStorage.getItem(SB_CONFIG_KEY) || '{}');
     if (cfg.url && cfg.key && typeof supabase !== 'undefined') {
-      initSupabase(cfg.url, cfg.key);
+      _loadSbSession();
     }
   } catch(e) {}
 }
