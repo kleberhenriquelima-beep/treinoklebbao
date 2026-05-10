@@ -8597,6 +8597,10 @@ create policy "Usuário vê apenas seus dados"
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);`;
 
+// Credenciais fixas do projeto (anon key é pública por design)
+const _SB_DEFAULT_URL = 'https://vboasrvzxbixsoihpanc.supabase.co';
+const _SB_DEFAULT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZib2FzcnZ6eGJpeHNvaWhwYW5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMzg1NDQsImV4cCI6MjA5MzkxNDU0NH0.xk5A72vfwSYNnrUUlAYfKgAFNSewdib8FZ2TxB4nD80';
+
 let _sbAuth = null; // { url, key, access_token, refresh_token, user_id, user_email, expires_at }
 const SB_SESSION_KEY = 'projeto_tatame_sbsession';
 
@@ -8685,20 +8689,22 @@ function saveSupabaseConfig() {
 function loadSupabaseConfig() {
   try {
     const cfg = JSON.parse(localStorage.getItem(SB_CONFIG_KEY) || '{}');
-    if (cfg.url && cfg.key) {
-      const urlEl = document.getElementById('sbUrl');
-      const keyEl = document.getElementById('sbKey');
-      if (urlEl) urlEl.value = cfg.url;
-      if (keyEl) keyEl.value = cfg.key;
-      if (!_sbAuth) _loadSbSession();
-    }
+    const url = cfg.url || _SB_DEFAULT_URL;
+    const key = cfg.key || _SB_DEFAULT_KEY;
+    const urlEl = document.getElementById('sbUrl');
+    const keyEl = document.getElementById('sbKey');
+    if (urlEl) urlEl.value = url;
+    if (keyEl) keyEl.value = key;
+    // Salva as credenciais padrão se ainda não salvas
+    if (!cfg.url) localStorage.setItem(SB_CONFIG_KEY, JSON.stringify({ url, key }));
+    if (!_sbAuth) _loadSbSession();
   } catch(e) {}
 }
 
 // ── SUPABASE REST (sem SDK) ─────────────────────────────────────────
 async function _sbFetch(path, options) {
   options = options || {};
-  const url = _sbAuth.url + path;
+  const url = _sbAuth.url.replace(/\/$/, '') + path;
   const headers = Object.assign({
     'apikey': _sbAuth.key,
     'Authorization': 'Bearer ' + _sbAuth.access_token,
@@ -8813,38 +8819,50 @@ function setLoginStatus(msg, type) {
 
 async function supabaseLogin() {
   const cfg = JSON.parse(localStorage.getItem(SB_CONFIG_KEY) || '{}');
-  const url = cfg.url || document.getElementById('sbUrl')?.value.trim();
-  const key = cfg.key || document.getElementById('sbKey')?.value.trim();
+  const rawUrl = cfg.url || document.getElementById('sbUrl')?.value.trim() || _SB_DEFAULT_URL;
+  const url = rawUrl.replace(/\/$/, '');
+  const key = cfg.key || document.getElementById('sbKey')?.value.trim() || _SB_DEFAULT_KEY;
   if (!url || !key) { setLoginStatus('❌ Salve as credenciais (URL + Chave) primeiro.', 'err'); return; }
   const email    = document.getElementById('sbEmail')?.value.trim();
   const password = document.getElementById('sbPassword')?.value;
   if (!email || !email.includes('@')) { setLoginStatus('❌ Digite um e-mail válido.', 'err'); return; }
   if (!password || password.length < 6) { setLoginStatus('❌ Senha precisa ter mínimo 6 caracteres.', 'err'); return; }
   setLoginStatus('⏳ Entrando…', 'info');
-  try {
-    const res = await fetch(url + '/auth/v1/token?grant_type=password', {
-      method: 'POST',
-      headers: { 'apikey': key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error_description || data.msg || data.message || 'Erro de login');
-    _sbAuth = {
-      url, key,
-      access_token: data.access_token,
-      refresh_token: data.refresh_token,
-      user_id: data.user && data.user.id,
-      user_email: data.user && data.user.email,
-      expires_at: Date.now() + (data.expires_in || 3600) * 1000
+
+  // Usa XMLHttpRequest para máxima compatibilidade iOS
+  return new Promise(function(resolve) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url + '/auth/v1/token?grant_type=password', true);
+    xhr.setRequestHeader('apikey', key);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.timeout = 15000;
+    xhr.onload = function() {
+      try {
+        const data = JSON.parse(xhr.responseText);
+        if (xhr.status >= 200 && xhr.status < 300 && data.access_token) {
+          _sbAuth = {
+            url, key,
+            access_token: data.access_token,
+            refresh_token: data.refresh_token,
+            user_id: data.user && data.user.id,
+            user_email: data.user && data.user.email,
+            expires_at: Date.now() + (data.expires_in || 3600) * 1000
+          };
+          _saveSbSession();
+          refreshCloudUI();
+          setLoginStatus('✅ Login realizado!', 'ok');
+          setSbStatus('✅ Conectado como ' + (_sbAuth.user_email || ''), 'ok');
+        } else {
+          const msg = data.error_description || data.msg || data.message || ('Erro ' + xhr.status);
+          setLoginStatus('❌ ' + (msg === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : msg), 'err');
+        }
+      } catch(e) { setLoginStatus('❌ Resposta inválida: ' + e.message, 'err'); }
+      resolve();
     };
-    _saveSbSession();
-    refreshCloudUI();
-    setLoginStatus('✅ Login realizado com sucesso!', 'ok');
-    setSbStatus('✅ Conectado como ' + (_sbAuth.user_email || ''), 'ok');
-  } catch(e) {
-    const msg = e.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : e.message;
-    setLoginStatus('❌ ' + msg, 'err');
-  }
+    xhr.onerror = function() { setLoginStatus('❌ Falha na conexão com o servidor.', 'err'); resolve(); };
+    xhr.ontimeout = function() { setLoginStatus('❌ Tempo esgotado (15s). Tente novamente.', 'err'); resolve(); };
+    xhr.send(JSON.stringify({ email: email, password: password }));
+  });
 }
 
 async function supabaseLogout() {
