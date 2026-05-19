@@ -2869,6 +2869,63 @@
 #syncDot.syncing   { background:#fbbf24;animation:pulse 1s infinite; }
 #syncDot.error     { background:#f87171; }
 
+
+  /* ===== MEDIDAS CORPORAIS ===== */
+  .medidas-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  .medida-input-wrap { display:flex; flex-direction:column; gap:4px; }
+  .medida-label { font-size:0.72rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:0.03em; }
+  .medida-input-row { display:flex; align-items:center; gap:6px; }
+  .medida-unit { font-size:0.75rem; color:var(--muted); }
+  .medidas-hist-row { display:flex; justify-content:space-between; align-items:flex-start; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.06); gap:8px; flex-wrap:wrap; }
+  .medidas-hist-date { font-size:0.75rem; color:var(--muted); white-space:nowrap; }
+  .medidas-hist-vals { display:flex; flex-wrap:wrap; gap:6px; }
+  .medida-chip { font-size:0.7rem; background:rgba(168,85,247,0.15); color:#a855f7; padding:2px 8px; border-radius:20px; }
+  .medida-delta-pos { color:#22c55e; font-size:0.7rem; margin-left:3px; }
+  .medida-delta-neg { color:#f87171; font-size:0.7rem; margin-left:3px; }
+  /* ===== EVOLUÇÃO POR EXERCÍCIO ===== */
+  .evolucao-select { width:100%; background:var(--card); color:var(--text); border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:10px 12px; font-size:0.9rem; margin-bottom:14px; }
+  .evolucao-chart-wrap { background:var(--card); border-radius:12px; padding:14px; margin-bottom:14px; }
+  .evolucao-stats-row { display:flex; gap:10px; margin-bottom:14px; }
+  .evolucao-stat { flex:1; background:var(--card); border-radius:10px; padding:10px; text-align:center; }
+  .evolucao-stat-val { font-size:1.2rem; font-weight:700; color:#a855f7; display:block; }
+  .evolucao-stat-lbl { font-size:0.65rem; color:var(--muted); }
+  /* ===== RELATÓRIO MENSAL ===== */
+  .relatorio-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  .relatorio-stat-card { background:var(--card); border-radius:12px; padding:14px; text-align:center; }
+  .relatorio-stat-num { font-size:1.5rem; font-weight:800; display:block; color:#a855f7; }
+  .relatorio-stat-lbl { font-size:0.68rem; color:var(--muted); margin-top:2px; }
+  .relatorio-highlight { background:linear-gradient(135deg,rgba(168,85,247,0.15),rgba(99,102,241,0.15)); border:1px solid rgba(168,85,247,0.25); border-radius:12px; padding:14px; margin-bottom:12px; }
+  .relatorio-highlight-title { font-size:0.75rem; color:#a855f7; font-weight:700; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em; }
+  .relatorio-highlight-val { font-size:1.1rem; font-weight:700; }
+
+
+  /* ===== BJJ MÉTRICAS ===== */
+  .jj-metricas-toggle { background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.25); border-radius:10px; padding:10px 14px; cursor:pointer; font-size:0.82rem; color:#a855f7; font-weight:600; width:100%; text-align:left; margin-top:10px; display:flex; align-items:center; justify-content:space-between; }
+  .jj-metricas-panel { display:none; margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.07); }
+  .jj-metricas-panel.open { display:block; }
+  .jj-met-row { display:flex; gap:10px; margin-bottom:10px; }
+  .jj-met-field { flex:1; display:flex; flex-direction:column; gap:4px; }
+  .jj-met-label { font-size:0.7rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:0.03em; }
+  .jj-posicoes-wrap { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
+  .jj-pos-btn { font-size:0.72rem; background:var(--card); border:1px solid var(--border); border-radius:20px; padding:4px 10px; cursor:pointer; color:var(--text); transition:all 0.15s; }
+  .jj-pos-btn.sel { background:rgba(168,85,247,0.25); border-color:#a855f7; color:#a855f7; font-weight:700; }
+  .jj-nivel-btns { display:flex; gap:6px; margin-top:4px; }
+  .jj-nivel-btn { flex:1; font-size:0.72rem; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:6px 4px; cursor:pointer; color:var(--text); text-align:center; transition:all 0.15s; }
+  .jj-nivel-btn.sel { background:rgba(168,85,247,0.25); border-color:#a855f7; color:#a855f7; font-weight:700; }
+  /* Histório BJJ com métricas */
+  .jj-hist-metricas { display:flex; flex-wrap:wrap; gap:5px; margin-top:6px; }
+  .jj-hist-met-chip { font-size:0.65rem; background:rgba(168,85,247,0.12); color:#c4b5fd; padding:2px 8px; border-radius:12px; }
+  .jj-hist-pos-chip { font-size:0.65rem; background:rgba(99,102,241,0.15); color:#818cf8; padding:2px 8px; border-radius:12px; }
+  /* ===== COMPARTILHAR ===== */
+  .share-card { background:var(--card); border-radius:16px; padding:16px; margin-bottom:14px; }
+  .share-canvas-wrap { border-radius:12px; overflow:hidden; margin-bottom:14px; }
+  .share-btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:13px; border-radius:12px; border:none; font-size:0.9rem; font-weight:700; cursor:pointer; transition:all 0.2s; }
+  .share-btn-download { background:linear-gradient(135deg,#a855f7,#6366f1); color:#fff; margin-bottom:8px; }
+  .share-btn-download:active { opacity:0.85; }
+  .share-period-sel { display:flex; gap:8px; margin-bottom:14px; }
+  .share-period-btn { flex:1; padding:9px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); font-size:0.8rem; cursor:pointer; text-align:center; transition:all 0.15s; }
+  .share-period-btn.active { border-color:#a855f7; color:#a855f7; background:rgba(168,85,247,0.12); font-weight:700; }
+
 </style>
 </head>
 <body>
@@ -2909,6 +2966,9 @@
       <button class="drawer-item" data-tab="c" onclick="switchTab('c')">
         <span class="di-icon">⚡</span><span class="di-text">Treino C <small>Potência & BJJ</small></span>
       </button>
+      <button class="drawer-item" data-tab="livre" onclick="switchTab('livre')">
+        <span class="drawer-icon">🏋️</span><span class="drawer-label">Treino Livre</span>
+      </button>
       <button class="drawer-item" data-tab="h" onclick="switchTab('h')">
         <span class="di-icon">🥋</span><span class="di-text">Jiu-Jitsu <small>Sessões BJJ</small></span>
       </button>
@@ -2916,11 +2976,17 @@
 
     <div class="drawer-group">
       <div class="drawer-group-label">📊 SAÚDE & NUTRIÇÃO</div>
+      <button class="drawer-item" data-tab="tirze" onclick="switchTab('tirze')">
+        <span class="drawer-icon">💉</span><span class="drawer-label">Tirzepatida</span>
+      </button>
       <button class="drawer-item" data-tab="f" onclick="switchTab('f')">
         <span class="di-icon">🥗</span><span class="di-text">Dieta <small>Plano alimentar</small></span>
       </button>
       <button class="drawer-item" data-tab="e" onclick="switchTab('e')">
         <span class="di-icon">📊</span><span class="di-text">Bioimpedância <small>Composição corporal</small></span>
+      </button>
+      <button class="drawer-item" data-tab="conquistas" onclick="switchTab('conquistas')">
+        <span class="drawer-icon">🏆</span><span class="drawer-label">Conquistas</span>
       </button>
       <button class="drawer-item" data-tab="i" onclick="switchTab('i')">
         <span class="di-icon">📸</span><span class="di-text">Fotos <small>Comparativo visual</small></span>
@@ -2977,6 +3043,7 @@
     <!-- Streak -->
     <div class="sb-item">
       <span class="sb-val" id="sb-streak">🔥 0</span>
+      <span class="sb-val" id="sb-weight" style="color:var(--accent)">⚖️ —</span>
       <span class="sb-label">sequência</span>
     </div>
     <div class="sb-sep"></div>
@@ -3388,6 +3455,15 @@
         <input type="number" step="0.1" id="bioBone" placeholder="3.0" />
       </div>
     </div>
+    <div class="bio-field" style="grid-column:1/-1">
+      <label>📸 Foto da bioimpedância (tela da balança)</label>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+        <button onclick="document.getElementById('bioPhotoInput').click()" style="background:var(--card2);border:1px dashed var(--border);border-radius:8px;padding:8px 14px;color:var(--text);font-size:0.8rem;cursor:pointer">📷 Selecionar foto</button>
+        <span id="bioPhotoName" style="font-size:0.72rem;color:var(--muted)">Nenhuma foto</span>
+      </div>
+      <input type="file" id="bioPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="handleBioPhoto(this)"/>
+      <img id="bioPhotoPreview" style="display:none;max-width:100%;border-radius:10px;margin-top:8px;max-height:200px;object-fit:contain"/>
+    </div>
     <button class="bio-save-btn" onclick="saveBioEntry()">✅ Salvar medição</button>
   </div>
 
@@ -3423,6 +3499,10 @@
     <button onclick="saveDietWeight()">✓</button>
   </div>
   <div id="dietWeightStatus" style="font-size:0.75rem;color:var(--muted);margin-top:-4px;margin-bottom:12px;padding:0 4px"></div>
+
+  <!-- CHECK RÁPIDO HOJE -->
+  <div class="diet-section-title">⚡ Check Rápido — Hoje</div>
+  <div id="mealQuickCheck" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px"></div>
 
   <!-- TIRZEPATIDA ALERTA -->
   <div class="diet-alert-card">
@@ -3792,6 +3872,12 @@
     <canvas id="trainFreqChart" height="150" style="width:100%;display:block"></canvas>
   </div>
 
+  <!-- ANÁLISE CRUZADA -->
+  <div class="dash-section">
+    <div class="dash-section-title">🔬 Análise Cruzada</div>
+    <div id="crossAnalysis"></div>
+  </div>
+
   <!-- INSIGHTS -->
   <div class="dash-section">
     <div class="dash-section-title">💡 Insights Automáticos</div>
@@ -3799,6 +3885,218 @@
   </div>
 </div>
 
+
+<!-- ===================== TREINO LIVRE ===================== -->
+<div class="tab-content" id="tab-livre">
+  <div class="intro-card">
+    <h3>🏋️ Treino Livre — Registro Manual</h3>
+    <p>Registre qualquer treino de academia de forma livre, com exercícios, séries, repetições e carga.</p>
+  </div>
+
+  <div class="bio-form-card" style="margin-bottom:14px">
+    <div class="bio-form-title">📅 Nova Sessão</div>
+    <div class="bio-grid">
+      <div class="bio-field">
+        <label>Data</label>
+        <input type="date" id="livreDate"/>
+      </div>
+      <div class="bio-field">
+        <label>Duração (min)</label>
+        <input type="number" id="livreDuracao" placeholder="60" min="1" max="300"/>
+      </div>
+      <div class="bio-field" style="grid-column:1/-1">
+        <label>Observações gerais</label>
+        <textarea id="livreNotes" class="form-textarea" placeholder="Ex: Foco em peito e tríceps, boa sessão..."></textarea>
+      </div>
+    </div>
+
+    <div style="font-size:0.8rem;font-weight:700;color:var(--accent);margin:12px 0 8px">💪 Exercícios</div>
+    <div id="livreExercicios"></div>
+
+    <button onclick="addLivreExercicio()" style="background:transparent;border:1px dashed var(--accent);border-radius:8px;padding:8px 16px;color:var(--accent);font-size:0.8rem;width:100%;cursor:pointer;margin-top:8px">+ Adicionar exercício</button>
+
+    <button class="bio-save-btn" style="margin-top:14px" onclick="saveLivreTreino()">✅ Salvar Treino</button>
+  </div>
+
+  <div class="bio-section-title">🗂️ Histórico de Treinos Livres</div>
+  <div id="livreHistorico"></div>
+</div>
+
+<!-- ===================== TIRZEPATIDA ===================== -->
+<div class="tab-content" id="tab-tirze">
+  <div class="intro-card">
+    <h3>💉 Tirzepatida 2,5mg</h3>
+    <p>Acompanhe suas aplicações, sintomas e evolução com o medicamento. Ajuda a identificar padrões de fome, energia e efeitos colaterais ao longo do tratamento.</p>
+  </div>
+
+  <!-- PRÓXIMA DOSE -->
+  <div id="tirze-next-card" style="background:var(--card2);border-radius:14px;padding:14px;margin-bottom:14px;text-align:center"></div>
+
+  <!-- FORM -->
+  <div class="bio-form-card" style="margin-bottom:14px">
+    <div class="bio-form-title">💉 Registrar Aplicação</div>
+    <div class="bio-grid">
+      <div class="bio-field">
+        <label>📅 Data da aplicação</label>
+        <input type="date" id="tirze-date"/>
+      </div>
+      <div class="bio-field">
+        <label>💊 Dose (mg)</label>
+        <select id="tirze-dose" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-size:0.85rem">
+          <option value="2.5">2,5 mg</option>
+          <option value="5">5 mg</option>
+          <option value="7.5">7,5 mg</option>
+          <option value="10">10 mg</option>
+          <option value="12.5">12,5 mg</option>
+          <option value="15">15 mg</option>
+        </select>
+      </div>
+      <div class="bio-field">
+        <label>⚡ Nível de energia (1-10)</label>
+        <input type="number" id="tirze-energia" min="1" max="10" placeholder="7"/>
+      </div>
+      <div class="bio-field">
+        <label>🍽️ Apetite (1=sem fome · 10=fome normal)</label>
+        <input type="number" id="tirze-apetite" min="1" max="10" placeholder="4"/>
+      </div>
+      <div class="bio-field" style="grid-column:1/-1">
+        <label>🤢 Sintomas (marque os que teve)</label>
+        <div id="tirze-sintomas-wrap" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px">
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Náusea" style="accent-color:var(--accent)"> Náusea</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Vômito" style="accent-color:var(--accent)"> Vômito</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Diarreia" style="accent-color:var(--accent)"> Diarreia</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Constipação" style="accent-color:var(--accent)"> Constipação</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Fadiga" style="accent-color:var(--accent)"> Fadiga</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Tontura" style="accent-color:var(--accent)"> Tontura</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Dor no local" style="accent-color:var(--accent)"> Dor no local</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Sem apetite" style="accent-color:var(--accent)"> Sem apetite</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Refluxo" style="accent-color:var(--accent)"> Refluxo</label>
+        </div>
+      </div>
+      <div class="bio-field" style="grid-column:1/-1">
+        <label>📝 Observações</label>
+        <textarea id="tirze-notes" class="form-textarea" placeholder="Como se sentiu nessa semana?"></textarea>
+      </div>
+    </div>
+    <button class="bio-save-btn" onclick="saveTirze()">💾 Salvar Aplicação</button>
+  </div>
+
+  <!-- HISTÓRICO -->
+  <div class="bio-section-title">📋 Histórico de Aplicações</div>
+  <div id="tirze-hist"></div>
+</div>
+
+<!-- ===================== CONQUISTAS ===================== -->
+<div class="tab-content" id="tab-conquistas">
+  <div class="intro-card">
+    <h3>🏆 Suas Conquistas</h3>
+    <p>Badges desbloqueados automaticamente com base na sua consistência e evolução. Continue treinando para desbloquear mais!</p>
+  </div>
+  <div id="conquistasGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px"></div>
+  <div id="conquistasLocked" style="margin-top:8px"></div>
+</div>
+
+
+<!-- ===================== MEDIDAS CORPORAIS ===================== -->
+<div class="tab-content" id="tab-medidas">
+  <div class="intro-card">
+    <h3>📏 Medidas Corporais</h3>
+    <p>Registre suas medidas semanais para acompanhar a recomposição corporal além da balança.</p>
+  </div>
+  <div class="session-card" style="margin-bottom:14px">
+    <div class="dash-section-title" style="margin-bottom:12px">📋 Novo Registro</div>
+    <div style="margin-bottom:10px">
+      <label class="medida-label">📅 Data</label>
+      <input type="date" id="medidasDate" class="metrics-input" style="width:100%;margin-top:4px"/>
+    </div>
+    <div class="medidas-grid">
+      <div class="medida-input-wrap">
+        <span class="medida-label">Cintura</span>
+        <div class="medida-input-row">
+          <input type="number" id="med-cintura" class="metrics-input" placeholder="0.0" step="0.1" min="0" style="flex:1"/>
+          <span class="medida-unit">cm</span>
+        </div>
+      </div>
+      <div class="medida-input-wrap">
+        <span class="medida-label">Quadril</span>
+        <div class="medida-input-row">
+          <input type="number" id="med-quadril" class="metrics-input" placeholder="0.0" step="0.1" min="0" style="flex:1"/>
+          <span class="medida-unit">cm</span>
+        </div>
+      </div>
+      <div class="medida-input-wrap">
+        <span class="medida-label">Peito</span>
+        <div class="medida-input-row">
+          <input type="number" id="med-peito" class="metrics-input" placeholder="0.0" step="0.1" min="0" style="flex:1"/>
+          <span class="medida-unit">cm</span>
+        </div>
+      </div>
+      <div class="medida-input-wrap">
+        <span class="medida-label">Braço (bíceps)</span>
+        <div class="medida-input-row">
+          <input type="number" id="med-braco" class="metrics-input" placeholder="0.0" step="0.1" min="0" style="flex:1"/>
+          <span class="medida-unit">cm</span>
+        </div>
+      </div>
+      <div class="medida-input-wrap">
+        <span class="medida-label">Coxa</span>
+        <div class="medida-input-row">
+          <input type="number" id="med-coxa" class="metrics-input" placeholder="0.0" step="0.1" min="0" style="flex:1"/>
+          <span class="medida-unit">cm</span>
+        </div>
+      </div>
+      <div class="medida-input-wrap">
+        <span class="medida-label">Panturrilha</span>
+        <div class="medida-input-row">
+          <input type="number" id="med-panturrilha" class="metrics-input" placeholder="0.0" step="0.1" min="0" style="flex:1"/>
+          <span class="medida-unit">cm</span>
+        </div>
+      </div>
+    </div>
+    <button class="btn-save" style="width:100%;margin-top:10px" onclick="saveMedidas()">💾 Salvar Medidas</button>
+  </div>
+  <div class="session-card">
+    <div class="dash-section-title" style="margin-bottom:10px">📜 Histórico</div>
+    <div id="medidasHistorico"></div>
+  </div>
+</div>
+
+<!-- ===================== EVOLUCAO POR EXERCICIO ===================== -->
+<div class="tab-content" id="tab-evolucao">
+  <div class="intro-card">
+    <h3>📊 Evolução por Exercício</h3>
+    <p>Veja a progressão de carga ao longo do tempo para cada exercício registrado.</p>
+  </div>
+  <select id="evolucaoSelect" class="evolucao-select" onchange="renderEvolucao()">
+    <option value="">— Selecione um exercício —</option>
+  </select>
+  <div class="evolucao-stats-row" id="evolucaoStats" style="display:none">
+    <div class="evolucao-stat">
+      <span class="evolucao-stat-val" id="evoMaxPR">—</span>
+      <span class="evolucao-stat-lbl">🏆 Recorde</span>
+    </div>
+    <div class="evolucao-stat">
+      <span class="evolucao-stat-val" id="evoLast">—</span>
+      <span class="evolucao-stat-lbl">📅 Último</span>
+    </div>
+    <div class="evolucao-stat">
+      <span class="evolucao-stat-val" id="evoGain">—</span>
+      <span class="evolucao-stat-lbl">📈 Ganho</span>
+    </div>
+    <div class="evolucao-stat">
+      <span class="evolucao-stat-val" id="evoSessions">—</span>
+      <span class="evolucao-stat-lbl">🔢 Sessões</span>
+    </div>
+  </div>
+  <div class="evolucao-chart-wrap" id="evolucaoChartWrap" style="display:none">
+    <canvas id="evolucaoChart" height="160" style="width:100%;display:block"></canvas>
+  </div>
+  <div id="evolucaoEmpty" class="intro-card" style="display:none">
+    <p>Nenhum dado registrado para este exercício. Use 💾 Salvar cargas nas abas de treino.</p>
+  </div>
+</div>
+
+<!-- ===================== RELATORIO MENSAL ===================== -->
+<div class="tab-content" id="tab-relatorio">
+  <div class="intro-card">
+    <h3>📅 Relatório Mensal</h3>
+    <p>Resumo completo da sua performance e evolução no mês selecionado.</p>
+  </div>
+  <select id="relatorioMes" class="evolucao-select" onchange="renderRelatorio()"></select>
+  <div id="relatorioConteudo"></div>
+</div>
 
 <!-- ===================== JIU-JITSU ===================== -->
 <div class="tab-content" id="tab-h">
@@ -3827,6 +4125,56 @@
         <textarea id="jjObs" class="jj-obs-input" placeholder="Ex: trabalhei passagem de guarda, boa rolagem com fulano..." rows="2"></textarea>
       </div>
     </div>
+
+    <!-- MÉTRICAS AVANÇADAS -->
+    <button class="jj-metricas-toggle" onclick="toggleJJMetricas(this)">
+      <span>📊 Métricas detalhadas (opcional)</span>
+      <span id="jjMetricasChevron">▼</span>
+    </button>
+    <div class="jj-metricas-panel" id="jjMetricasPanel">
+      <div class="jj-met-row">
+        <div class="jj-met-field">
+          <span class="jj-met-label">🥊 Sparrings (rounds)</span>
+          <input type="number" id="jjSparrings" class="metrics-input" placeholder="0" min="0" max="20" style="width:100%"/>
+        </div>
+        <div class="jj-met-field">
+          <span class="jj-met-label">⚡ Finalizações tentadas</span>
+          <input type="number" id="jjFinTent" class="metrics-input" placeholder="0" min="0" max="50" style="width:100%"/>
+        </div>
+        <div class="jj-met-field">
+          <span class="jj-met-label">✅ Finalizações conseguidas</span>
+          <input type="number" id="jjFinOk" class="metrics-input" placeholder="0" min="0" max="50" style="width:100%"/>
+        </div>
+      </div>
+
+      <div style="margin-bottom:10px">
+        <span class="jj-met-label">🗺️ Posições trabalhadas</span>
+        <div class="jj-posicoes-wrap" id="jjPosicoesWrap">
+          <button class="jj-pos-btn" onclick="toggleJJPos(this)">Guarda Fechada</button>
+          <button class="jj-pos-btn" onclick="toggleJJPos(this)">Meia Guarda</button>
+          <button class="jj-pos-btn" onclick="toggleJJPos(this)">Guarda Aberta</button>
+          <button class="jj-pos-btn" onclick="toggleJJPos(this)">Guarda Aranha</button>
+          <button class="jj-pos-btn" onclick="toggleJJPos(this)">X-Guard</button>
+          <button class="jj-pos-btn" onclick="toggleJJPos(this)">Montada</button>
+          <button class="jj-pos-btn" onclick="toggleJJPos(this)">Costas</button>
+          <button class="jj-pos-btn" onclick="toggleJJPos(this)">Passagem</button>
+          <button class="jj-pos-btn" onclick="toggleJJPos(this)">Leg Lock</button>
+          <button class="jj-pos-btn" onclick="toggleJJPos(this)">Raspagem</button>
+          <button class="jj-pos-btn" onclick="toggleJJPos(this)">Imersão</button>
+          <button class="jj-pos-btn" onclick="toggleJJPos(this)">Triângulo</button>
+        </div>
+      </div>
+
+      <div>
+        <span class="jj-met-label">👤 Nível do parceiro principal</span>
+        <div class="jj-nivel-btns">
+          <button class="jj-nivel-btn" data-nivel="Iniciante" onclick="selectJJNivel(this)">🟢 Iniciante</button>
+          <button class="jj-nivel-btn" data-nivel="Similar" onclick="selectJJNivel(this)">🟡 Similar</button>
+          <button class="jj-nivel-btn" data-nivel="Avançado" onclick="selectJJNivel(this)">🔴 Avançado</button>
+        </div>
+      </div>
+    </div>
+
     <button class="btn-save" style="width:100%;margin-top:12px" onclick="saveJJSession()">✅ Registrar sessão</button>
   </div>
 
@@ -3837,6 +4185,7 @@
     <div class="jj-stat-chip"><span class="jj-stat-val" id="jjStreak">0</span><span class="jj-stat-label">Sequência</span></div>
     <div class="jj-stat-chip"><span class="jj-stat-val" id="jjAvgDur">—</span><span class="jj-stat-label">Média min</span></div>
   </div>
+  <div id="jjFinStats" style="padding:6px 0;margin-bottom:4px;text-align:center"></div>
 
   <!-- FREQUÊNCIA SEMANAL -->
   <div class="dash-section">
@@ -4380,7 +4729,8 @@ let currentTab = 'a';
 const TAB_NAMES = {
   a:'🏋️ Treino A', b:'🦵 Treino B', c:'⚡ Treino C',
   d:'📋 Histórico', e:'📊 Bioimpedância', f:'🥗 Dieta',
-  g:'📈 Projeção', h:'🥋 Jiu-Jitsu', i:'📸 Fotos'
+  g:'📈 Projeção', h:'🥋 Jiu-Jitsu', i:'📸 Fotos',
+  livre:'🏋️ Treino Livre', tirze:'💉 Tirzepatida', conquistas:'🏆 Conquistas', medidas:'📏 Medidas', evolucao:'📊 Evolução', relatorio:'📅 Relatório', compartilhar:'📤 Compartilhar'
 };
 function switchTab(id) {
   document.querySelectorAll('[data-tab]').forEach(b => {
@@ -4393,6 +4743,10 @@ function switchTab(id) {
   if (nameEl) nameEl.textContent = TAB_NAMES[id] || 'Projeto Tatame';
   closeDrawer();
   currentTab = id;
+  if (id === 'medidas') { renderMedidasHistorico(); initMedidasDate(); }
+  if (id === 'evolucao') { populateEvolucaoSelect(); renderEvolucao(); }
+  if (id === 'relatorio') { populateRelatorioMeses(); renderRelatorio(); }
+  if (id === 'compartilhar') { renderShareCard(); }
   if (id === 'd') {
     renderHistoricoTab();
     renderCalendar();
@@ -4401,7 +4755,22 @@ function switchTab(id) {
   }
   if (id === 'e') { setTimeout(renderBioTab, 50); }
   if (id === 'f') { setTimeout(renderDietTab, 50); }
-  if (id === 'g') { setTimeout(renderDashboard, 80); }
+  if (id === 'g') { setTimeout(() => { renderDashboard(); setTimeout(renderDashboard, 400); }, 80); }
+  if (id === 'conquistas') { setTimeout(renderConquistas, 80); }
+  if (id === 'tirze') {
+    setTimeout(() => {
+      const d = document.getElementById('tirze-date');
+      if (d && !d.value) d.value = todayStr();
+      renderTirze();
+    }, 80);
+  }
+  if (id === 'livre') {
+    setTimeout(() => {
+      const d = document.getElementById('livreDate');
+      if (d && !d.value) d.value = todayStr();
+      renderLivreHistorico();
+    }, 80);
+  }
   if (id === 'h') { setTimeout(renderJJTab, 50); }
   if (id === 'i') { setTimeout(renderFotosTab, 50); }
   updateProgress();
@@ -4649,6 +5018,12 @@ function updateHeaderStats() {
   // ── Summary Banner ──
   const sbWeek   = document.getElementById('sb-week');   if(sbWeek)   sbWeek.textContent   = week.length + '/' + goal;
   const sbStreak = document.getElementById('sb-streak'); if(sbStreak) sbStreak.textContent = '🔥 ' + streak;
+  // Peso atual no topo
+  try {
+    const bios = getBioEntries();
+    const sbW = document.getElementById('sb-weight');
+    if (sbW && bios.length) sbW.textContent = '⚖️ ' + bios[bios.length-1].weight + 'kg';
+  } catch(e) {}
   const sbGoal   = document.getElementById('sb-goal');   if(sbGoal)   sbGoal.textContent   = goal;
   const sbProg   = document.getElementById('sb-progress-fill');
   if(sbProg) sbProg.style.width = Math.min(100, week.length / goal * 100) + '%';
@@ -4959,7 +5334,8 @@ function saveModal() {
   const { totalVolume, details } = calcSessionVolume(modalTab);
   const volumeStr = totalVolume > 0 ? totalVolume.toLocaleString('pt-BR') + ' kg' : null;
 
-  addSession(date, modalTab, notes, startTime, endTime, duration, modalPhotoData, volumeStr, details);
+  addSession(date, modalTab, notes, startTime, endTime, duration, modalPhotoData, volumeStr, details, _rpeVal || 0);
+  resetRPE();
 
   // Reset workout session state for this tab
   if (ws) {
@@ -5034,7 +5410,7 @@ function closeLightbox() {
 }
 
 // ─────── SHARED SAVE ───────
-function addSession(date, treino, notes, startTime, endTime, duration, photo, volume, metricsDetails) {
+function addSession(date, treino, notes, startTime, endTime, duration, photo, volume, metricsDetails, rpe) {
   const sessions = getSessions();
   const now = Date.now();
   // Soft-dedup: same date + tab registered within 10 minutes = update existing
@@ -5178,6 +5554,22 @@ function renderHistoricoTab() {
       <div class="session-analysis-panel" id="analysis-${s.id}"></div>
     </div>`).join('');
 }
+
+let _rpeVal = 0;
+const RPE_LABELS = {1:'Recuperação ativa',2:'Muito leve',3:'Leve',4:'Moderado leve',5:'Moderado',6:'Moderado forte',7:'Forte',8:'Muito forte',9:'Quase máximo',10:'Máximo absoluto'};
+function setRPE(val) {
+  _rpeVal = val;
+  document.querySelectorAll('[id^="rpe-"]').forEach(b => {
+    const n = parseInt(b.id.split('-')[1]);
+    const colors = ['','#22c55e','#22c55e','#4ade80','#86efac','#fbbf24','#f97316','#ef4444','#ef4444','#dc2626','#b91c1c'];
+    b.style.background = n <= val ? colors[val] : 'transparent';
+    b.style.borderColor = n <= val ? colors[val] : 'var(--border)';
+    b.style.color = n <= val ? '#000' : 'var(--text)';
+  });
+  const lbl = document.getElementById('rpeLabel');
+  if (lbl) lbl.textContent = val ? RPE_LABELS[val] + ' (' + val + '/10)' : '';
+}
+function resetRPE() { _rpeVal = 0; document.querySelectorAll('[id^="rpe-"]').forEach(b => { b.style.background='transparent'; b.style.borderColor='var(--border)'; b.style.color='var(--text)'; }); const lbl=document.getElementById('rpeLabel'); if(lbl) lbl.textContent=''; }
 
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -6201,6 +6593,21 @@ function getBioEntries() {
   catch(e) { return []; }
 }
 
+let _bioPendingPhoto = null;
+function handleBioPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const nameEl = document.getElementById('bioPhotoName');
+  if (nameEl) nameEl.textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    _bioPendingPhoto = e.target.result;
+    const prev = document.getElementById('bioPhotoPreview');
+    if (prev) { prev.src = e.target.result; prev.style.display = 'block'; }
+  };
+  reader.readAsDataURL(file);
+}
+
 function saveBioEntry() {
   const date    = document.getElementById('bioDate').value;
   const weight  = parseFloat(document.getElementById('bioWeight').value);
@@ -6863,6 +7270,49 @@ function renderDietTab() {
   renderWaterTracker();
   const logDate = document.getElementById('dietLogDate');
   if (logDate && !logDate.value) logDate.value = todayStr();
+  renderMealQuickCheck();
+}
+
+function renderMealQuickCheck() {
+  const el = document.getElementById('mealQuickCheck');
+  if (!el) return;
+  const today = todayStr();
+  const all = getDietLogs();
+  const dayLog = all[today] || {};
+  const meals = [
+    { key:'cafe',    icon:'🌅', name:'Café' },
+    { key:'lanche1', icon:'🍊', name:'Lanche manhã' },
+    { key:'almoco',  icon:'🍽️', name:'Almoço' },
+    { key:'pre',     icon:'💪', name:'Pré-treino' },
+    { key:'pos',     icon:'🔋', name:'Pós-treino' },
+    { key:'jantar',  icon:'🌙', name:'Jantar' },
+  ];
+  el.innerHTML = meals.map(m => {
+    const done = !!(dayLog[m.key] || dayLog[m.key + '_done']);
+    return `<button onclick="toggleMealQuick('${m.key}')" style="background:${done ? 'rgba(34,197,94,0.2)' : 'var(--card2)'};border:2px solid ${done ? 'var(--green)' : 'var(--border)'};border-radius:12px;padding:10px 8px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:all .2s;color:var(--text)">
+      <span style="font-size:1.1rem">${done ? '✅' : '⬜'}</span>
+      <div style="text-align:left">
+        <div style="font-size:0.78rem;font-weight:700">${m.icon} ${m.name}</div>
+        <div style="font-size:0.6rem;color:${done ? 'var(--green)' : 'var(--muted)'}">${done ? 'Feito!' : 'Toque p/ marcar'}</div>
+      </div>
+    </button>`;
+  }).join('');
+}
+
+function toggleMealQuick(key) {
+  const today = todayStr();
+  const all = getDietLogs();
+  if (!all[today]) all[today] = {};
+  const done = !!(all[today][key] || all[today][key + '_done']);
+  if (done) {
+    delete all[today][key + '_done'];
+  } else {
+    all[today][key + '_done'] = '✅ Feito';
+  }
+  try { localStorage.setItem('projeto_tatame_dietlog', JSON.stringify(all)); } catch(e) {}
+  renderMealQuickCheck();
+  autoSync();
+  showToast(done ? '❌ Desmarcado' : '✅ Refeição marcada!');
 }
 
 function renderDietMacros() {
@@ -6918,6 +7368,16 @@ function renderDietWeight() {
   try {
     const weights = JSON.parse(localStorage.getItem(DIET_WEIGHT_KEY) || '[]');
     const start = 79.70, target = 65.80;
+    // Auto-preenche com peso mais recente do bio se não houver peso hoje na dieta
+    const todayKey = todayStr();
+    const hasToday = weights.some(w => w.date === todayKey);
+    if (!hasToday) {
+      const bios = getBioEntries();
+      if (bios.length) {
+        const lastBioW = bios[bios.length - 1].weight;
+        if (lastBioW) weights.push({ date: todayKey, w: lastBioW, fromBio: true });
+      }
+    }
     const last = weights.length ? weights[weights.length - 1] : null;
     const current = last ? last.w : start;
     const lost = start - current;
@@ -7250,6 +7710,86 @@ function renderDashboard() {
   renderWeightProjChart(bioEntries, stats);
   renderTrainFreqChart(allSessions, dietLogs);
   renderInsights(stats, allSessions, bioEntries, dietLogs);
+  renderCrossAnalysis(allSessions, bioEntries, dietLogs);
+}
+
+function renderCrossAnalysis(sessions, bioEntries, dietLogs) {
+  const el = document.getElementById('crossAnalysis');
+  if (!el) return;
+  const today = brDate();
+  const last30 = new Date(today); last30.setDate(today.getDate() - 30);
+  const recentSessions = sessions.filter(s => new Date(s.date+'T12:00:00') >= last30);
+  const recentBio = bioEntries.filter(b => new Date(b.date+'T12:00:00') >= last30);
+  const dietDays = Object.keys(dietLogs).filter(d => new Date(d+'T12:00:00') >= last30);
+  const weeksCount = Math.max(1, recentSessions.length > 0 ? 4 : 1);
+  const gymSessions = recentSessions.filter(s => s.tipo !== 'jj' && !s.jj);
+  const jjSessions  = recentSessions.filter(s => s.tipo === 'jj' || s.jj);
+
+  // Variação peso
+  let weightDelta = null, weightTrend = '';
+  if (recentBio.length >= 2) {
+    weightDelta = (recentBio[recentBio.length-1].weight - recentBio[0].weight).toFixed(1);
+    weightTrend = weightDelta < 0 ? '📉 Perdendo' : weightDelta > 0 ? '📈 Ganhando' : '➡️ Estável';
+  }
+
+  // Correlação treino × dieta
+  let corrMsg = '';
+  const trainRate  = gymSessions.length / 4;
+  const dietRate   = dietDays.length / 30;
+  if (trainRate >= 0.6 && dietRate >= 0.6) corrMsg = '🟢 Treino e dieta alinhados — ambiente perfeito para resultados.';
+  else if (trainRate >= 0.6 && dietRate < 0.4) corrMsg = '🟡 Treino bom, mas dieta inconsistente — isso limita seus ganhos.';
+  else if (trainRate < 0.4 && dietRate >= 0.6) corrMsg = '🟡 Dieta em dia, mas frequência de treino baixa — aumente o volume.';
+  else corrMsg = '🔴 Treino e dieta abaixo do ideal — foco nos dois juntos.';
+
+  // Score composto
+  const trainScore = Math.min(100, Math.round(trainRate * 100 / 0.75 * 100));
+  const dietScore  = Math.min(100, Math.round(dietRate * 100));
+  const bioScore   = Math.min(100, recentBio.length * 25);
+  const total      = Math.round((trainScore + dietScore + bioScore) / 3);
+
+  const bar = (val, color) => `<div style="background:var(--card2);border-radius:4px;height:8px;flex:1;overflow:hidden"><div style="height:100%;width:${val}%;background:${color};border-radius:4px;transition:width .5s"></div></div>`;
+
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <div style="background:var(--card2);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:1.6rem;font-weight:900;color:var(--accent)">${total}%</div>
+        <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Score 30 dias</div>
+      </div>
+      <div style="background:var(--card2);border-radius:12px;padding:12px">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+          <span style="font-size:0.65rem;color:var(--muted);width:40px">Treino</span>
+          ${bar(trainScore,'var(--accent)')}
+          <span style="font-size:0.65rem;font-weight:700;color:var(--accent);width:32px">${trainScore}%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+          <span style="font-size:0.65rem;color:var(--muted);width:40px">Dieta</span>
+          ${bar(dietScore,'var(--green)')}
+          <span style="font-size:0.65rem;font-weight:700;color:var(--green);width:32px">${dietScore}%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-size:0.65rem;color:var(--muted);width:40px">Bio</span>
+          ${bar(bioScore,'#4fc3f7')}
+          <span style="font-size:0.65rem;font-weight:700;color:#4fc3f7;width:32px">${bioScore}%</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--card2);border-radius:12px;padding:12px;margin-bottom:10px;font-size:0.8rem">${corrMsg}</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px">
+      <div style="background:var(--card2);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:1.1rem;font-weight:800;color:var(--accent)">${gymSessions.length}</div>
+        <div style="font-size:0.62rem;color:var(--muted)">Treinos academia</div>
+      </div>
+      <div style="background:var(--card2);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:1.1rem;font-weight:800;color:#4fc3f7">${jjSessions.length}</div>
+        <div style="font-size:0.62rem;color:var(--muted)">Sessões JJ</div>
+      </div>
+      <div style="background:var(--card2);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:1.1rem;font-weight:800;color:var(--green)">${dietDays.length}</div>
+        <div style="font-size:0.62rem;color:var(--muted)">Dias dieta</div>
+      </div>
+    </div>
+    ${weightDelta !== null ? `<div style="background:var(--card2);border-radius:10px;padding:10px;text-align:center;font-size:0.8rem">${weightTrend}: <strong style="color:var(--accent)">${weightDelta > 0 ? '+' : ''}${weightDelta}kg</strong> nos últimos 30 dias</div>` : '<div style="background:var(--card2);border-radius:10px;padding:10px;text-align:center;font-size:0.75rem;color:var(--muted)">Registre 2+ bioimpedâncias para ver variação de peso</div>'}
+  `;
 }
 
 function calcDashStats(sessions, bioEntries, dietLogs) {
@@ -7598,6 +8138,10 @@ function renderProjCards(stats, horizonMonths) {
     </div>`;
   }
 
+  if (!stats.curWeight || stats.curWeight <= 0) {
+    el.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:0.8rem;padding:16px">Registre uma bioimpedância para ver a projeção</div>';
+    return;
+  }
   el.innerHTML =
     card('⚖️', 'Peso total',      +stats.curWeight.toFixed(1), proj.projWeight, ' kg', true) +
     card('🔥', 'Gordura corporal', +stats.curFatKg.toFixed(1),  proj.projFatKg,  ' kg', true) +
@@ -8573,6 +9117,8 @@ const BACKUP_KEYS = [
   'projeto_tatame_water',
   'projeto_tatame_jj',
   'projeto_tatame_fotos',
+  'projeto_tatame_tirze',
+  'projeto_tatame_medidas',
   'weeklyGoal',
   'theme'
 ];
@@ -8757,6 +9303,233 @@ async function _sbRefreshSession() {
     return true;
   } catch(e) { return false; }
 }
+
+// ══════════════════════════════════════════════════════════
+// TREINO LIVRE
+// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// TIRZEPATIDA TRACKER
+// ══════════════════════════════════════════════════════════
+const TIRZE_KEY = 'projeto_tatame_tirze';
+function getTirze() { try { return JSON.parse(localStorage.getItem(TIRZE_KEY)||'[]'); } catch(e){ return []; } }
+function saveTirzeData(arr) { try { localStorage.setItem(TIRZE_KEY, JSON.stringify(arr)); } catch(e){} }
+
+function saveTirze() {
+  const date = document.getElementById('tirze-date')?.value || todayStr();
+  const dose = parseFloat(document.getElementById('tirze-dose')?.value) || 2.5;
+  const energia = parseInt(document.getElementById('tirze-energia')?.value) || 0;
+  const apetite = parseInt(document.getElementById('tirze-apetite')?.value) || 0;
+  const sintomas = [...document.querySelectorAll('.tirze-sintoma:checked')].map(c => c.value);
+  const notes = document.getElementById('tirze-notes')?.value.trim() || '';
+  const arr = getTirze();
+  const idx = arr.findIndex(t => t.date === date);
+  const entry = { date, dose, energia, apetite, sintomas, notes };
+  if (idx >= 0) arr[idx] = entry; else arr.unshift(entry);
+  arr.sort((a,b) => b.date.localeCompare(a.date));
+  saveTirzeData(arr);
+  document.querySelectorAll('.tirze-sintoma').forEach(c => c.checked = false);
+  document.getElementById('tirze-notes').value = '';
+  renderTirze();
+  autoSync();
+  showToast('💉 Aplicação registrada!');
+}
+
+function renderTirze() {
+  renderTirze_NextCard();
+  const el = document.getElementById('tirze-hist');
+  if (!el) return;
+  const arr = getTirze();
+  if (!arr.length) { el.innerHTML = '<p style="color:var(--muted);font-size:0.8rem;text-align:center;padding:16px">Nenhuma aplicação registrada ainda</p>'; return; }
+  el.innerHTML = arr.slice(0,20).map(t => {
+    const energia_bar = t.energia ? '⚡'.repeat(Math.round(t.energia/2)) : '—';
+    const apetite_bar = t.apetite ? '🍽️'.repeat(Math.round(t.apetite/2)) : '—';
+    return `<div style="background:var(--card2);border-radius:12px;padding:12px;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-weight:700;color:var(--accent)">${t.date.split('-').reverse().join('/')} · ${t.dose}mg</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;font-size:0.75rem">
+        ${t.energia ? `<div style="background:var(--card);border-radius:8px;padding:6px">⚡ Energia: <strong>${t.energia}/10</strong></div>` : ''}
+        ${t.apetite ? `<div style="background:var(--card);border-radius:8px;padding:6px">🍽️ Apetite: <strong>${t.apetite}/10</strong></div>` : ''}
+      </div>
+      ${t.sintomas.length ? `<div style="font-size:0.72rem;color:var(--muted);margin-bottom:6px">🤢 ${t.sintomas.join(' · ')}</div>` : ''}
+      ${t.notes ? `<div style="font-size:0.75rem;color:var(--muted)">${t.notes}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function renderTirze_NextCard() {
+  const el = document.getElementById('tirze-next-card');
+  if (!el) return;
+  const arr = getTirze();
+  if (!arr.length) { el.innerHTML = '<div style="color:var(--muted);font-size:0.8rem">Registre sua primeira aplicação</div>'; return; }
+  const last = arr[0];
+  const lastDate = new Date(last.date + 'T12:00:00');
+  const nextDate = new Date(lastDate); nextDate.setDate(nextDate.getDate() + 7);
+  const today = brDate();
+  const diffDays = Math.round((nextDate - today) / 86400000);
+  const diffStr = diffDays === 0 ? 'HOJE!' : diffDays > 0 ? `em ${diffDays} dia${diffDays > 1 ? 's' : ''}` : `há ${Math.abs(diffDays)} dia${Math.abs(diffDays) > 1 ? 's' : ''} (atrasada)`;
+  const urgente = diffDays <= 1;
+  el.innerHTML = `
+    <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px">PRÓXIMA APLICAÇÃO</div>
+    <div style="font-size:1.4rem;font-weight:900;color:${urgente ? '#ef4444' : 'var(--accent)'}">${nextDate.toLocaleDateString('pt-BR')}</div>
+    <div style="font-size:0.85rem;color:${urgente ? '#ef4444' : 'var(--muted)'};margin-top:4px">${diffStr}</div>
+    <div style="font-size:0.72rem;color:var(--muted);margin-top:6px">Última: ${last.date.split('-').reverse().join('/')} · ${last.dose}mg</div>`;
+}
+
+const LIVRE_KEY = 'projeto_tatame_livre';
+// ══════════════════════════════════════════════════════════
+// CONQUISTAS / BADGES
+// ══════════════════════════════════════════════════════════
+const CONQUISTAS_KEY = 'projeto_tatame_conquistas';
+const BADGES_DEF = [
+  { id:'first_session',  icon:'🥋', name:'Primeiro Passo',      desc:'Registrou seu primeiro treino',              check: (s,b,d,j) => s.length >= 1 },
+  { id:'sessions_10',    icon:'💪', name:'10 Treinos',           desc:'Completou 10 sessões de treino',             check: (s,b,d,j) => s.length >= 10 },
+  { id:'sessions_30',    icon:'🔥', name:'30 Treinos',           desc:'30 sessões de treino completadas',           check: (s,b,d,j) => s.length >= 30 },
+  { id:'sessions_100',   icon:'💎', name:'Centurião',            desc:'100 treinos registrados',                    check: (s,b,d,j) => s.length >= 100 },
+  { id:'jj_first',       icon:'🥋', name:'OSS!',                 desc:'Primeira sessão de Jiu-Jitsu registrada',   check: (s,b,d,j) => j.length >= 1 },
+  { id:'jj_10',          icon:'🔵', name:'10 Sessões JJ',        desc:'10 treinos de Jiu-Jitsu',                   check: (s,b,d,j) => j.length >= 10 },
+  { id:'bio_first',      icon:'📊', name:'Métricas On',          desc:'Primeira bioimpedância registrada',          check: (s,b,d,j) => b.length >= 1 },
+  { id:'bio_5',          icon:'📈', name:'Evolução Consistente', desc:'5 bioimpedâncias registradas',               check: (s,b,d,j) => b.length >= 5 },
+  { id:'weight_loss_1',  icon:'⚖️',  name:'Primeiro Kg',         desc:'Perdeu 1kg desde o início',                 check: (s,b,d,j) => b.length >= 2 && (b[0].weight - b[b.length-1].weight) >= 1 },
+  { id:'weight_loss_5',  icon:'🏅', name:'5kg Eliminados',       desc:'Perdeu 5kg desde o início',                 check: (s,b,d,j) => b.length >= 2 && (b[0].weight - b[b.length-1].weight) >= 5 },
+  { id:'diet_3streak',   icon:'🥗', name:'3 Dias de Dieta',      desc:'3 dias consecutivos com dieta registrada',  check: (s,b,d,j) => calcDietStreak() >= 3 },
+  { id:'diet_7streak',   icon:'🌟', name:'Semana Perfeita',      desc:'7 dias consecutivos na dieta',              check: (s,b,d,j) => calcDietStreak() >= 7 },
+  { id:'diet_30streak',  icon:'👑', name:'Mês de Ouro',          desc:'30 dias consecutivos na dieta',             check: (s,b,d,j) => calcDietStreak() >= 30 },
+  { id:'water_goal',     icon:'💧', name:'Hidratado',            desc:'Bateu a meta de água pela primeira vez',    check: (s,b,d,j) => { try { const w=JSON.parse(localStorage.getItem('projeto_tatame_water')||'{}'); return Object.values(w).some(v=>(v||0)>=2500); } catch(e){return false;} } },
+  { id:'rpe_10',         icon:'😤', name:'No Limite',            desc:'Treino com RPE 10 registrado',              check: (s,b,d,j) => s.some(x=>x.rpe>=10) },
+  { id:'week_complete',  icon:'📅', name:'Semana Cheia',         desc:'Cumpriu a meta semanal de treinos',         check: (s,b,d,j) => { const g=parseInt(localStorage.getItem('weeklyGoal')||3); const ws=getWeekStart(); return s.filter(x=>x.date>=ws).length>=g; } },
+];
+
+function getUnlockedBadges() { try { return JSON.parse(localStorage.getItem(CONQUISTAS_KEY)||'[]'); } catch(e){ return []; } }
+
+function checkAndUnlockBadges() {
+  const sessions = getAllTrainingSessions();
+  const bioEntries = getBioEntries();
+  const dietLogs = getDietLogs();
+  const jjSessions = getJJSessions();
+  const unlocked = getUnlockedBadges();
+  const newBadges = [];
+  BADGES_DEF.forEach(b => {
+    if (unlocked.includes(b.id)) return;
+    try {
+      if (b.check(sessions, bioEntries, dietLogs, jjSessions)) {
+        newBadges.push(b.id);
+        showToast('🏆 Conquista desbloqueada: ' + b.name + '!');
+      }
+    } catch(e) {}
+  });
+  if (newBadges.length) localStorage.setItem(CONQUISTAS_KEY, JSON.stringify([...unlocked, ...newBadges]));
+}
+
+function renderConquistas() {
+  const grid = document.getElementById('conquistasGrid');
+  const locked = document.getElementById('conquistasLocked');
+  if (!grid) return;
+  checkAndUnlockBadges();
+  const unlocked = getUnlockedBadges();
+  const done = BADGES_DEF.filter(b => unlocked.includes(b.id));
+  const notDone = BADGES_DEF.filter(b => !unlocked.includes(b.id));
+  grid.innerHTML = done.length ? done.map(b => `
+    <div style="background:linear-gradient(135deg,rgba(240,165,0,.2),rgba(240,165,0,.05));border:1px solid var(--accent);border-radius:14px;padding:14px;text-align:center">
+      <div style="font-size:2rem;margin-bottom:6px">${b.icon}</div>
+      <div style="font-weight:800;font-size:0.8rem;color:var(--accent)">${b.name}</div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-top:3px">${b.desc}</div>
+    </div>`).join('') : '<div style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:0.8rem;padding:16px">Nenhuma conquista ainda — comece a treinar!</div>';
+  if (locked) locked.innerHTML = notDone.length ? `
+    <div style="font-size:0.72rem;color:var(--muted);font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">🔒 Ainda por desbloquear (${notDone.length})</div>
+    ${notDone.map(b => `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--card2);border-radius:10px;margin-bottom:6px;opacity:.5">
+      <span style="font-size:1.3rem;filter:grayscale(1)">${b.icon}</span>
+      <div><div style="font-size:0.78rem;font-weight:700">${b.name}</div><div style="font-size:0.65rem;color:var(--muted)">${b.desc}</div></div>
+    </div>`).join('')}` : '';
+}
+
+function getLivreTreinos() { try { return JSON.parse(localStorage.getItem(LIVRE_KEY)||'[]'); } catch(e){ return []; } }
+function saveLivreTreinos(arr) { try { localStorage.setItem(LIVRE_KEY, JSON.stringify(arr)); } catch(e){} }
+
+let _livreExCount = 0;
+function addLivreExercicio() {
+  const container = document.getElementById('livreExercicios');
+  if (!container) return;
+  const id = ++_livreExCount;
+  const div = document.createElement('div');
+  div.id = 'livre-ex-' + id;
+  div.style.cssText = 'background:var(--card2);border-radius:10px;padding:10px;margin-bottom:8px;position:relative';
+  div.innerHTML = `
+    <button onclick="this.closest('#livre-ex-${id}').remove()" style="position:absolute;right:8px;top:8px;background:transparent;border:none;color:var(--muted);font-size:1rem;cursor:pointer">✕</button>
+    <div style="font-size:0.72rem;font-weight:700;color:var(--accent);margin-bottom:8px">Exercício ${id}</div>
+    <div class="bio-grid">
+      <div class="bio-field" style="grid-column:1/-1">
+        <label>Nome do exercício</label>
+        <input type="text" class="livre-nome" placeholder="Ex: Supino reto, Agachamento..." style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-size:0.85rem"/>
+      </div>
+      <div class="bio-field">
+        <label>Séries</label>
+        <input type="number" class="livre-series" placeholder="4" min="1" max="20" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-size:0.85rem"/>
+      </div>
+      <div class="bio-field">
+        <label>Reps</label>
+        <input type="number" class="livre-reps" placeholder="12" min="1" max="100" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-size:0.85rem"/>
+      </div>
+      <div class="bio-field">
+        <label>Carga (kg)</label>
+        <input type="number" class="livre-carga" placeholder="60" step="0.5" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-size:0.85rem"/>
+      </div>
+      <div class="bio-field">
+        <label>Obs.</label>
+        <input type="text" class="livre-obs" placeholder="falha na 4ª..." style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-size:0.85rem"/>
+      </div>
+    </div>`;
+  container.appendChild(div);
+}
+
+function saveLivreTreino() {
+  const date = document.getElementById('livreDate')?.value || todayStr();
+  const dur  = parseInt(document.getElementById('livreDuracao')?.value) || 0;
+  const notes = document.getElementById('livreNotes')?.value.trim() || '';
+  const exercicios = [];
+  document.querySelectorAll('[id^="livre-ex-"]').forEach(div => {
+    const nome  = div.querySelector('.livre-nome')?.value.trim();
+    const series= parseInt(div.querySelector('.livre-series')?.value) || 0;
+    const reps  = parseInt(div.querySelector('.livre-reps')?.value) || 0;
+    const carga = parseFloat(div.querySelector('.livre-carga')?.value) || 0;
+    const obs   = div.querySelector('.livre-obs')?.value.trim() || '';
+    if (nome) exercicios.push({ nome, series, reps, carga, obs });
+  });
+  if (!exercicios.length) { showToast('Adicione ao menos 1 exercício!'); return; }
+  const arr = getLivreTreinos();
+  arr.unshift({ date, dur, notes, exercicios, savedAt: new Date().toISOString() });
+  saveLivreTreinos(arr);
+  // Também registra na sessão geral para aparecer no calendário e stats
+  addSession(date, 'livre', 'Treino Livre: ' + exercicios.map(e=>e.nome).join(', '), null, null, dur, null, null, null);
+  document.getElementById('livreExercicios').innerHTML = '';
+  document.getElementById('livreNotes').value = '';
+  document.getElementById('livreDuracao').value = '';
+  _livreExCount = 0;
+  renderLivreHistorico();
+  autoSync();
+  showToast('✅ Treino salvo!');
+}
+
+function renderLivreHistorico() {
+  const el = document.getElementById('livreHistorico');
+  if (!el) return;
+  const arr = getLivreTreinos();
+  if (!arr.length) { el.innerHTML = '<p style="color:var(--muted);font-size:0.8rem;text-align:center;padding:16px">Nenhum treino registrado ainda</p>'; return; }
+  el.innerHTML = arr.slice(0, 20).map(t => `
+    <div style="background:var(--card2);border-radius:12px;padding:12px;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-weight:700;color:var(--accent)">${t.date.split('-').reverse().join('/')} ${t.dur ? '· '+t.dur+'min' : ''}</div>
+      </div>
+      ${t.notes ? `<div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px">${t.notes}</div>` : ''}
+      ${t.exercicios.map(e => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:0.78rem">
+          <div style="font-weight:600">${e.nome}</div>
+          <div style="color:var(--muted)">${e.series ? e.series+'x' : ''}${e.reps ? e.reps : ''} ${e.carga ? '· '+e.carga+'kg' : ''}</div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════════
 
 let _syncDebounce = null;
 function autoSync() {
@@ -9233,6 +10006,641 @@ if (typeof supabase !== 'undefined') {
   // SDK ainda carregando — tenta após carregamento da página
   window.addEventListener('load', tryInitSupabase);
 }
+
+// ===== MEDIDAS CORPORAIS =====
+const MEDIDAS_KEY = 'projeto_tatame_medidas';
+const MEDIDAS_FIELDS = [
+  { id:'cintura', label:'Cintura' },
+  { id:'quadril', label:'Quadril' },
+  { id:'peito',   label:'Peito' },
+  { id:'braco',   label:'Braço' },
+  { id:'coxa',    label:'Coxa' },
+  { id:'panturrilha', label:'Panturrilha' }
+];
+function getMedidas() {
+  try { return JSON.parse(localStorage.getItem(MEDIDAS_KEY) || '[]'); } catch(e) { return []; }
+}
+function saveMedidas() {
+  var dateEl = document.getElementById('medidasDate');
+  var date = dateEl ? dateEl.value : todayStr();
+  if (!date) { showToast('Selecione uma data!'); return; }
+  var entry = { date: date, ts: Date.now() };
+  var hasAny = false;
+  MEDIDAS_FIELDS.forEach(function(f) {
+    var el = document.getElementById('med-' + f.id);
+    var v = el ? parseFloat(el.value) : NaN;
+    if (!isNaN(v) && v > 0) { entry[f.id] = v; hasAny = true; }
+  });
+  if (!hasAny) { showToast('Preencha ao menos uma medida!'); return; }
+  var arr = getMedidas();
+  var idx = arr.findIndex(function(m){ return m.date === date; });
+  if (idx >= 0) arr[idx] = Object.assign({}, arr[idx], entry);
+  else arr.unshift(entry);
+  arr.sort(function(a,b){ return b.date.localeCompare(a.date); });
+  localStorage.setItem(MEDIDAS_KEY, JSON.stringify(arr));
+  MEDIDAS_FIELDS.forEach(function(f) {
+    var el = document.getElementById('med-' + f.id);
+    if (el) el.value = '';
+  });
+  showToast('📏 Medidas salvas!');
+  renderMedidasHistorico();
+}
+function renderMedidasHistorico() {
+  var el = document.getElementById('medidasHistorico');
+  if (!el) return;
+  var arr = getMedidas();
+  if (!arr.length) {
+    el.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;text-align:center;padding:20px">Nenhuma medida registrada ainda.</p>';
+    return;
+  }
+  var html2 = '';
+  arr.forEach(function(entry, i) {
+    var prev = arr[i + 1];
+    var parts = entry.date.split('-');
+    var dateLabel = parts[2] + '/' + parts[1] + '/' + parts[0];
+    var chips = '';
+    MEDIDAS_FIELDS.forEach(function(f) {
+      if (entry[f.id]) {
+        var delta = '';
+        if (prev && prev[f.id]) {
+          var diff = entry[f.id] - prev[f.id];
+          if (diff !== 0) {
+            var cls2 = diff < 0 ? 'medida-delta-pos' : 'medida-delta-neg';
+            var sign2 = diff > 0 ? '+' : '';
+            delta = '<span class="' + cls2 + '">' + sign2 + diff.toFixed(1) + '</span>';
+          }
+        }
+        chips += '<span class="medida-chip">' + f.label + ': ' + entry[f.id] + 'cm' + delta + '</span>';
+      }
+    });
+    html2 += '<div class="medidas-hist-row"><span class="medidas-hist-date">📅 ' + dateLabel + '</span><div class="medidas-hist-vals">' + chips + '</div></div>';
+  });
+  el.innerHTML = html2 || '<p style="color:var(--muted)">Sem dados.</p>';
+}
+function initMedidasDate() {
+  var el = document.getElementById('medidasDate');
+  if (el && !el.value) el.value = todayStr();
+}
+
+// ===== EVOLUÇÃO POR EXERCÍCIO =====
+function populateEvolucaoSelect() {
+  var sel = document.getElementById('evolucaoSelect');
+  if (!sel) return;
+  var all = getAllMetrics();
+  var keys = Object.keys(all).filter(function(k){ return all[k] && all[k].length > 0; });
+  var prev = sel.value;
+  sel.innerHTML = '<option value="">— Selecione um exercício —</option>';
+  keys.sort().forEach(function(k) {
+    var label = decodeURIComponent(k);
+    var opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = label;
+    if (k === prev) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+function renderEvolucao() {
+  var sel = document.getElementById('evolucaoSelect');
+  var statsRow = document.getElementById('evolucaoStats');
+  var chartWrap = document.getElementById('evolucaoChartWrap');
+  var emptyEl = document.getElementById('evolucaoEmpty');
+  if (!sel) return;
+  var key = sel.value;
+  if (!key) {
+    if (statsRow) statsRow.style.display = 'none';
+    if (chartWrap) chartWrap.style.display = 'none';
+    if (emptyEl) emptyEl.style.display = 'none';
+    return;
+  }
+  var all = getAllMetrics();
+  var log = (all[key] || []).slice().reverse();
+  if (!log.length) {
+    if (statsRow) statsRow.style.display = 'none';
+    if (chartWrap) chartWrap.style.display = 'none';
+    if (emptyEl) emptyEl.style.display = 'block';
+    return;
+  }
+  if (emptyEl) emptyEl.style.display = 'none';
+  if (statsRow) statsRow.style.display = 'flex';
+  if (chartWrap) chartWrap.style.display = 'block';
+  var weights = log.map(function(e){ return getMaxWeight(e); }).filter(function(v){ return v > 0; });
+  var maxPR = weights.length ? Math.max.apply(null, weights) : 0;
+  var lastW = weights.length ? weights[weights.length - 1] : 0;
+  var firstW = weights.length ? weights[0] : 0;
+  var gain = lastW - firstW;
+  var prEl = document.getElementById('evoMaxPR');
+  var lastEl = document.getElementById('evoLast');
+  var gainEl = document.getElementById('evoGain');
+  var sessEl = document.getElementById('evoSessions');
+  if (prEl) prEl.textContent = maxPR > 0 ? maxPR + 'kg' : '—';
+  if (lastEl) lastEl.textContent = lastW > 0 ? lastW + 'kg' : '—';
+  if (gainEl) {
+    gainEl.textContent = gain !== 0 ? (gain > 0 ? '+' : '') + gain.toFixed(1) + 'kg' : '—';
+    gainEl.style.color = gain > 0 ? '#22c55e' : gain < 0 ? '#f87171' : '#a855f7';
+  }
+  if (sessEl) sessEl.textContent = log.length;
+  var canvas = document.getElementById('evolucaoChart');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W = canvas.offsetWidth || 300;
+  var H = 160;
+  canvas.width = W; canvas.height = H;
+  ctx.clearRect(0, 0, W, H);
+  var data = log.map(function(e){ return getMaxWeight(e); });
+  var labels = log.map(function(e){ var p=e.date.split('-'); return p[2]+'/'+p[1]; });
+  var validD = data.filter(function(v){ return v>0; });
+  if (!validD.length) return;
+  var minV = Math.min.apply(null,validD)*0.92;
+  var maxV = Math.max.apply(null,validD)*1.08;
+  var pad = {t:16,r:12,b:32,l:40};
+  var cW = W-pad.l-pad.r; var cH = H-pad.t-pad.b;
+  var n = data.length;
+  function xPos(i){ return pad.l+(n>1?i/(n-1):0.5)*cW; }
+  function yPos(v){ return v<=0?pad.t+cH:pad.t+cH-((v-minV)/(maxV-minV))*cH; }
+  ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
+  for(var g=0;g<=4;g++){
+    var gy=pad.t+(g/4)*cH;
+    ctx.beginPath(); ctx.moveTo(pad.l,gy); ctx.lineTo(pad.l+cW,gy); ctx.stroke();
+    var gv=maxV-(g/4)*(maxV-minV);
+    ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.font='10px sans-serif';
+    ctx.textAlign='right'; ctx.fillText(gv.toFixed(1),pad.l-4,gy+4);
+  }
+  var grad=ctx.createLinearGradient(0,pad.t,0,pad.t+cH);
+  grad.addColorStop(0,'rgba(168,85,247,0.35)');
+  grad.addColorStop(1,'rgba(168,85,247,0.02)');
+  ctx.beginPath();
+  data.forEach(function(v,i){
+    var x=xPos(i),y=v>0?yPos(v):pad.t+cH;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.lineTo(xPos(n-1),pad.t+cH); ctx.lineTo(xPos(0),pad.t+cH);
+  ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+  ctx.beginPath(); ctx.strokeStyle='#a855f7'; ctx.lineWidth=2.5; ctx.lineJoin='round';
+  data.forEach(function(v,i){
+    var x=xPos(i),y=v>0?yPos(v):pad.t+cH;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  data.forEach(function(v,i){
+    if(v<=0) return;
+    var x=xPos(i),y=yPos(v),isMax=(v===maxPR);
+    ctx.beginPath(); ctx.arc(x,y,isMax?5:3.5,0,Math.PI*2);
+    ctx.fillStyle=isMax?'#f0a500':'#a855f7'; ctx.fill();
+    if(i===0||i===n-1||isMax){
+      ctx.fillStyle='rgba(255,255,255,0.8)'; ctx.font='10px sans-serif';
+      ctx.textAlign='center'; ctx.fillText(v+'kg',x,y-9);
+    }
+  });
+  ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+  var step=Math.max(1,Math.floor(n/6));
+  labels.forEach(function(lbl,i){
+    if(i%step===0||i===n-1) ctx.fillText(lbl,xPos(i),H-8);
+  });
+}
+
+// ===== RELATÓRIO MENSAL =====
+function populateRelatorioMeses() {
+  var sel = document.getElementById('relatorioMes');
+  if (!sel) return;
+  var sessions = getSessions();
+  var jjSessions = typeof getJJSessions === 'function' ? getJJSessions() : [];
+  var allDates = sessions.map(function(s){ return s.date; }).concat(jjSessions.map(function(s){ return s.date; }));
+  var monthSet = {};
+  allDates.forEach(function(d){ if(d) monthSet[d.slice(0,7)] = true; });
+  var months = Object.keys(monthSet).sort().reverse();
+  var now2 = brDate();
+  var curMonth = now2.getFullYear() + '-' + String(now2.getMonth()+1).padStart(2,'0');
+  if (!monthSet[curMonth]) months.unshift(curMonth);
+  var prev = sel.value;
+  sel.innerHTML = '';
+  var mNames = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  months.forEach(function(mo) {
+    var p = mo.split('-');
+    var opt = document.createElement('option');
+    opt.value = mo;
+    opt.textContent = mNames[parseInt(p[1])-1] + ' ' + p[0];
+    if (mo === prev) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  if (!prev && sel.options.length) sel.value = sel.options[0].value;
+}
+function renderRelatorio() {
+  var sel = document.getElementById('relatorioMes');
+  var el = document.getElementById('relatorioConteudo');
+  if (!sel || !el) return;
+  var month = sel.value;
+  if (!month) { el.innerHTML = ''; return; }
+  var p = month.split('-');
+  var mNamesLong = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  var monthName = mNamesLong[parseInt(p[1])-1] + ' ' + p[0];
+  var allSessions = getSessions().filter(function(s){ return s.date && s.date.startsWith(month); });
+  var jjSessions = (typeof getJJSessions === 'function' ? getJJSessions() : []).filter(function(s){ return s.date && s.date.startsWith(month); });
+  var totalSessions = allSessions.length + jjSessions.length;
+  var totalVolume = 0;
+  allSessions.forEach(function(s){
+    if(s.volume){ var m2=s.volume.match(/([\d.]+)\s*ton/); if(m2) totalVolume+=parseFloat(m2[1]); }
+  });
+  var totalDuration = 0;
+  allSessions.forEach(function(s){ if(s.duration) totalDuration+=parseInt(s.duration)||0; });
+  jjSessions.forEach(function(s){ if(s.duration) totalDuration+=parseInt(s.duration)||0; });
+  var rpeVals = allSessions.filter(function(s){ return s.rpe>0; }).map(function(s){ return s.rpe; });
+  var avgRPE = rpeVals.length ? (rpeVals.reduce(function(a,b){ return a+b; },0)/rpeVals.length).toFixed(1) : '—';
+  var bios = typeof getBioEntries === 'function' ? getBioEntries().filter(function(b){ return b.date && b.date.startsWith(month); }) : [];
+  var bioFirst = bios.length ? bios[0] : null;
+  var bioLast  = bios.length ? bios[bios.length-1] : null;
+  var weightChange = '—';
+  if(bioFirst && bioLast && bioFirst.weight && bioLast.weight){
+    var diff2 = parseFloat(bioLast.weight) - parseFloat(bioFirst.weight);
+    var sign2 = diff2>0?'+':'';
+    weightChange = sign2 + diff2.toFixed(1) + 'kg';
+  }
+  var waterEntries = [];
+  try {
+    var wArr = JSON.parse(localStorage.getItem('projeto_tatame_water')||'[]');
+    wArr.filter(function(w){ return w.date && w.date.startsWith(month); }).forEach(function(w){ waterEntries.push(w); });
+  } catch(e2) {}
+  var avgWater = waterEntries.length ? (waterEntries.reduce(function(s2,w){ return s2+(w.ml||0); },0)/waterEntries.length/1000).toFixed(1) : '—';
+  var dietDays = 0;
+  try {
+    var dietlog2 = JSON.parse(localStorage.getItem('projeto_tatame_dietlog')||'{}');
+    dietDays = Object.keys(dietlog2).filter(function(k){ return k.startsWith(month); }).length;
+  } catch(e3) {}
+  var badgesThisMonth = 0;
+  try {
+    var conquistas2 = JSON.parse(localStorage.getItem('projeto_tatame_conquistas')||'{}');
+    badgesThisMonth = Object.values(conquistas2).filter(function(v2){ return v2 && typeof v2==='string' && v2.startsWith(month); }).length;
+  } catch(e4) {}
+  var tCounts = {};
+  allSessions.forEach(function(s){ tCounts[s.treino]=(tCounts[s.treino]||0)+1; });
+  var topTreino='—', topCount=0;
+  Object.keys(tCounts).forEach(function(t){ if(tCounts[t]>topCount){ topTreino=t; topCount=tCounts[t]; } });
+  var horas = Math.floor(totalDuration/60);
+  var mins2 = totalDuration%60;
+  var durStr = totalDuration>0?(horas>0?horas+'h'+(mins2>0?mins2+'m':''):mins2+'min'):'—';
+  var html3 = '<div style="text-align:center;margin-bottom:14px;font-size:1rem;font-weight:700;color:#a855f7">📅 ' + monthName + '</div>';
+  html3 += '<div class="relatorio-stat-grid">';
+  html3 += '<div class="relatorio-stat-card"><span class="relatorio-stat-num">' + totalSessions + '</span><span class="relatorio-stat-lbl">🏋️ Treinos</span></div>';
+  html3 += '<div class="relatorio-stat-card"><span class="relatorio-stat-num">' + durStr + '</span><span class="relatorio-stat-lbl">⏱ Tempo total</span></div>';
+  html3 += '<div class="relatorio-stat-card"><span class="relatorio-stat-num">' + (totalVolume>0?totalVolume.toFixed(1)+'t':'—') + '</span><span class="relatorio-stat-lbl">🏋️ Volume total</span></div>';
+  html3 += '<div class="relatorio-stat-card"><span class="relatorio-stat-num">' + avgRPE + '</span><span class="relatorio-stat-lbl">💪 RPE médio</span></div>';
+  html3 += '<div class="relatorio-stat-card"><span class="relatorio-stat-num">' + jjSessions.length + '</span><span class="relatorio-stat-lbl">🥋 Sessões BJJ</span></div>';
+  html3 += '<div class="relatorio-stat-card"><span class="relatorio-stat-num">' + bios.length + '</span><span class="relatorio-stat-lbl">📊 Bioimpedâncias</span></div>';
+  html3 += '<div class="relatorio-stat-card"><span class="relatorio-stat-num">' + avgWater + 'L</span><span class="relatorio-stat-lbl">💧 Hidratação média</span></div>';
+  html3 += '<div class="relatorio-stat-card"><span class="relatorio-stat-num">' + dietDays + '</span><span class="relatorio-stat-lbl">🥗 Dias de dieta</span></div>';
+  html3 += '</div>';
+  if (weightChange !== '—') {
+    var wColor = weightChange.startsWith('-') ? '#22c55e' : '#f87171';
+    html3 += '<div class="relatorio-highlight"><div class="relatorio-highlight-title">⚖️ Variação de Peso</div><div class="relatorio-highlight-val" style="color:' + wColor + '">' + weightChange + ' no mês</div></div>';
+  }
+  if (topTreino !== '—') {
+    html3 += '<div class="relatorio-highlight"><div class="relatorio-highlight-title">🏆 Treino mais frequente</div><div class="relatorio-highlight-val">' + topTreino + ' — ' + topCount + 'x</div></div>';
+  }
+  if (badgesThisMonth > 0) {
+    html3 += '<div class="relatorio-highlight"><div class="relatorio-highlight-title">🏅 Conquistas desbloqueadas</div><div class="relatorio-highlight-val">' + badgesThisMonth + ' badge' + (badgesThisMonth>1?'s':'') + ' novos!</div></div>';
+  }
+  if (totalSessions === 0) {
+    html3 += '<div class="intro-card" style="text-align:center"><p style="color:var(--muted)">Nenhum treino registrado neste mês ainda.</p></div>';
+  }
+  el.innerHTML = html3;
+}
+
+
+// ===== BJJ METRICAS AVANCADAS =====
+var _jjNivel = '';
+var _jjPosicoes = [];
+
+function toggleJJMetricas(btn) {
+  var panel = document.getElementById('jjMetricasPanel');
+  var chev = document.getElementById('jjMetricasChevron');
+  if (!panel) return;
+  panel.classList.toggle('open');
+  if (chev) chev.textContent = panel.classList.contains('open') ? '▲' : '▼';
+}
+
+function toggleJJPos(btn) {
+  btn.classList.toggle('sel');
+  _jjPosicoes = [];
+  document.querySelectorAll('.jj-pos-btn.sel').forEach(function(b){ _jjPosicoes.push(b.textContent.trim()); });
+}
+
+function selectJJNivel(btn) {
+  document.querySelectorAll('.jj-nivel-btn').forEach(function(b){ b.classList.remove('sel'); });
+  btn.classList.add('sel');
+  _jjNivel = btn.dataset.nivel;
+}
+
+// Patch saveJJSession to include extra metrics
+var _origSaveJJSession = saveJJSession;
+saveJJSession = function() {
+  var date2 = document.getElementById('jjDate').value || todayStr();
+  var dur2  = parseInt(document.getElementById('jjDuration').value) || 0;
+  var obs2  = document.getElementById('jjObs').value.trim();
+  if (!dur2) { showToast('Informe a duração em minutos!'); return; }
+
+  var sparrings = parseInt(document.getElementById('jjSparrings') ? document.getElementById('jjSparrings').value : 0) || 0;
+  var finTent   = parseInt(document.getElementById('jjFinTent')   ? document.getElementById('jjFinTent').value   : 0) || 0;
+  var finOk     = parseInt(document.getElementById('jjFinOk')     ? document.getElementById('jjFinOk').value     : 0) || 0;
+
+  var sessions2 = getJJSessions();
+  sessions2.push({
+    id: Date.now(),
+    date: date2, duration: dur2, tipo: _jjTipo, obs: obs2,
+    sparrings: sparrings || undefined,
+    finalizacoesTentadas: finTent || undefined,
+    finalizacoesOk: finOk || undefined,
+    posicoes: _jjPosicoes.length ? _jjPosicoes.slice() : undefined,
+    nivelParceiro: _jjNivel || undefined
+  });
+  sessions2.sort(function(a,b){ return a.date.localeCompare(b.date); });
+  saveJJSessions(sessions2);
+
+  // Clear
+  document.getElementById('jjDuration').value = '';
+  document.getElementById('jjObs').value = '';
+  if (document.getElementById('jjSparrings')) document.getElementById('jjSparrings').value = '';
+  if (document.getElementById('jjFinTent'))   document.getElementById('jjFinTent').value = '';
+  if (document.getElementById('jjFinOk'))     document.getElementById('jjFinOk').value = '';
+  document.querySelectorAll('.jj-pos-btn.sel').forEach(function(b){ b.classList.remove('sel'); });
+  document.querySelectorAll('.jj-nivel-btn.sel').forEach(function(b){ b.classList.remove('sel'); });
+  _jjPosicoes = []; _jjNivel = '';
+  // Close panel
+  var panel2 = document.getElementById('jjMetricasPanel');
+  if (panel2) panel2.classList.remove('open');
+
+  renderJJTab();
+  showToast('🥋 Sessão de Jiu-Jitsu registrada!');
+};
+
+// Patch renderJJHistory to show extra chips
+var _origRenderJJTab = renderJJTab;
+renderJJTab = function() {
+  _origRenderJJTab();
+  // Enhance history items
+  var sessions3 = getJJSessions().slice().reverse();
+  var histEl = document.getElementById('jjHistory');
+  if (!histEl) return;
+  var items = histEl.querySelectorAll('.jj-hist-item, [data-jjid]');
+  // Re-render history with metrics
+  if (!sessions3.length) return;
+  var histHtml = '';
+  sessions3.slice(0, 30).forEach(function(s) {
+    var p = s.date.split('-');
+    var dLabel = p[2]+'/'+p[1]+'/'+p[0];
+    var tipoIcon = {Gi:'🥋','No-Gi':'👕',Randori:'🔄',Drilling:'🎯','Competição':'🏆'}[s.tipo] || '🥋';
+    var metChips = '';
+    if (s.sparrings) metChips += '<span class="jj-hist-met-chip">🥊 ' + s.sparrings + ' rounds</span>';
+    if (s.finalizacoesTentadas) metChips += '<span class="jj-hist-met-chip">⚡ ' + (s.finalizacoesOk||0) + '/' + s.finalizacoesTentadas + ' fin.</span>';
+    if (s.nivelParceiro) metChips += '<span class="jj-hist-met-chip">👤 ' + s.nivelParceiro + '</span>';
+    if (s.posicoes && s.posicoes.length) {
+      s.posicoes.forEach(function(pos){ metChips += '<span class="jj-hist-pos-chip">' + pos + '</span>'; });
+    }
+    histHtml += '<div class="jj-hist-item" style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06)">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">'
+      + '<span style="font-weight:700">' + tipoIcon + ' ' + dLabel + '</span>'
+      + '<span style="display:flex;align-items:center;gap:8px">'
+      + '<span style="font-size:0.78rem;color:var(--muted)">' + (s.duration||0) + 'min</span>'
+      + '<button onclick="deleteJJSession(' + s.id + ')" style="background:none;border:none;color:#f87171;cursor:pointer;font-size:0.8rem">✕</button>'
+      + '</span></div>'
+      + (s.obs ? '<div style="font-size:0.78rem;color:var(--muted);margin-bottom:4px">' + s.obs + '</div>' : '')
+      + (metChips ? '<div class="jj-hist-metricas">' + metChips + '</div>' : '')
+      + '</div>';
+  });
+  histEl.innerHTML = histHtml || '<p style="color:var(--muted);font-size:0.85rem;text-align:center;padding:16px">Nenhuma sessão registrada ainda.</p>';
+};
+
+// Adicionar stats de finalizações nos chips de stats
+function renderJJFinStats() {
+  var sessions4 = getJJSessions();
+  var totalFin = 0, totalTent = 0, totalSparr = 0;
+  sessions4.forEach(function(s){
+    totalFin  += s.finalizacoesOk || 0;
+    totalTent += s.finalizacoesTentadas || 0;
+    totalSparr+= s.sparrings || 0;
+  });
+  var finEl = document.getElementById('jjFinStats');
+  if (finEl) {
+    var pct = totalTent > 0 ? Math.round(totalFin/totalTent*100) : 0;
+    finEl.innerHTML = '<span style="font-size:0.72rem;color:var(--muted)">⚡ ' + totalFin + '/' + totalTent + ' fin. (' + pct + '%) &nbsp;|&nbsp; 🥊 ' + totalSparr + ' rounds total</span>';
+  }
+}
+
+// ===== COMPARTILHAR — CARD DE IMAGEM =====
+var _sharePeriod = 'semana';
+
+function setSharePeriod(period, btn) {
+  _sharePeriod = period;
+  document.querySelectorAll('.share-period-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderShareCard();
+}
+
+function renderShareCard() {
+  var canvas = document.getElementById('shareCanvas');
+  if (!canvas) return;
+
+  var now2 = brDate();
+  var month = now2.getFullYear() + '-' + String(now2.getMonth()+1).padStart(2,'0');
+  var weekStart2 = getWeekStart();
+
+  var sessions5, label5, dateRange;
+  if (_sharePeriod === 'semana') {
+    sessions5 = getSessions().filter(function(s){ return s.date >= weekStart2; });
+    var wsEnd = new Date(weekStart2 + 'T12:00:00');
+    wsEnd.setDate(wsEnd.getDate() + 6);
+    var wsEndStr = wsEnd.getFullYear()+'-'+String(wsEnd.getMonth()+1).padStart(2,'0')+'-'+String(wsEnd.getDate()).padStart(2,'0');
+    var p1=weekStart2.split('-'), p2=wsEndStr.split('-');
+    dateRange = p1[2]+'/'+p1[1] + ' — ' + p2[2]+'/'+p2[1]+'/'+p2[0];
+    label5 = 'SEMANA';
+  } else {
+    sessions5 = getSessions().filter(function(s){ return s.date && s.date.startsWith(month); });
+    var mNames2 = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    label5 = mNames2[now2.getMonth()].toUpperCase() + ' ' + now2.getFullYear();
+    dateRange = label5;
+  }
+
+  var jjS = (typeof getJJSessions === 'function' ? getJJSessions() : []);
+  var jjFiltered = _sharePeriod === 'semana'
+    ? jjS.filter(function(s){ return s.date >= weekStart2; })
+    : jjS.filter(function(s){ return s.date && s.date.startsWith(month); });
+
+  var totalTreinos = sessions5.length + jjFiltered.length;
+  var totalDur5 = 0;
+  sessions5.forEach(function(s){ if(s.duration) totalDur5 += parseInt(s.duration)||0; });
+  jjFiltered.forEach(function(s){ if(s.duration) totalDur5 += parseInt(s.duration)||0; });
+  var h5 = Math.floor(totalDur5/60), m5 = totalDur5%60;
+  var durStr5 = totalDur5>0?(h5>0?h5+'h'+(m5>0?m5+'m':''):m5+'min'):'0min';
+
+  var totalVol = 0;
+  sessions5.forEach(function(s){
+    if(s.volume){ var mv=s.volume.match(/([\d.]+)\s*ton/); if(mv) totalVol+=parseFloat(mv[1]); }
+  });
+
+  var rpeVals5 = sessions5.filter(function(s){ return s.rpe>0; }).map(function(s){ return s.rpe; });
+  var avgRPE5 = rpeVals5.length ? (rpeVals5.reduce(function(a,b){ return a+b; },0)/rpeVals5.length).toFixed(1) : '—';
+
+  var bios5 = typeof getBioEntries === 'function' ? getBioEntries() : [];
+  var lastBio5 = bios5.length ? bios5[bios5.length-1] : null;
+  var weightStr5 = lastBio5 && lastBio5.weight ? lastBio5.weight + 'kg' : '—';
+  var fatStr5 = lastBio5 && lastBio5.fat ? lastBio5.fat + '%' : '—';
+
+  // Draw canvas
+  var W5 = canvas.offsetWidth || 360;
+  var H5 = 520;
+  canvas.width = W5;
+  canvas.height = H5;
+  var ctx5 = canvas.getContext('2d');
+
+  // Background gradient
+  var bg5 = ctx5.createLinearGradient(0, 0, W5, H5);
+  bg5.addColorStop(0, '#0f0a1a');
+  bg5.addColorStop(1, '#1a0f2e');
+  ctx5.fillStyle = bg5;
+  ctx5.roundRect ? ctx5.roundRect(0,0,W5,H5,16) : ctx5.rect(0,0,W5,H5);
+  ctx5.fill();
+
+  // Header bar
+  var hdr = ctx5.createLinearGradient(0, 0, W5, 0);
+  hdr.addColorStop(0, '#7c3aed');
+  hdr.addColorStop(1, '#4f46e5');
+  ctx5.fillStyle = hdr;
+  ctx5.fillRect(0, 0, W5, 70);
+
+  // Header text
+  ctx5.fillStyle = '#fff';
+  ctx5.font = 'bold 18px sans-serif';
+  ctx5.textAlign = 'left';
+  ctx5.fillText('🏋️ PROJETO TATAME', 18, 28);
+  ctx5.font = '13px sans-serif';
+  ctx5.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx5.fillText(dateRange, 18, 52);
+
+  // Label badge
+  ctx5.fillStyle = 'rgba(255,255,255,0.2)';
+  var lblW = ctx5.measureText(label5).width + 20;
+  ctx5.fillRect(W5 - lblW - 14, 18, lblW, 26);
+  ctx5.fillStyle = '#fff';
+  ctx5.font = 'bold 11px sans-serif';
+  ctx5.textAlign = 'right';
+  ctx5.fillText(label5, W5 - 14 - 10, 36);
+
+  // Stats grid 2x2
+  var stats5 = [
+    { icon:'🏋️', val: String(totalTreinos), lbl: 'Treinos' },
+    { icon:'⏱', val: durStr5, lbl: 'Tempo Total' },
+    { icon:'🥋', val: String(jjFiltered.length), lbl: 'Sessões BJJ' },
+    { icon:'💪', val: String(avgRPE5), lbl: 'RPE Médio' }
+  ];
+  var cardW5 = (W5 - 50) / 2;
+  var cardH5 = 90;
+  stats5.forEach(function(stat5, i) {
+    var col = i % 2, row = Math.floor(i / 2);
+    var x5 = 14 + col * (cardW5 + 14);
+    var y5 = 88 + row * (cardH5 + 12);
+    ctx5.fillStyle = 'rgba(255,255,255,0.07)';
+    if (ctx5.roundRect) {
+      ctx5.beginPath(); ctx5.roundRect(x5, y5, cardW5, cardH5, 10); ctx5.fill();
+    } else { ctx5.fillRect(x5, y5, cardW5, cardH5); }
+    ctx5.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx5.font = '18px sans-serif';
+    ctx5.textAlign = 'left';
+    ctx5.fillText(stat5.icon, x5+12, y5+30);
+    ctx5.fillStyle = '#e9d5ff';
+    ctx5.font = 'bold 26px sans-serif';
+    ctx5.textAlign = 'center';
+    ctx5.fillText(stat5.val, x5 + cardW5/2, y5+62);
+    ctx5.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx5.font = '11px sans-serif';
+    ctx5.fillText(stat5.lbl, x5 + cardW5/2, y5+80);
+  });
+
+  // Volume bar
+  var vyOffset = 88 + 2*(cardH5+12) + 10;
+  ctx5.fillStyle = 'rgba(255,255,255,0.07)';
+  if (ctx5.roundRect) {
+    ctx5.beginPath(); ctx5.roundRect(14, vyOffset, W5-28, 58, 10); ctx5.fill();
+  } else { ctx5.fillRect(14, vyOffset, W5-28, 58); }
+  ctx5.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx5.font = '11px sans-serif';
+  ctx5.textAlign = 'left';
+  ctx5.fillText('Volume levantado', 24, vyOffset+18);
+  ctx5.fillStyle = '#c4b5fd';
+  ctx5.font = 'bold 22px sans-serif';
+  ctx5.fillText(totalVol>0?totalVol.toFixed(1)+'t':'—', 24, vyOffset+46);
+  if (totalVol > 0) {
+    // Mini bar
+    var barMax = 10, barVal = Math.min(totalVol, barMax);
+    var barX = W5/2 + 10;
+    ctx5.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx5.fillRect(barX, vyOffset+30, W5-barX-24, 12);
+    var barGrad = ctx5.createLinearGradient(barX, 0, W5-24, 0);
+    barGrad.addColorStop(0,'#a855f7'); barGrad.addColorStop(1,'#6366f1');
+    ctx5.fillStyle = barGrad;
+    ctx5.fillRect(barX, vyOffset+30, (W5-barX-24)*(barVal/barMax), 12);
+  }
+
+  // Bio stats
+  var bioY = vyOffset + 78;
+  ctx5.fillStyle = 'rgba(255,255,255,0.07)';
+  var bw = (W5-42)/2;
+  [[weightStr5,'⚖️','Peso atual'],[fatStr5,'🔥','% Gordura']].forEach(function(item,ii){
+    var bx = 14 + ii*(bw+14);
+    if (ctx5.roundRect) {
+      ctx5.beginPath(); ctx5.roundRect(bx, bioY, bw, 68, 10); ctx5.fill();
+    } else { ctx5.fillRect(bx, bioY, bw, 68); }
+    ctx5.font = '16px sans-serif';
+    ctx5.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx5.textAlign = 'center';
+    ctx5.fillText(item[1], bx+bw/2, bioY+24);
+    ctx5.fillStyle = '#e9d5ff';
+    ctx5.font = 'bold 20px sans-serif';
+    ctx5.fillText(item[0], bx+bw/2, bioY+50);
+    ctx5.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx5.font = '10px sans-serif';
+    ctx5.fillText(item[2], bx+bw/2, bioY+64);
+  });
+
+  // Footer
+  ctx5.fillStyle = 'rgba(255,255,255,0.2)';
+  ctx5.font = '11px sans-serif';
+  ctx5.textAlign = 'center';
+  ctx5.fillText('Projeto Tatame • klebbao-j3ir.vercel.app', W5/2, H5-12);
+}
+
+function downloadShareImage() {
+  var canvas6 = document.getElementById('shareCanvas');
+  if (!canvas6) return;
+  renderShareCard();
+  setTimeout(function(){
+    var link = document.createElement('a');
+    link.download = 'tatame-' + _sharePeriod + '-' + todayStr() + '.png';
+    link.href = canvas6.toDataURL('image/png');
+    link.click();
+    showToast('📥 Imagem salva!');
+  }, 100);
+}
+
 </script>
+
+<!-- ===================== COMPARTILHAR ===================== -->
+<div class="tab-content" id="tab-compartilhar">
+  <div class="intro-card">
+    <h3>📤 Compartilhar Progresso</h3>
+    <p>Gere uma imagem com seu resumo semanal ou mensal para salvar ou compartilhar onde quiser.</p>
+  </div>
+
+  <div class="share-period-sel">
+    <button class="share-period-btn active" id="sharePeriodSemana" onclick="setSharePeriod('semana', this)">📅 Esta semana</button>
+    <button class="share-period-btn" id="sharePeriodMes" onclick="setSharePeriod('mes', this)">📆 Este mês</button>
+  </div>
+
+  <div class="share-canvas-wrap">
+    <canvas id="shareCanvas" style="width:100%;display:block;border-radius:12px"></canvas>
+  </div>
+
+  <button class="share-btn share-btn-download" onclick="downloadShareImage()">
+    ⬇️ Salvar imagem
+  </button>
+</div>
+
 </body>
 </html>
