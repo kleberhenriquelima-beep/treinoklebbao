@@ -3322,6 +3322,28 @@
 }
 /* ========== FIM REESTRUTURAÇÃO CSS ========== */
 
+
+  .tirze-sint-lbl {
+    display:flex; align-items:center; gap:5px; font-size:0.78rem;
+    background:var(--card); border:1px solid var(--border);
+    border-radius:10px; padding:7px 11px; cursor:pointer;
+    transition:border-color .15s, background .15s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .tirze-sint-lbl:has(input:checked) {
+    border-color:#f87171; background:rgba(248,113,113,0.1);
+  }
+  .tirze-local-lbl {
+    display:flex; align-items:center; gap:5px; font-size:0.78rem;
+    background:var(--card); border:1px solid var(--border);
+    border-radius:10px; padding:7px 11px; cursor:pointer;
+    transition:border-color .15s, background .15s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .tirze-local-lbl:has(input:checked) {
+    border-color:var(--accent); background:rgba(240,165,0,0.1);
+  }
+
 </style>
 </head>
 <body>
@@ -3399,7 +3421,7 @@
 <header>
   <div class="header-top">
     <button class="hamburger-btn" onclick="openDrawer()">☰</button>
-    <div class="header-tab-name" id="currentTabName">🏋️ Treino A</div>
+    <div class="header-tab-name" id="currentTabName">🏠 Home</div>
     <div class="header-right-btns">
       <span class="stat-chip-mini" id="statWeekMini">📅 0/3</span>
       <span class="stat-chip-mini streak" id="statStreakMini">🔥 0</span>
@@ -3429,7 +3451,7 @@
     <!-- Streak -->
     <div class="sb-item">
       <span class="sb-val" id="sb-streak">🔥 0</span>
-      <span class="sb-val" id="sb-weight" style="color:var(--accent)">⚖️ —</span>
+      <span class="sb-val" id="sb-streak-icon" style="color:var(--accent)">⚖️ —</span>
       <span class="sb-label">sequência</span>
     </div>
     <div class="sb-sep"></div>
@@ -4395,10 +4417,34 @@
         <label>🍽️ Apetite (1=sem fome · 10=fome normal)</label>
         <input type="number" id="tirze-apetite" min="1" max="10" placeholder="4"/>
       </div>
+      <!-- Local de aplicação -->
       <div class="bio-field" style="grid-column:1/-1">
-        <label>🤢 Sintomas (marque os que teve)</label>
+        <label>📍 Local de aplicação</label>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px" id="tirze-local-wrap">
+          <label class="tirze-local-lbl"><input type="radio" name="tirze-local" value="Barriga esq." style="accent-color:var(--accent)"> Barriga esq.</label>
+          <label class="tirze-local-lbl"><input type="radio" name="tirze-local" value="Barriga dir." style="accent-color:var(--accent)"> Barriga dir.</label>
+          <label class="tirze-local-lbl"><input type="radio" name="tirze-local" value="Coxa esq."    style="accent-color:var(--accent)"> Coxa esq.</label>
+          <label class="tirze-local-lbl"><input type="radio" name="tirze-local" value="Coxa dir."    style="accent-color:var(--accent)"> Coxa dir.</label>
+          <label class="tirze-local-lbl"><input type="radio" name="tirze-local" value="Braço esq."   style="accent-color:var(--accent)"> Braço esq.</label>
+          <label class="tirze-local-lbl"><input type="radio" name="tirze-local" value="Braço dir."   style="accent-color:var(--accent)"> Braço dir.</label>
+        </div>
+      </div>
+      <!-- Sintomas -->
+      <div class="bio-field" style="grid-column:1/-1">
+        <label>🤢 Sintomas nas 48h após aplicação</label>
         <div id="tirze-sintomas-wrap" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px">
-          <label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Náusea" style="accent-color:var(--accent)"> Náusea</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Vômito" style="accent-color:var(--accent)"> Vômito</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Diarreia" style="accent-color:var(--accent)"> Diarreia</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Constipação" style="accent-color:var(--accent)"> Constipação</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Fadiga" style="accent-color:var(--accent)"> Fadiga</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Tontura" style="accent-color:var(--accent)"> Tontura</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Dor no local" style="accent-color:var(--accent)"> Dor no local</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Sem apetite" style="accent-color:var(--accent)"> Sem apetite</label><label style="display:flex;align-items:center;gap:4px;font-size:0.78rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer"><input type="checkbox" class="tirze-sintoma" value="Refluxo" style="accent-color:var(--accent)"> Refluxo</label>
+          <label class="tirze-sint-lbl"><input type="checkbox" class="tirze-sintoma" value="Náusea"        style="accent-color:var(--accent)"> 🤢 Náusea</label>
+          <label class="tirze-sint-lbl"><input type="checkbox" class="tirze-sintoma" value="Vômito"        style="accent-color:var(--accent)"> 🤮 Vômito</label>
+          <label class="tirze-sint-lbl"><input type="checkbox" class="tirze-sintoma" value="Diarreia"      style="accent-color:var(--accent)"> 💧 Diarreia</label>
+          <label class="tirze-sint-lbl"><input type="checkbox" class="tirze-sintoma" value="Constipação"   style="accent-color:var(--accent)"> 🔒 Constipação</label>
+          <label class="tirze-sint-lbl"><input type="checkbox" class="tirze-sintoma" value="Fadiga"        style="accent-color:var(--accent)"> 😪 Fadiga</label>
+          <label class="tirze-sint-lbl"><input type="checkbox" class="tirze-sintoma" value="Tontura"       style="accent-color:var(--accent)"> 💫 Tontura</label>
+          <label class="tirze-sint-lbl"><input type="checkbox" class="tirze-sintoma" value="Dor no local"  style="accent-color:var(--accent)"> 🩹 Dor no local</label>
+          <label class="tirze-sint-lbl"><input type="checkbox" class="tirze-sintoma" value="Sem apetite"   style="accent-color:var(--accent)"> 🚫 Sem apetite</label>
+          <label class="tirze-sint-lbl"><input type="checkbox" class="tirze-sintoma" value="Refluxo"       style="accent-color:var(--accent)"> 🔥 Refluxo</label>
+          <label class="tirze-sint-lbl"><input type="checkbox" class="tirze-sintoma" value="Dor de cabeça" style="accent-color:var(--accent)"> 🤕 Dor de cabeça</label>
+          <label class="tirze-sint-lbl"><input type="checkbox" class="tirze-sintoma" value="Ansiedade"     style="accent-color:var(--accent)"> 😰 Ansiedade</label>
+          <label class="tirze-sint-lbl"><input type="checkbox" class="tirze-sintoma" value="Boca seca"     style="accent-color:var(--accent)"> 🏜️ Boca seca</label>
         </div>
       </div>
       <div class="bio-field" style="grid-column:1/-1">
@@ -9551,8 +9597,11 @@ const BACKUP_KEYS = [
   'projeto_tatame_macros_log',
   'projeto_tatame_periodizacao',
   'weeklyGoal',
-  'theme'
-];
+  'theme',
+        'projeto_tatame_livre',
+        'projeto_tatame_ws',
+        'projeto_tatame_profile'
+      ];
 
 const SB_CONFIG_KEY = 'projeto_tatame_sbconfig';
 const SQL_SCHEMA = `-- Execute no SQL Editor do Supabase (supabase.com → projeto → SQL Editor)
@@ -9751,14 +9800,16 @@ function saveTirze() {
   const energia = parseInt(document.getElementById('tirze-energia')?.value) || 0;
   const apetite = parseInt(document.getElementById('tirze-apetite')?.value) || 0;
   const sintomas = [...document.querySelectorAll('.tirze-sintoma:checked')].map(c => c.value);
+  const localApl = (document.querySelector('input[name="tirze-local"]:checked')||{}).value || '';
   const notes = document.getElementById('tirze-notes')?.value.trim() || '';
   const arr = getTirze();
   const idx = arr.findIndex(t => t.date === date);
-  const entry = { date, dose, energia, apetite, sintomas, notes };
+  const entry = { date, dose, energia, apetite, sintomas, local: localApl, notes };
   if (idx >= 0) arr[idx] = entry; else arr.unshift(entry);
   arr.sort((a,b) => b.date.localeCompare(a.date));
   saveTirzeData(arr);
   document.querySelectorAll('.tirze-sintoma').forEach(c => c.checked = false);
+  const lr = document.querySelector('input[name="tirze-local"]:checked'); if(lr) lr.checked=false;
   document.getElementById('tirze-notes').value = '';
   renderTirze();
   autoSync();
@@ -9782,7 +9833,7 @@ function renderTirze() {
         ${t.energia ? `<div style="background:var(--card);border-radius:8px;padding:6px">⚡ Energia: <strong>${t.energia}/10</strong></div>` : ''}
         ${t.apetite ? `<div style="background:var(--card);border-radius:8px;padding:6px">🍽️ Apetite: <strong>${t.apetite}/10</strong></div>` : ''}
       </div>
-      ${t.sintomas.length ? `<div style="font-size:0.72rem;color:var(--muted);margin-bottom:6px">🤢 ${t.sintomas.join(' · ')}</div>` : ''}
+      ${t.local ? `<div style="font-size:0.72rem;color:var(--accent);margin-bottom:3px">📍 ${t.local}</div>` : ''}${t.sintomas && t.sintomas.length ? `<div style="font-size:0.72rem;color:var(--muted);margin-bottom:6px">🤢 ${t.sintomas.join(' · ')}</div>` : ''}
       ${t.notes ? `<div style="font-size:0.75rem;color:var(--muted)">${t.notes}</div>` : ''}
     </div>`;
   }).join('');
@@ -12227,6 +12278,9 @@ function switchPane(pane) {
 
   // Switch to default tab for this pane
   const defaultTab = PANE_DEFAULTS[pane];
+  // Mostrar/ocultar summary banner dependendo do pane
+  const sb = document.getElementById('summaryBanner');
+  if (sb) sb.style.display = pane === 'home' ? 'none' : '';
   if (defaultTab === 'home') {
     _switchToHome();
   } else {
@@ -12249,6 +12303,9 @@ function _switchToHome() {
   });
   const nameEl = document.getElementById('currentTabName');
   if (nameEl) nameEl.textContent = '🏠 Home';
+  // Ocultar summary banner no Home (info já está nos cards)
+  const sb = document.getElementById('summaryBanner');
+  if (sb) sb.style.display = 'none';
   closeDrawer();
   renderHome();
 }
@@ -12836,6 +12893,102 @@ function renderEvoUnificado() {
 //  FIM EVOLUÇÃO UNIFICADA
 // ═══════════════════════════════════════════════════════════════
 
+
+// ════════════════════════════════════════════════════════════════
+//  MELHORIAS: SONO / MAPA DORES / TIRZEPATIDA
+// ════════════════════════════════════════════════════════════════
+
+// ── SONO: calcular horas de dormiu→acordou ───────────────────────
+function calcSonoHoras() {
+  var dorme  = (document.getElementById('recSonoDorme')  || {}).value || '';
+  var acorda = (document.getElementById('recSonoAcorda') || {}).value || '';
+  var display = document.getElementById('recSonoCalcDisplay');
+  var hidden  = document.getElementById('recSonoHoras');
+  if (!dorme || !acorda) {
+    if (display) display.textContent = '—';
+    if (hidden)  hidden.value = '0';
+    return;
+  }
+  // Parse HH:MM
+  var dp = dorme.split(':').map(Number);
+  var ap = acorda.split(':').map(Number);
+  var dormeMin  = dp[0] * 60 + dp[1];
+  var acordaMin = ap[0] * 60 + ap[1];
+  // Handle crossing midnight (e.g. dormiu 23:00, acordou 07:00)
+  if (acordaMin <= dormeMin) acordaMin += 24 * 60;
+  var totalMin = acordaMin - dormeMin;
+  var horas = totalMin / 60;
+  var h = Math.floor(horas);
+  var m = Math.round((horas - h) * 60);
+  var label = h + 'h' + (m > 0 ? m + 'min' : '');
+  var col = horas >= 7 ? '#22c55e' : horas >= 5 ? '#eab308' : '#ef4444';
+  if (display) { display.textContent = label; display.style.color = col; }
+  if (hidden)  hidden.value = horas.toFixed(1);
+}
+
+// Reset sono fields after save
+var _origSaveRecuperacao = typeof saveRecuperacao === 'function' ? saveRecuperacao : null;
+// Patch saveRecuperacao to also clear time fields
+(function patchSaveRecuperacao() {
+  var _orig = window.saveRecuperacao;
+  if (!_orig) return;
+  window.saveRecuperacao = function() {
+    // Sync hidden field before save
+    calcSonoHoras();
+    _orig();
+    // Clear time inputs
+    var d = document.getElementById('recSonoDorme');
+    var a = document.getElementById('recSonoAcorda');
+    var disp = document.getElementById('recSonoCalcDisplay');
+    if (d) d.value = '';
+    if (a) a.value = '';
+    if (disp) { disp.textContent = '—'; disp.style.color = 'var(--accent)'; }
+  };
+})();
+
+// ── MAPA DE DORES: toggle frente/costas ──────────────────────────
+var _bodyView = 'frente';
+function switchBodyView(view) {
+  _bodyView = view;
+  var frente = document.getElementById('bodyMapFrente');
+  var costas = document.getElementById('bodyMapCostas');
+  var btnF   = document.getElementById('btnBodyFrente');
+  var btnC   = document.getElementById('btnBodyCostas');
+  if (frente) frente.style.display = view === 'frente' ? 'block' : 'none';
+  if (costas) costas.style.display = view === 'costas' ? 'block' : 'none';
+  if (btnF) {
+    btnF.style.background = view === 'frente' ? 'var(--accent)' : 'var(--card2)';
+    btnF.style.color      = view === 'frente' ? '#000' : 'var(--text-muted)';
+  }
+  if (btnC) {
+    btnC.style.background = view === 'costas' ? 'var(--accent)' : 'var(--card2)';
+    btnC.style.color      = view === 'costas' ? '#000' : 'var(--text-muted)';
+  }
+}
+
+// Override resetBodyMap to clear both SVGs
+var _origResetBodyDores = null;
+(function patchResetBodyMap() {
+  var _origSave = window.saveRecuperacao;
+  // toggleBodyDor already works with any element — no patch needed
+  // Just ensure clearing resets both SVGs
+  var origSave2 = window.saveRecuperacao;
+  window.saveRecuperacao = function() {
+    origSave2 && origSave2();
+    // Reset costas SVG body parts too
+    var costas = document.getElementById('bodyMapCostas');
+    if (costas) costas.querySelectorAll('.body-part').forEach(function(el) {
+      el.setAttribute('class', 'body-part');
+    });
+  };
+})();
+
+// ── TIRZEPATIDA: show aplicação info in renderTirze history ──────
+// (history rendering already updated via HTML patch above)
+// ════════════════════════════════════════════════════════════════
+//  FIM MELHORIAS
+// ════════════════════════════════════════════════════════════════
+
 </script>
 
 <!-- ===================== COMPARTILHAR ===================== -->
@@ -12894,48 +13047,104 @@ function renderEvoUnificado() {
         <span class="rec-field-label">😄 Humor (1-10)</span>
         <div class="rec-score-btns" id="recHumorBtns"></div>
       </div>
-      <div class="rec-field">
-        <span class="rec-field-label">😴 Horas de sono</span>
-        <input type="number" id="recSonoHoras" class="metrics-input" placeholder="7.5" step="0.5" min="0" max="24" style="width:100%"/>
+      <div class="rec-field" style="grid-column:1/-1">
+        <span class="rec-field-label">😴 Sono — horário de dormir e acordar</span>
+        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-top:6px">
+          <div style="flex:1;min-width:110px">
+            <div style="font-size:0.65rem;color:var(--text-muted);margin-bottom:4px">🌙 Dormiu às (ontem/hoje)</div>
+            <input type="time" id="recSonoDorme" class="metrics-input" style="width:100%"
+              oninput="calcSonoHoras()" placeholder="23:00"/>
+          </div>
+          <div style="font-size:1rem;color:var(--muted);padding-bottom:8px">→</div>
+          <div style="flex:1;min-width:110px">
+            <div style="font-size:0.65rem;color:var(--text-muted);margin-bottom:4px">☀️ Acordou às</div>
+            <input type="time" id="recSonoAcorda" class="metrics-input" style="width:100%"
+              oninput="calcSonoHoras()" placeholder="06:30"/>
+          </div>
+          <div style="flex-shrink:0;text-align:center;padding-bottom:6px;min-width:64px">
+            <div style="font-size:0.65rem;color:var(--text-muted);margin-bottom:2px">Total</div>
+            <div id="recSonoCalcDisplay" style="font-size:1.1rem;font-weight:800;color:var(--accent)">—</div>
+          </div>
+        </div>
+        <!-- Campo hidden que mantém compatibilidade com saveRecuperacao() -->
+        <input type="hidden" id="recSonoHoras" value="0"/>
       </div>
       <div class="rec-field">
-        <span class="rec-field-label">🌙 Qualidade sono (1-10)</span>
+        <span class="rec-field-label">🌙 Qualidade do sono (1-10)</span>
         <div class="rec-score-btns" id="recSonoBtns"></div>
       </div>
     </div>
 
     <div style="margin-bottom:10px">
       <div class="rec-field-label" style="margin-bottom:8px">🗺️ Mapa de dores — toque na região</div>
-      <div class="body-map-wrap">
-        <div class="body-map-svg-wrap">
-          <svg viewBox="0 0 160 370" width="140" style="display:block">
-            <ellipse class="body-part" id="bp-cabeca" cx="80" cy="28" rx="22" ry="25" onclick="toggleBodyDor(this,'Cabeça/Pescoço')"/>
-            <ellipse class="body-part" id="bp-ombro-e" cx="44" cy="72" rx="16" ry="13" onclick="toggleBodyDor(this,'Ombro Esq.')"/>
-            <ellipse class="body-part" id="bp-ombro-d" cx="116" cy="72" rx="16" ry="13" onclick="toggleBodyDor(this,'Ombro Dir.')"/>
-            <rect class="body-part" id="bp-peito" x="56" y="64" width="48" height="50" rx="6" onclick="toggleBodyDor(this,'Peito/Costas')"/>
-            <rect class="body-part" id="bp-braco-e" x="24" y="80" width="16" height="54" rx="7" onclick="toggleBodyDor(this,'Braço Esq.')"/>
-            <rect class="body-part" id="bp-braco-d" x="120" y="80" width="16" height="54" rx="7" onclick="toggleBodyDor(this,'Braço Dir.')"/>
-            <rect class="body-part" id="bp-abdomen" x="58" y="118" width="44" height="38" rx="5" onclick="toggleBodyDor(this,'Abdômen/Lombar')"/>
-            <rect class="body-part" id="bp-quadril" x="54" y="160" width="52" height="28" rx="6" onclick="toggleBodyDor(this,'Quadril/Glúteos')"/>
-            <rect class="body-part" id="bp-coxa-e" x="54" y="192" width="22" height="66" rx="8" onclick="toggleBodyDor(this,'Coxa Esq.')"/>
-            <rect class="body-part" id="bp-coxa-d" x="84" y="192" width="22" height="66" rx="8" onclick="toggleBodyDor(this,'Coxa Dir.')"/>
-            <ellipse class="body-part" id="bp-joelho-e" cx="65" cy="268" rx="13" ry="11" onclick="toggleBodyDor(this,'Joelho Esq.')"/>
-            <ellipse class="body-part" id="bp-joelho-d" cx="95" cy="268" rx="13" ry="11" onclick="toggleBodyDor(this,'Joelho Dir.')"/>
-            <rect class="body-part" id="bp-pant-e" x="55" y="282" width="20" height="52" rx="7" onclick="toggleBodyDor(this,'Panturrilha Esq.')"/>
-            <rect class="body-part" id="bp-pant-d" x="85" y="282" width="20" height="52" rx="7" onclick="toggleBodyDor(this,'Panturrilha Dir.')"/>
-          </svg>
+      <!-- Toggle frente/costas -->
+        <div style="display:flex;gap:0;margin-bottom:10px;border-radius:10px;overflow:hidden;border:1px solid var(--border)">
+          <button id="btnBodyFrente" onclick="switchBodyView('frente')"
+            style="flex:1;padding:8px;background:var(--accent);color:#000;border:none;font-size:0.8rem;font-weight:700;cursor:pointer">🫁 Frente</button>
+          <button id="btnBodyCostas" onclick="switchBodyView('costas')"
+            style="flex:1;padding:8px;background:var(--card2);color:var(--text-muted);border:none;font-size:0.8rem;font-weight:700;cursor:pointer;border-left:1px solid var(--border)">🔙 Costas</button>
         </div>
-        <div style="flex:1">
-          <div class="body-dor-legenda">
-            <div><span style="display:inline-block;width:12px;height:12px;background:rgba(168,85,247,0.15);border:1.5px solid rgba(168,85,247,0.3);border-radius:3px;margin-right:6px"></span>Sem dor</div>
-            <div onclick="setDorMode('leve')" style="cursor:pointer"><span style="display:inline-block;width:12px;height:12px;background:rgba(250,204,21,0.35);border:1.5px solid #fbbf24;border-radius:3px;margin-right:6px"></span>Dor leve</div>
-            <div onclick="setDorMode('forte')" style="cursor:pointer"><span style="display:inline-block;width:12px;height:12px;background:rgba(248,113,113,0.45);border:1.5px solid #f87171;border-radius:3px;margin-right:6px"></span>Dor forte</div>
+        <div class="body-map-wrap">
+          <div class="body-map-svg-wrap">
+
+            <!-- FRENTE -->
+            <svg id="bodyMapFrente" viewBox="0 0 160 370" width="140" style="display:block">
+              <ellipse class="body-part" id="bp-cabeca"    cx="80"  cy="28"  rx="22" ry="25" onclick="toggleBodyDor(this,'Cabeça')"/>
+              <ellipse class="body-part" id="bp-pescoco"   cx="80"  cy="58"  rx="10" ry="8"  onclick="toggleBodyDor(this,'Pescoço')"/>
+              <ellipse class="body-part" id="bp-ombro-e"   cx="42"  cy="76"  rx="16" ry="12" onclick="toggleBodyDor(this,'Ombro Esq.')"/>
+              <ellipse class="body-part" id="bp-ombro-d"   cx="118" cy="76"  rx="16" ry="12" onclick="toggleBodyDor(this,'Ombro Dir.')"/>
+              <rect    class="body-part" id="bp-peito"     x="58"   y="66"   width="44" height="46" rx="6" onclick="toggleBodyDor(this,'Peito')"/>
+              <rect    class="body-part" id="bp-biceps-e"  x="24"   y="84"   width="14" height="32" rx="6" onclick="toggleBodyDor(this,'Bíceps Esq.')"/>
+              <rect    class="body-part" id="bp-biceps-d"  x="122"  y="84"   width="14" height="32" rx="6" onclick="toggleBodyDor(this,'Bíceps Dir.')"/>
+              <rect    class="body-part" id="bp-anteb-e"   x="20"   y="120"  width="14" height="30" rx="5" onclick="toggleBodyDor(this,'Antebraço Esq.')"/>
+              <rect    class="body-part" id="bp-anteb-d"   x="126"  y="120"  width="14" height="30" rx="5" onclick="toggleBodyDor(this,'Antebraço Dir.')"/>
+              <rect    class="body-part" id="bp-abdomen"   x="58"   y="116"  width="44" height="42" rx="5" onclick="toggleBodyDor(this,'Abdômen')"/>
+              <rect    class="body-part" id="bp-quadril-f" x="54"   y="162"  width="52" height="24" rx="6" onclick="toggleBodyDor(this,'Quadril')"/>
+              <rect    class="body-part" id="bp-coxa-e"    x="54"   y="190"  width="22" height="64" rx="8" onclick="toggleBodyDor(this,'Coxa Esq.')"/>
+              <rect    class="body-part" id="bp-coxa-d"    x="84"   y="190"  width="22" height="64" rx="8" onclick="toggleBodyDor(this,'Coxa Dir.')"/>
+              <ellipse class="body-part" id="bp-joelho-e"  cx="65"  cy="264" rx="13" ry="11" onclick="toggleBodyDor(this,'Joelho Esq.')"/>
+              <ellipse class="body-part" id="bp-joelho-d"  cx="95"  cy="264" rx="13" ry="11" onclick="toggleBodyDor(this,'Joelho Dir.')"/>
+              <rect    class="body-part" id="bp-pant-e"    x="55"   y="278"  width="20" height="50" rx="7" onclick="toggleBodyDor(this,'Panturrilha Esq.')"/>
+              <rect    class="body-part" id="bp-pant-d"    x="85"   y="278"  width="20" height="50" rx="7" onclick="toggleBodyDor(this,'Panturrilha Dir.')"/>
+              <ellipse class="body-part" id="bp-pe-e"      cx="63"  cy="338" rx="13" ry="8"  onclick="toggleBodyDor(this,'Pé Esq.')"/>
+              <ellipse class="body-part" id="bp-pe-d"      cx="93"  cy="338" rx="13" ry="8"  onclick="toggleBodyDor(this,'Pé Dir.')"/>
+            </svg>
+
+            <!-- COSTAS (oculta inicialmente) -->
+            <svg id="bodyMapCostas" viewBox="0 0 160 370" width="140" style="display:none">
+              <ellipse class="body-part" id="bpb-cranio"   cx="80"  cy="28"  rx="22" ry="25" onclick="toggleBodyDor(this,'Nuca/Crânio')"/>
+              <ellipse class="body-part" id="bpb-trape-e"  cx="58"  cy="66"  rx="18" ry="12" onclick="toggleBodyDor(this,'Trapézio Esq.')"/>
+              <ellipse class="body-part" id="bpb-trape-d"  cx="102" cy="66"  rx="18" ry="12" onclick="toggleBodyDor(this,'Trapézio Dir.')"/>
+              <ellipse class="body-part" id="bpb-ombro-e"  cx="40"  cy="80"  rx="16" ry="12" onclick="toggleBodyDor(this,'Ombro Post. Esq.')"/>
+              <ellipse class="body-part" id="bpb-ombro-d"  cx="120" cy="80"  rx="16" ry="12" onclick="toggleBodyDor(this,'Ombro Post. Dir.')"/>
+              <rect    class="body-part" id="bpb-dorsal-e" x="56"   y="76"   width="20" height="52" rx="5" onclick="toggleBodyDor(this,'Dorsal Esq.')"/>
+              <rect    class="body-part" id="bpb-dorsal-d" x="84"   y="76"   width="20" height="52" rx="5" onclick="toggleBodyDor(this,'Dorsal Dir.')"/>
+              <rect    class="body-part" id="bpb-tricep-e" x="24"   y="84"   width="14" height="32" rx="6" onclick="toggleBodyDor(this,'Tríceps Esq.')"/>
+              <rect    class="body-part" id="bpb-tricep-d" x="122"  y="84"   width="14" height="32" rx="6" onclick="toggleBodyDor(this,'Tríceps Dir.')"/>
+              <rect    class="body-part" id="bpb-lombar"   x="56"   y="130"  width="48" height="36" rx="5" onclick="toggleBodyDor(this,'Lombar')"/>
+              <rect    class="body-part" id="bpb-gluteo-e" x="56"   y="170"  width="24" height="28" rx="7" onclick="toggleBodyDor(this,'Glúteo Esq.')"/>
+              <rect    class="body-part" id="bpb-gluteo-d" x="80"   y="170"  width="24" height="28" rx="7" onclick="toggleBodyDor(this,'Glúteo Dir.')"/>
+              <rect    class="body-part" id="bpb-isch-e"   x="54"   y="200"  width="22" height="60" rx="8" onclick="toggleBodyDor(this,'Posterior Coxa Esq.')"/>
+              <rect    class="body-part" id="bpb-isch-d"   x="84"   y="200"  width="22" height="60" rx="8" onclick="toggleBodyDor(this,'Posterior Coxa Dir.')"/>
+              <ellipse class="body-part" id="bpb-joelho-e" cx="65"  cy="270" rx="13" ry="11" onclick="toggleBodyDor(this,'Joelho Post. Esq.')"/>
+              <ellipse class="body-part" id="bpb-joelho-d" cx="95"  cy="270" rx="13" ry="11" onclick="toggleBodyDor(this,'Joelho Post. Dir.')"/>
+              <rect    class="body-part" id="bpb-pant-e"   x="55"   y="284"  width="20" height="50" rx="7" onclick="toggleBodyDor(this,'Panturrilha Post. Esq.')"/>
+              <rect    class="body-part" id="bpb-pant-d"   x="85"   y="284"  width="20" height="50" rx="7" onclick="toggleBodyDor(this,'Panturrilha Post. Dir.')"/>
+              <ellipse class="body-part" id="bpb-calc-e"   cx="63"  cy="342" rx="13" ry="8"  onclick="toggleBodyDor(this,'Calcanhar Esq.')"/>
+              <ellipse class="body-part" id="bpb-calc-d"   cx="93"  cy="342" rx="13" ry="8"  onclick="toggleBodyDor(this,'Calcanhar Dir.')"/>
+            </svg>
+
           </div>
-          <div style="margin-top:10px;font-size:0.72rem;color:var(--muted)">Modo: <span id="dorModeLabel" style="color:#a855f7;font-weight:700">Dor forte</span></div>
-          <div id="dorAtivasList" class="body-dor-ativa" style="margin-top:8px;font-size:0.72rem"></div>
+          <div style="flex:1">
+            <div class="body-dor-legenda">
+              <div><span style="display:inline-block;width:12px;height:12px;background:rgba(168,85,247,0.15);border:1.5px solid rgba(168,85,247,0.3);border-radius:3px;margin-right:6px"></span>Sem dor</div>
+              <div onclick="setDorMode('leve')" style="cursor:pointer"><span style="display:inline-block;width:12px;height:12px;background:rgba(250,204,21,0.35);border:1.5px solid #fbbf24;border-radius:3px;margin-right:6px"></span>Dor leve</div>
+              <div onclick="setDorMode('forte')" style="cursor:pointer"><span style="display:inline-block;width:12px;height:12px;background:rgba(248,113,113,0.45);border:1.5px solid #f87171;border-radius:3px;margin-right:6px"></span>Dor forte</div>
+            </div>
+            <div style="margin-top:10px;font-size:0.72rem;color:var(--muted)">Modo: <span id="dorModeLabel" style="color:#a855f7;font-weight:700">Dor forte</span></div>
+            <div id="dorAtivasList" class="body-dor-ativa" style="margin-top:8px;font-size:0.72rem"></div>
+          </div>
         </div>
-      </div>
-    </div>
 
     <div class="rec-field" style="margin-bottom:10px">
       <span class="rec-field-label">📝 Observação</span>
