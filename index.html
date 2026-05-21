@@ -3198,6 +3198,33 @@
 }
 .sn-pill:active { opacity: 0.75; }
 
+/* ── Botão Home no sub-nav ── */
+.sn-home-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card2);
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.sn-home-btn:active { background: rgba(240,165,0,0.18); transform: scale(0.92); }
+.sn-sep {
+  width: 1px;
+  height: 22px;
+  background: var(--border);
+  flex-shrink: 0;
+  align-self: center;
+  margin: 0 2px;
+}
+
 /* ---- HOME DASHBOARD ---- */
 #tab-home { padding: 0 0 80px; }
 .home-hero {
@@ -9595,6 +9622,7 @@ const BACKUP_KEYS = [
   'projeto_tatame_recuperacao',
   'projeto_tatame_exames',
   'projeto_tatame_suplementos',
+  'projeto_tatame_medicamentos',
   'projeto_tatame_fisico_testes',
   'projeto_tatame_tecnicas_bjj',
   'projeto_tatame_macros_meta',
@@ -11725,6 +11753,80 @@ function renderExameChart() {
   labels.forEach(function(l,i){if(i%step===0||i===n-1)ctx.fillText(l,xP(i),H-6);});
 }
 
+
+// ============================================================
+// MEDICAMENTOS
+// ============================================================
+var MED_KEY = 'projeto_tatame_medicamentos';
+
+function getMeds() {
+  try { return JSON.parse(localStorage.getItem(MED_KEY)||'[]'); } catch(e){ return []; }
+}
+
+function saveMedicamento() {
+  var nome=((document.getElementById('medNome')||{}).value||'').trim();
+  var dose=((document.getElementById('medDose')||{}).value||'').trim();
+  var freq=((document.getElementById('medFreq')||{}).value||'').trim();
+  var hor=((document.getElementById('medHorario')||{}).value||'').trim();
+  var obs=((document.getElementById('medObs')||{}).value||'').trim();
+  if(!nome) { showToast('Informe o nome do medicamento!'); return; }
+  var arr=getMeds();
+  arr.push({nome:nome,dose:dose,freq:freq,horario:hor,obs:obs,ativo:true,ts:Date.now()});
+  localStorage.setItem(MED_KEY,JSON.stringify(arr));
+  ['medNome','medDose','medHorario','medObs'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  var sel=document.getElementById('medFreq'); if(sel) sel.value='Semanal';
+  showToast('💊 Medicamento salvo!');
+  renderMedLista();
+}
+
+function toggleMed(idx) {
+  var arr=getMeds();
+  if(arr[idx]) arr[idx].ativo=!arr[idx].ativo;
+  localStorage.setItem(MED_KEY,JSON.stringify(arr));
+  renderMedLista();
+}
+
+function deleteMed(idx) {
+  if(!confirm('Remover medicamento?')) return;
+  var arr=getMeds();
+  arr.splice(idx,1);
+  localStorage.setItem(MED_KEY,JSON.stringify(arr));
+  renderMedLista();
+}
+
+function renderMedLista() {
+  var el=document.getElementById('medLista');
+  if(!el) return;
+  var arr=getMeds();
+  if(!arr.length){
+    el.innerHTML='<p style="color:var(--muted);text-align:center;padding:12px;font-size:0.8rem">Nenhum medicamento cadastrado.<br>Adicione Tirzepatida, Creatina etc.</p>';
+    return;
+  }
+  el.innerHTML=arr.map(function(m,i){
+    var badge = m.ativo
+      ? '<span style="color:#22c55e;font-size:0.7rem;font-weight:700">● ATIVO</span>'
+      : '<span style="color:#f87171;font-size:0.7rem;font-weight:700">● PAUSADO</span>';
+    var icon = '💊';
+    var n = (m.nome||'').toLowerCase();
+    if(n.includes('tirzepatida')||n.includes('tirze')) icon='💉';
+    else if(n.includes('creatina')) icon='🔵';
+    else if(n.includes('beta')||n.includes('alanina')) icon='⚡';
+    var detail = [m.dose, m.freq, m.horario].filter(Boolean).join(' · ');
+    return '<div class="supl-card'+(m.ativo?'':' pausado')+'" style="gap:10px">'
+      +'<span style="font-size:1.6rem;flex-shrink:0">'+icon+'</span>'
+      +'<div class="supl-info" style="flex:1">'
+        +'<div class="supl-nome" style="display:flex;align-items:center;gap:8px">'+m.nome+' '+badge+'</div>'
+        +(detail?'<div class="supl-detail">'+detail+'</div>':'')
+        +(m.obs?'<div class="supl-detail" style="color:var(--muted);font-style:italic">'+m.obs+'</div>':'')
+      +'</div>'
+      +'<div class="supl-actions">'
+        +'<button class="supl-toggle-btn" onclick="toggleMed('+i+')">'+(m.ativo?'Pausar':'Retomar')+'</button>'
+        +'<button onclick="deleteMed('+i+')" style="background:none;border:none;color:#f87171;cursor:pointer;font-size:0.85rem;padding:4px">✕</button>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+
 // SUPLEMENTOS
 function getSupl() {
   try { return JSON.parse(localStorage.getItem('projeto_tatame_suplementos')||'[]'); } catch(e){ return []; }
@@ -11775,6 +11877,7 @@ function renderSaude() {
   renderExameChartSel();
   renderExameChart();
   renderSuplLista();
+  renderMedLista();
   var d=document.getElementById('exameDate');if(d&&!d.value)d.value=todayStr();
 }
 
@@ -12266,18 +12369,21 @@ function switchPane(pane) {
     btn.classList.toggle('active', btn.id === 'bn-' + pane);
   });
 
-  // Update sub-nav
+  // Update sub-nav — sempre exibe botão 🏠 Home + pills do pane
   const snBar = document.getElementById('subNavBar');
   const defs  = SUBNAV_DEFS[pane] || [];
-  if (defs.length === 0) {
+  if (pane === 'home') {
+    // Na Home não mostramos o sub-nav
     snBar.style.display = 'none';
     snBar.innerHTML = '';
   } else {
     snBar.style.display = 'flex';
     const defaultTab = PANE_DEFAULTS[pane];
-    snBar.innerHTML = defs.map(d =>
+    const homeBtn = `<button class="sn-home-btn" onclick="switchPane('home')" title="Voltar ao Home">🏠</button>`;
+    const pills = defs.map(d =>
       `<button class="sn-pill${d.tab===defaultTab?' active':''}" id="snp-${d.tab}" onclick="switchPaneTab('${d.tab}')">${d.label}</button>`
     ).join('');
+    snBar.innerHTML = homeBtn + (defs.length ? '<div class="sn-sep"></div>' + pills : '');
   }
 
   // Switch to default tab for this pane
@@ -13210,9 +13316,43 @@ var _origResetBodyDores = null;
     <div id="exameHistorico" style="margin-top:10px"></div>
   </div>
 
+  <!-- MEDICAMENTOS -->
+  <div class="session-card" style="margin-bottom:14px">
+    <div class="dash-section-title" style="margin-bottom:10px">💊 Medicamentos</div>
+    <p style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">Remédios com prescrição médica, uso contínuo ou controlado.</p>
+    <div class="rec-form-grid" style="margin-bottom:10px">
+      <div class="rec-field">
+        <span class="rec-field-label">Nome</span>
+        <input type="text" id="medNome" class="metrics-input" placeholder="ex: Tirzepatida" style="width:100%"/>
+      </div>
+      <div class="rec-field">
+        <span class="rec-field-label">Dose</span>
+        <input type="text" id="medDose" class="metrics-input" placeholder="ex: 2.5 mg" style="width:100%"/>
+      </div>
+      <div class="rec-field">
+        <span class="rec-field-label">Frequência</span>
+        <select id="medFreq" class="evolucao-select" style="margin-top:0">
+          <option value="Diário">Diário</option>
+          <option value="Semanal" selected>Semanal</option>
+          <option value="Quinzenal">Quinzenal</option>
+          <option value="Mensal">Mensal</option>
+          <option value="Conforme necessário">Conforme necessário</option>
+        </select>
+      </div>
+      <div class="rec-field">
+        <span class="rec-field-label">Horário / Via</span>
+        <input type="text" id="medHorario" class="metrics-input" placeholder="ex: Noite / Subcutâneo" style="width:100%"/>
+      </div>
+    </div>
+    <input id="medObs" class="metrics-input" placeholder="Observações (médico, indicação...)" style="width:100%;margin-bottom:10px"/>
+    <button class="btn-save" style="width:100%" onclick="saveMedicamento()">＋ Adicionar Medicamento</button>
+    <div id="medLista" style="margin-top:12px"></div>
+  </div>
+
   <!-- SUPLEMENTOS -->
   <div class="session-card">
-    <div class="dash-section-title" style="margin-bottom:10px">💊 Suplementos</div>
+    <div class="dash-section-title" style="margin-bottom:10px">🥤 Suplementos</div>
+    <p style="font-size:0.72rem;color:var(--muted);margin-bottom:10px">Suplementos nutricionais (sem prescrição).</p>
     <div class="rec-form-grid" style="margin-bottom:10px">
       <div class="rec-field">
         <span class="rec-field-label">Nome</span>
