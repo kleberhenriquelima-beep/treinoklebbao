@@ -567,8 +567,9 @@
   /* FLOATING TIMER */
   #floating-timer {
     position: fixed;
-    bottom: 20px;
-    right: 16px;
+    bottom: calc(68px + env(safe-area-inset-bottom));
+    left: 12px;
+    right: 12px;
     background: var(--card);
     border: 2px solid var(--accent);
     border-radius: 16px;
@@ -577,7 +578,7 @@
     align-items: center;
     gap: 12px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    z-index: 200;
+    z-index: 950;
     animation: slideUp 0.3s ease;
   }
 
@@ -1880,7 +1881,7 @@
     .intro-card h3 { font-size: 0.92rem; }
     .intro-card p { font-size: 0.78rem; }
 
-    #floating-timer { bottom: 12px; right: 10px; left: 10px; justify-content: space-between; }
+    #floating-timer { bottom: calc(64px + env(safe-area-inset-bottom)); right: 8px; left: 8px; justify-content: space-between; }
     .float-time { font-size: 1.3rem; }
   }
 
@@ -3134,7 +3135,7 @@
   border-top: 1px solid var(--border);
   display: flex;
   align-items: stretch;
-  z-index: 900;
+  z-index: 1000;
   box-shadow: 0 -2px 12px rgba(0,0,0,0.25);
 }
 .bn-item {
@@ -3506,7 +3507,7 @@
     <div class="sb-sep"></div>
     <!-- Dieta hoje -->
     <div class="sb-item">
-      <span class="sb-val" id="sb-meals">0/6</span>
+      <span class="sb-val" id="sb-meals">0/4</span>
       <span class="sb-label">refeições hoje</span>
     </div>
     <div class="sb-sep"></div>
@@ -4742,7 +4743,7 @@ const treinoB = {
   acc: [
     { name: 'Kettlebell swing', sets: '3', reps: '12 a 15 reps', rest: '45 a 60s', restSecs: 52, vid: 'n1df4ASFeZU' },
     { name: "Farmer's walk", sets: '3', reps: '3 voltas de 30 a 40m', rest: '60s', restSecs: 60, vid: '1uOs1hP3u4A' },
-    { name: 'Prancha com arrasto de anilha / RKC', sets: '3', reps: '30 a 40 segundos', rest: '45s', restSecs: 45, vid: 'Xvgw5ODIatQ' },
+    { name: 'Prancha com arrasto de anilha / RKC', sets: '3', reps: '30 a 40 segundos', rest: '45s', restSecs: 45, vid: 'Xvgw5ODIatQ', timerSecs: 40, timerLabel: 'HOLD — Prancha' },
   ],
   post: [
     { name: 'Flexor de quadril', meta: '30s por lado', icon: '🦵', vid: 'K-8dxuHU79Y' },
@@ -4903,6 +4904,16 @@ function makeExCard(ex, tabId, section, idx) {
         <div class="sets-tracker-label">Séries concluídas</div>
         ${setDots}
       </div>
+      ${ex.timerSecs ? `
+      <div class="rest-timer" id="extimer-${id}" style="border-color:rgba(168,85,247,0.5);background:rgba(168,85,247,0.06)">
+        <div class="rest-timer-label" style="color:#a855f7">🏋️ ${ex.timerLabel || 'Timer de exercício'} — toque para iniciar</div>
+        <div class="rest-timer-display" id="exdisplay-${id}" onclick="document.getElementById('exstartbtn-${id}').click()" title="Toque para iniciar/pausar" style="color:#a855f7">${formatTime(ex.timerSecs)}</div>
+        <div class="timer-tap-hint" style="color:#a855f7">▼ toque para iniciar / pausar</div>
+        <div class="timer-btns">
+          <button class="timer-btn start" id="exstartbtn-${id}" onclick="startExTimer('${id}', ${ex.timerSecs})" style="background:#a855f7">▶ Iniciar Hold</button>
+          <button class="timer-btn reset" onclick="resetExTimer('${id}', ${ex.timerSecs})">↺ Reset</button>
+        </div>
+      </div>` : ''}
       <div class="rest-timer" id="timer-${id}" style="border-color:rgba(240,165,0,0.3)">
         <div class="rest-timer-label" style="color:var(--accent)">⬇ Timer de descanso — toque no número para iniciar</div>
         <div class="rest-timer-display" id="display-${id}" onclick="document.getElementById('startbtn-${id}').click()" title="Toque para iniciar/pausar">${formatTime(ex.restSecs)}</div>
@@ -5248,48 +5259,110 @@ function setPreset(id, secs) {
   });
 }
 
+// ── Exercise Hold Timer (ex: Prancha) ────────────────────────────────────────
+var exTimers = {};
+
+function startExTimer(id, secs) {
+  if (exTimers[id] && exTimers[id].running) {
+    // PAUSE
+    clearInterval(exTimers[id].interval);
+    exTimers[id].running = false;
+    exTimers[id].remaining = Math.max(0, Math.round((exTimers[id].endTime - Date.now()) / 1000));
+    const sb = document.getElementById('exstartbtn-' + id);
+    if (sb) sb.textContent = '▶ Continuar Hold';
+    const d = document.getElementById('exdisplay-' + id);
+    if (d) { d.classList.remove('running'); d.textContent = formatTime(exTimers[id].remaining); }
+    hideFloat();
+    return;
+  }
+
+  const remaining = (exTimers[id] && exTimers[id].remaining > 0) ? exTimers[id].remaining : secs;
+  if (remaining <= 0) { resetExTimer(id, secs); return; }
+
+  const endTime = Date.now() + remaining * 1000;
+  const d = document.getElementById('exdisplay-' + id);
+  if (d) { d.classList.add('running'); d.classList.remove('done-timer'); }
+  const sb = document.getElementById('exstartbtn-' + id);
+  if (sb) sb.textContent = '⏸ Pausar Hold';
+
+  showFloat('🏋️ ' + formatTime(remaining), 'ex-' + id, '#a855f7');
+
+  const interval = setInterval(() => {
+    const rem = Math.max(0, Math.round((endTime - Date.now()) / 1000));
+    const d2 = document.getElementById('exdisplay-' + id);
+    if (d2) d2.textContent = formatTime(rem);
+    showFloat('🏋️ ' + formatTime(rem), 'ex-' + id, '#a855f7');
+
+    if (rem <= 0) {
+      clearInterval(interval);
+      exTimers[id].running = false;
+      if (d2) { d2.classList.remove('running'); d2.classList.add('done-timer'); d2.textContent = '💪 Boa!'; }
+      const sb2 = document.getElementById('exstartbtn-' + id);
+      if (sb2) sb2.textContent = '▶ Iniciar Hold';
+      hideFloat();
+      if (navigator.vibrate) navigator.vibrate([400, 100, 400]);
+      showToast('💪 Prancha completa! Descanse agora.');
+    }
+  }, 500);
+
+  exTimers[id] = { interval, remaining, endTime, running: true };
+}
+
+function resetExTimer(id, secs) {
+  if (exTimers[id] && exTimers[id].interval) clearInterval(exTimers[id].interval);
+  exTimers[id] = { interval: null, remaining: secs, running: false };
+  const d = document.getElementById('exdisplay-' + id);
+  if (d) { d.textContent = formatTime(secs); d.classList.remove('running', 'done-timer'); }
+  const sb = document.getElementById('exstartbtn-' + id);
+  if (sb) sb.textContent = '▶ Iniciar Hold';
+  hideFloat();
+}
+
+
+// ── Timer background-proof (epoch-based) ───────────────────────────────────
+// Usa Date.now() para que mesmo se o intervalo atrasar (browser throttling
+// ou tela bloqueada), o display seja sempre preciso quando voltar.
 function startTimer(id, secs) {
   if (timers[id] && timers[id].running) {
-    // Pause
+    // PAUSE — salvar quanto sobrou
     clearInterval(timers[id].interval);
     timers[id].running = false;
+    timers[id].remaining = Math.max(0, Math.round((timers[id].endTime - Date.now()) / 1000));
     document.getElementById('startbtn-' + id).textContent = '▶ Continuar';
-    document.getElementById('display-' + id).classList.remove('running');
+    const d = document.getElementById('display-' + id);
+    if (d) { d.classList.remove('running'); d.textContent = formatTime(timers[id].remaining); }
     hideFloat();
     return;
   }
 
   const display = document.getElementById('display-' + id);
-  const startSecs = timers[id] ? timers[id].remaining : secs;
-  let remaining = startSecs;
-
+  const remaining = (timers[id] && timers[id].remaining > 0) ? timers[id].remaining : secs;
   if (remaining <= 0) { resetTimer(id, secs); return; }
 
-  display.classList.add('running');
-  display.classList.remove('done-timer');
-  document.getElementById('startbtn-' + id).textContent = '⏸ Pausar';
-
+  const endTime = Date.now() + remaining * 1000;
+  if (display) { display.classList.add('running'); display.classList.remove('done-timer'); }
+  const startBtn = document.getElementById('startbtn-' + id);
+  if (startBtn) startBtn.textContent = '⏸ Pausar';
   showFloat(formatTime(remaining), id);
 
   const interval = setInterval(() => {
-    remaining--;
-    timers[id].remaining = remaining;
-    display.textContent = formatTime(remaining);
-    showFloat(formatTime(remaining), id);
+    const rem = Math.max(0, Math.round((endTime - Date.now()) / 1000));
+    const d = document.getElementById('display-' + id);
+    if (d) d.textContent = formatTime(rem);
+    showFloat(formatTime(rem), id);
 
-    if (remaining <= 0) {
+    if (rem <= 0) {
       clearInterval(interval);
       timers[id].running = false;
-      display.classList.remove('running');
-      display.classList.add('done-timer');
-      display.textContent = '✓ Pronto!';
-      document.getElementById('startbtn-' + id).textContent = '▶ Iniciar';
+      if (d) { d.classList.remove('running'); d.classList.add('done-timer'); d.textContent = '✓ Pronto!'; }
+      const sb = document.getElementById('startbtn-' + id);
+      if (sb) sb.textContent = '▶ Iniciar';
       hideFloat();
       if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
     }
-  }, 1000);
+  }, 500); // 500ms para ser mais responsivo
 
-  timers[id] = { interval, remaining, running: true };
+  timers[id] = { interval, remaining, endTime, running: true };
 }
 
 function resetTimer(id, secs) {
@@ -5313,17 +5386,50 @@ function resetTimer(id, secs) {
 
 let activeTimerId = null; // rastreia qual timer está ativo para o floating
 
-function showFloat(time, timerId) {
+function showFloat(time, timerId, color) {
   if (timerId) activeTimerId = timerId;
   const ft = document.getElementById('floating-timer');
   ft.classList.add('visible');
-  document.getElementById('floatTime').textContent = time;
+  const ftEl = document.getElementById('floatTime');
+  if (ftEl) { ftEl.textContent = time; ftEl.style.color = color || 'var(--accent)'; }
 }
 
 function hideFloat() {
   document.getElementById('floating-timer').classList.remove('visible');
   activeTimerId = null;
 }
+// ── Sync displays quando volta para a página (aba do browser ou app) ─────────
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    // Re-calcular todos os timers baseado em endTime
+    Object.keys(timers).forEach(function(id) {
+      var t = timers[id];
+      if (t && t.running && t.endTime) {
+        var rem = Math.max(0, Math.round((t.endTime - Date.now()) / 1000));
+        var d = document.getElementById('display-' + id);
+        if (d) d.textContent = rem <= 0 ? '✓ Pronto!' : formatTime(rem);
+        if (rem <= 0 && t.running) {
+          clearInterval(t.interval); t.running = false;
+          if (d) { d.classList.remove('running'); d.classList.add('done-timer'); d.textContent = '✓ Pronto!'; }
+          var sb = document.getElementById('startbtn-' + id);
+          if (sb) sb.textContent = '▶ Iniciar';
+          hideFloat();
+          if (navigator.vibrate) navigator.vibrate([200,100,200]);
+        }
+      }
+    });
+    Object.keys(exTimers).forEach(function(id) {
+      var t = exTimers[id];
+      if (t && t.running && t.endTime) {
+        var rem = Math.max(0, Math.round((t.endTime - Date.now()) / 1000));
+        var d = document.getElementById('exdisplay-' + id);
+        if (d) d.textContent = rem <= 0 ? '💪 Boa!' : formatTime(rem);
+      }
+    });
+  }
+});
+
+
 
 function tapFloat() {
   // Toque no floating timer pausa/retoma o timer ativo
@@ -5475,8 +5581,8 @@ function updateHeaderStats() {
   try {
     const _dietAll = JSON.parse(localStorage.getItem(DIET_LOG_KEY) || '{}');
     const _todayLog = _dietAll[todayStr()] || {};
-    const _mealCount = ['cafe','lanche1','almoco','pre','pos','jantar'].filter(k => _todayLog[k]).length;
-    const sbMeals = document.getElementById('sb-meals'); if(sbMeals) sbMeals.textContent = _mealCount + '/6';
+    const _mealCount = ['cafe','almoco','lanche','jantar'].filter(k => _todayLog[k] || _todayLog[k+'_done']).length;
+    const sbMeals = document.getElementById('sb-meals'); if(sbMeals) sbMeals.textContent = _mealCount + '/' + (typeof MEALS_DEF !== 'undefined' ? MEALS_DEF.length : 4);
   } catch(e) {}
   // Water today
   try {
@@ -6348,9 +6454,7 @@ function showDayDetail(dateStr) {
   const dietLog     = (typeof getDietLogForDate === 'function') ? getDietLogForDate(dateStr) : {};
 
   const MEALS_LABELS = {
-    cafe:'☀️ Café da manhã', lanche1:'🍊 Lanche manhã',
-    almoco:'🍽️ Almoço', pre:'💪 Pré-treino',
-    pos:'🔋 Pós-treino', jantar:'🌙 Jantar'
+    cafe:'☕ Café da manhã', almoco:'🍱 Almoço', lanche:'🍌 Lanche', jantar:'🌙 Jantar'
   };
   const gymLabels = { A:'🏋️ Tronco Superior', B:'🦵 Pernas & Core', C:'⚡ Potência' };
 
@@ -6394,7 +6498,7 @@ function showDayDetail(dateStr) {
   const mealKeys = Object.keys(MEALS_LABELS);
   const mealsLogged = mealKeys.filter(k => dietLog[k]);
   if (mealsLogged.length > 0) {
-    html += `<div class="dd-section"><div class="dd-section-title">🥗 Dieta (${mealsLogged.length}/6 refeições)</div>`;
+    html += `<div class="dd-section"><div class="dd-section-title">🥗 Dieta (${mealsLogged.length}/${MEALS_DEF ? MEALS_DEF.length : 4} refeições)</div>`;
     mealsLogged.forEach(k => {
       const ts = dietLog[k + '_ts'] ? ` <span>${dietLog[k + '_ts']}</span>` : '';
       html += `<div class="dd-card diet">
@@ -7899,12 +8003,10 @@ function saveDietWeight() {
 
 // ─── MEAL DEFINITIONS ──────────────────────
 const MEALS_DEF = [
-  { key:'cafe',    icon:'🌅', name:'Café da manhã',       time:'07:00', placeholder:'Ex: vitamina com leite em pó 30g + banana + aveia 35g + whey 30g + 2 claras mexidas no azeite' },
-  { key:'lanche1', icon:'🍊', name:'Lanche da manhã',     time:'10:00', placeholder:'Ex: 3 claras cozidas + uva roxa 100g (fibra p/ LDL)' },
-  { key:'almoco',  icon:'🍽️', name:'Almoço',              time:'12:30', placeholder:'Ex: frango grelhado 200g + arroz + feijão + salada + azeite — sem frituras' },
-  { key:'pre',     icon:'💪', name:'Pré-treino',           time:'16:00', placeholder:'Ex: cuscuz 130g + claras 3un — evite gordura saturada antes do treino' },
-  { key:'pos',     icon:'🔋', name:'Pós-treino / Lanche', time:'19:00', placeholder:'Ex: whey isolado 40g + água 300ml + mel — janela anabólica' },
-  { key:'jantar',  icon:'🌙', name:'Jantar',               time:'21:00', placeholder:'Ex: sardinha/atum/salmão 150g + cuscuz 120g + salada verde (ômega-3 para LDL)' },
+  { key:'cafe',   icon:'☕', name:'Café da manhã', time:'07:00', placeholder:'Ex: vitamina com leite + banana + aveia + whey 30g' },
+  { key:'almoco', icon:'🍱', name:'Almoço',        time:'12:30', placeholder:'Ex: frango grelhado 200g + arroz + feijão + salada + azeite' },
+  { key:'lanche', icon:'🍌', name:'Lanche',        time:'16:00', placeholder:'Ex: whey + fruta ou claras + fruta' },
+  { key:'jantar', icon:'🌙', name:'Jantar',        time:'21:00', placeholder:'Ex: sardinha/atum/salmão 150g + legumes + salada' },
 ];
 
 function getDietLogForDate(date) {
@@ -8005,7 +8107,7 @@ function renderMealCards() {
   const bar = document.getElementById('mealProgressBar');
   const lbl = document.getElementById('mealProgressLabel');
   if (bar) bar.style.width = pct + '%';
-  if (lbl) lbl.textContent = doneCount + '/6 refeições registradas' + (pct === 100 ? ' 🎉' : '');
+  if (lbl) lbl.textContent = doneCount + '/' + MEALS_DEF.length + ' refeições registradas' + (pct === 100 ? ' 🎉' : '');
 }
 
 function editMeal(key) {
@@ -8137,14 +8239,13 @@ function renderDietLogHistory() {
     const dates = Object.keys(all).sort().reverse().filter(d => d !== today2).slice(0, 7);
     if (!dates.length) { el.innerHTML = '<p style="color:var(--muted);font-size:0.78rem">Nenhum registro anterior.</p>'; return; }
     const fieldNames = {
-      cafe:'🌅 Café', lanche1:'🍊 Lanche', almoco:'🍽️ Almoço',
-      pre:'💪 Pré-treino', pos:'🔋 Pós-treino', jantar:'🌙 Jantar'
+      cafe:'☕ Café', almoco:'🍱 Almoço', lanche:'🍌 Lanche', jantar:'🌙 Jantar'
     };
     el.innerHTML = dates.map(date => {
       const entry = all[date];
       const d = new Date(date + 'T12:00:00');
       const dStr = d.toLocaleDateString('pt-BR', { weekday:'short', day:'2-digit', month:'short' });
-      const mealKeys = ['cafe','lanche1','almoco','pre','pos','jantar'];
+      const mealKeys = ['cafe','almoco','lanche','jantar'];
       const rows = mealKeys.filter(k => entry[k]).map(k => {
         const ts = entry[k+'_ts'] ? ` <span style="color:var(--muted);font-size:.65rem">· ${entry[k+'_ts']}</span>` : '';
         return `<div class="diet-log-entry-meal"><strong>${fieldNames[k]}:</strong>${ts} ${entry[k]}</div>`;
@@ -8153,7 +8254,7 @@ function renderDietLogHistory() {
       return `<div class="diet-log-entry">
         <div class="diet-log-entry-date" style="display:flex;justify-content:space-between;align-items:center">
           <span>📅 ${dStr}</span>
-          <span style="font-size:.65rem;color:${doneCount>=5?'#81c784':'var(--muted)'}">${doneCount}/6 refeições</span>
+          <span style="font-size:.65rem;color:${doneCount>=5?'#81c784':'var(--muted)'}">${doneCount}/${MEALS_DEF ? MEALS_DEF.length : 4} refeições</span>
         </div>
         ${rows || '<p style="color:var(--muted);font-size:.72rem">Sem dados</p>'}
       </div>`;
@@ -10280,7 +10381,7 @@ function renderDietKcalProgress() {
   if (!container) return;
   const date = document.getElementById('dietLogDate')?.value || todayStr();
   const log  = getDietLogForDate(date);
-  const mealKeys = ['cafe','lanche1','almoco','pre','pos','jantar'];
+  const mealKeys = ['cafe','almoco','lanche','jantar'];
   let totalKcal = 0;
   mealKeys.forEach(k => { if (log[k + '_kcal']) totalKcal += log[k + '_kcal']; });
 
@@ -10305,7 +10406,7 @@ function renderDietKcalProgress() {
 function calcDietStreak() {
   try {
     const all = JSON.parse(localStorage.getItem(DIET_LOG_KEY) || '{}');
-    const mealKeys = ['cafe','lanche1','almoco','pre','pos','jantar'];
+    const mealKeys = ['cafe','almoco','lanche','jantar'];
     let streak = 0;
     let d = brDate();
     for (let i = 0; i < 365; i++) {
@@ -10347,7 +10448,7 @@ function renderWeeklySummaryCard() {
 
   // Diet compliance
   const all = JSON.parse(localStorage.getItem(DIET_LOG_KEY) || '{}');
-  const mealKeys = ['cafe','lanche1','almoco','pre','pos','jantar'];
+  const mealKeys = ['cafe','almoco','lanche','jantar'];
   let dietDays = 0, totalKcalWeek = 0, kcalDays = 0;
   for (let i = 0; i < 7; i++) {
     const d = new Date(weekStart + 'T12:00:00');
@@ -10416,7 +10517,7 @@ function renderHealthPanel() {
   if (!el) return;
 
   const all = JSON.parse(localStorage.getItem(DIET_LOG_KEY) || '{}');
-  const mealKeys = ['cafe','lanche1','almoco','pre','pos','jantar'];
+  const mealKeys = ['cafe','almoco','lanche','jantar'];
   const fishWords = ['sardinha','atum','salmão','salmon','peixe','tilapia','tilápia','bacalhau'];
   const fiberWords = ['aveia','feijão','lentilha','feijao','arroz integral','salada','brocolis','brócolis','cenoura','maçã','banana'];
   const badFatWords = ['queijo gordo','manteiga','fritura','frito','bacon','embutido','salsicha','linguiça'];
