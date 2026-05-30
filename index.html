@@ -3179,9 +3179,6 @@
 /* ========== REESTRUTURAÇÃO: BOTTOM NAV + PANES ========== */
 
 /* Ocultar abas-lixo (mantidas no DOM mas invisíveis) */
-#tab-conquistas, #tab-missoes, #tab-compartilhar,
-#tab-relatorio, #tab-tecnicas { display:none !important; }
-
 /* Ajuste geral: conteúdo empurrado para cima do bottom nav */
 .tab-content { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
 
@@ -3449,69 +3446,129 @@
 <!-- DRAWER OVERLAY -->
 <div id="drawerOverlay" onclick="closeDrawer()" class="drawer-overlay"></div>
 
-<!-- SETTINGS DRAWER (substituiu menu de navegação) -->
+<!-- ☰ MENU PRINCIPAL -->
 <nav id="navDrawer" class="nav-drawer">
-  <div class="drawer-header">
-    <div class="drawer-logo">⚙️ CONFIGURAÇÕES</div>
-    <button class="drawer-close-btn" onclick="closeDrawer()">✕</button>
-  </div>
-  <div class="drawer-profile">
-    <div class="drawer-profile-avatar">🥋</div>
-    <div class="drawer-profile-info">
-      <div class="drawer-profile-name">Klebbao</div>
-      <div class="drawer-profile-sub" id="ds-total-drawer">0 treinos registrados</div>
+
+  <!-- HEADER COM PERFIL -->
+  <div class="drawer-header" style="padding:16px 16px 12px;border-bottom:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:12px;flex:1">
+      <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">🥋</div>
+      <div>
+        <div style="font-size:1rem;font-weight:800;color:var(--text)">Klebbao</div>
+        <div style="font-size:0.68rem;color:var(--muted)" id="ds-total-drawer">carregando...</div>
+      </div>
     </div>
+    <button class="drawer-close-btn" onclick="closeDrawer()" style="font-size:1.1rem;padding:6px 10px">✕</button>
   </div>
-  <div class="drawer-nav-scroll" style="padding:12px;">
-    <!-- TEMA -->
-    <div class="drawer-group-label" style="margin-bottom:8px;">🎨 APARÊNCIA</div>
-    <button class="drawer-item" onclick="toggleTheme(); closeDrawer();">
-      <span class="di-icon" id="themeIconDrawer">🌙</span>
-      <span class="di-text">Alternar Tema</span>
+
+  <div class="drawer-nav-scroll">
+
+    <!-- NAVEGAÇÃO PRINCIPAL -->
+    <div class="drawer-group-label">📱 NAVEGAÇÃO</div>
+    <button class="drawer-item" onclick="switchPane('home');closeDrawer()">
+      <span class="di-icon">🏠</span><span class="di-text">Home — Dashboard</span>
     </button>
 
-    <!-- BACKUP -->
-    <div class="drawer-group-label" style="margin:14px 0 8px;">💾 DADOS</div>
-    <button class="drawer-item" onclick="openCloudModal(); closeDrawer();">
-      <span class="di-icon">☁️</span>
-      <span class="di-text">Backup &amp; Nuvem</span>
+    <div class="drawer-group-label" style="margin-top:10px">🏋️ TREINO</div>
+    <button class="drawer-item" onclick="switchPane('treino');closeDrawer()">
+      <span class="di-icon">🏋️</span><span class="di-text">Treino A — Empurrar + Core</span>
     </button>
-    <button class="drawer-item" onclick="exportBackup(); closeDrawer();">
-      <span class="di-icon">📤</span>
-      <span class="di-text">Exportar dados (JSON)</span>
+    <button class="drawer-item" onclick="switchPane('treino');switchPaneTab('b');closeDrawer()">
+      <span class="di-icon">🦵</span><span class="di-text">Treino B — Puxar + Pernas</span>
     </button>
-    <button class="drawer-item" onclick="document.getElementById('importFile').click(); closeDrawer();">
-      <span class="di-icon">📥</span>
-      <span class="di-text">Importar dados</span>
+    <button class="drawer-item" onclick="switchPane('treino');switchPaneTab('c');closeDrawer()">
+      <span class="di-icon">⚡</span><span class="di-text">Treino C — Potência</span>
     </button>
-
-    <!-- NOTIFICAÇÕES -->
-    <div class="drawer-group-label" style="margin:14px 0 8px;">🔔 NOTIFICAÇÕES</div>
-    <button class="drawer-item" onclick="openNotifModal(); closeDrawer();">
-      <span class="di-icon">🔔</span>
-      <span class="di-text">Configurar lembretes</span>
+    <button class="drawer-item" onclick="switchPane('treino');switchPaneTab('corrida');closeDrawer()">
+      <span class="di-icon">🏃</span><span class="di-text">Corrida — Protocolo 8 sem.</span>
+    </button>
+    <button class="drawer-item" onclick="switchPane('treino');switchPaneTab('livre');closeDrawer()">
+      <span class="di-icon">📝</span><span class="di-text">Treino Livre</span>
     </button>
 
-    <!-- META SEMANAL -->
-    <div class="drawer-group-label" style="margin:14px 0 8px;">🎯 META</div>
-    <div style="padding:0 4px; display:flex; align-items:center; gap:8px;">
-      <span style="font-size:.8rem; color:var(--text-muted);">Treinos/semana:</span>
+    <div class="drawer-group-label" style="margin-top:10px">🥋 JIU-JITSU</div>
+    <button class="drawer-item" onclick="switchPane('bjj');closeDrawer()">
+      <span class="di-icon">🥋</span><span class="di-text">Sessões BJJ</span>
+    </button>
+
+    <div class="drawer-group-label" style="margin-top:10px">📊 CORPO</div>
+    <button class="drawer-item" onclick="switchPane('corpo');closeDrawer()">
+      <span class="di-icon">📊</span><span class="di-text">Bioimpedância</span>
+    </button>
+    <button class="drawer-item" onclick="switchPane('corpo');switchPaneTab('medidas');closeDrawer()">
+      <span class="di-icon">📏</span><span class="di-text">Medidas Corporais</span>
+    </button>
+    <button class="drawer-item" onclick="switchPane('corpo');switchPaneTab('recuperacao');closeDrawer()">
+      <span class="di-icon">🛌</span><span class="di-text">Recuperação & Sono</span>
+    </button>
+    <button class="drawer-item" onclick="switchPane('corpo');switchPaneTab('fisico');closeDrawer()">
+      <span class="di-icon">💪</span><span class="di-text">Físico — 1RM & Testes</span>
+    </button>
+
+    <div class="drawer-group-label" style="margin-top:10px">🥗 NUTRIÇÃO</div>
+    <button class="drawer-item" onclick="switchPane('nutricao');closeDrawer()">
+      <span class="di-icon">🥗</span><span class="di-text">Dieta & Macros</span>
+    </button>
+    <button class="drawer-item" onclick="switchPane('nutricao');switchPaneTab('saude');closeDrawer()">
+      <span class="di-icon">🩺</span><span class="di-text">Saúde & Exames</span>
+    </button>
+
+    <div class="drawer-group-label" style="margin-top:10px">📈 EVOLUÇÃO</div>
+    <button class="drawer-item" onclick="switchPane('evolucao');closeDrawer()">
+      <span class="di-icon">📈</span><span class="di-text">Evolução Completa</span>
+    </button>
+
+    <!-- CONFIGURAÇÕES -->
+    <div class="drawer-group-label" style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">⚙️ CONFIGURAÇÕES</div>
+
+    <!-- Meta semanal inline -->
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:4px">
+      <span style="font-size:1rem">🎯</span>
+      <span style="font-size:0.82rem;color:var(--text-muted);flex:1">Meta semanal</span>
       <select id="weeklyGoalDrawer" onchange="saveWeeklyGoal(this.value)"
-        style="background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:4px 8px;font-size:.85rem;">
-        <option value="2">2</option>
-        <option value="3" selected>3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
+        style="background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:.85rem;font-weight:700">
+        <option value="2">2×</option>
+        <option value="3" selected>3×</option>
+        <option value="4">4×</option>
+        <option value="5">5×</option>
+        <option value="6">6×</option>
       </select>
     </div>
-  </div>
-  <div class="drawer-footer">
+
+    <button class="drawer-item" onclick="toggleTheme()">
+      <span class="di-icon" id="themeIconDrawer">🌙</span>
+      <span class="di-text" id="themeTextDrawer">Alternar Tema</span>
+    </button>
+    <button class="drawer-item" onclick="openNotifModal();closeDrawer()">
+      <span class="di-icon">🔔</span><span class="di-text">Lembretes & Notificações</span>
+    </button>
+
+    <div class="drawer-group-label" style="margin-top:12px">💾 DADOS</div>
+    <button class="drawer-item" onclick="exportBackup();closeDrawer()">
+      <span class="di-icon">📤</span><span class="di-text">Exportar backup (JSON)</span>
+    </button>
+    <button class="drawer-item" onclick="document.getElementById('importFile').click();closeDrawer()">
+      <span class="di-icon">📥</span><span class="di-text">Importar backup</span>
+    </button>
+    <button class="drawer-item" onclick="openCloudModal();closeDrawer()">
+      <span class="di-icon">☁️</span><span class="di-text">Sincronização Nuvem</span>
+    </button>
+
+    <div style="text-align:center;padding:16px 8px 8px;font-size:0.62rem;color:var(--muted)">
+      Projeto Tatame v3.0 · Klebbao 🥋<br>
+      <span id="syncDot"></span>
+    </div>
+
+  </div><!-- /drawer-nav-scroll -->
+
+  <!-- FOOTER AÇÕES RÁPIDAS -->
+  <div class="drawer-footer" style="padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center">
     <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="Tema">🌙</button>
     <button class="icon-btn" id="notifBtn" onclick="openNotifModal()" title="Lembrete">🔔</button>
     <button class="icon-btn" onclick="openCloudModal()" title="Backup" style="color:#40c4ff">☁️</button>
-    <span style="font-size:.6rem;color:var(--muted);margin-left:auto">v3.0 <span id="syncDot"></span></span>
+    <button class="icon-btn" onclick="switchPane('home');closeDrawer()" title="Home">🏠</button>
   </div>
+
 </nav>
 
 <header>
@@ -3614,8 +3671,8 @@
   <div class="suggestion-banner hidden" id="suggestion-a"></div>
 
   <div class="intro-card">
-    <h3>🎯 Treino A — Tronco Superior</h3>
-    <p>Foco em tração, ombro e pegada. Comece com o aquecimento completo. Toque em cada exercício para ver o vídeo guia e controlar o descanso.</p>
+    <h3>🎯 Treino A — Empurrar + Core + Explosão</h3>
+    <p>~55 min · Peito · Ombro · Tríceps · Core. <em style="color:var(--accent)">Transferência JJ:</em> Press = criar espaço na guarda. Core rotacional = base de toda passagem e sweep. Ombros fortes = não ser controlado.</p>
   </div>
 
   <div class="session-start-bar">
@@ -3689,8 +3746,8 @@
   <div class="suggestion-banner hidden" id="suggestion-b"></div>
 
   <div class="intro-card">
-    <h3>🎯 Treino B — Pernas, Base, Quadril e Core</h3>
-    <p>Foco em força das pernas e estabilidade. Mantenha a técnica impecável nos exercícios principais. Sem ego — peso correto, movimento certo.</p>
+    <h3>🎯 Treino B — Puxar + Pernas + Grip</h3>
+    <p>~60 min · Costas · Bíceps · Pernas · Grip. <em style="color:var(--accent)">Transferência JJ:</em> Costas e bíceps = clinch, underhook, guard pull. Pernas = base de tudo. Grip = quem segura mais tempo controla a luta.</p>
   </div>
 
   <div class="session-start-bar">
@@ -3756,8 +3813,8 @@
   <div class="suggestion-banner hidden" id="suggestion-c"></div>
 
   <div class="intro-card">
-    <h3>🎯 Treino C — Potência, Resistência e Estabilidade</h3>
-    <p>Treino mais exigente. Movimentos explosivos + circuito final. Descanse o suficiente nos principais e mantenha a velocidade nos acessórios.</p>
+    <h3>🎯 Treino C — Potência + Explosão (Opcional)</h3>
+    <p>Treino de potência para complementar A e B. <strong style="color:var(--accent)">Faça somente se estiver bem recuperado</strong> — pule ou substitua por mobilidade nos dias de fadiga acumulada. Não é obrigatório toda semana.</p>
   </div>
 
   <div class="session-start-bar">
@@ -3823,61 +3880,6 @@
   <div id="evo-unified-content" style="padding-bottom:80px">
     <div style="text-align:center;padding:40px;color:var(--text-muted)">Carregando...</div>
   </div>
-</div>
-
-<div class="tab-content" id="tab-d">
-  <div id="last-treino-wrap"></div>
-
-  <!-- EVOLUÇÃO -->
-  <div class="hist-section-title">📈 Evolução</div>
-
-  <!-- Meta semanal -->
-  <div class="goal-row">
-    <span class="goal-label">🎯 Meta semanal de treinos</span>
-    <button class="goal-btn" onclick="changeGoal(-1)">−</button>
-    <span class="goal-val" id="goalValHist">3</span>
-    <button class="goal-btn" onclick="changeGoal(1)">+</button>
-  </div>
-
-  <!-- Calendário mensal -->
-  <div class="cal-wrap">
-    <div class="chart-title">📅 Calendário de treinos</div>
-    <div id="calendarWrap"></div>
-  </div>
-
-  <!-- Gráfico -->
-  <div class="chart-wrap">
-    <div class="chart-title">
-      <span>📊 Frequência por semana (últimas 10)</span>
-      <div class="chart-legend">
-        <span><div class="dot" style="background:var(--accent)"></div> Treinos</span>
-        <span><div class="dot" style="background:var(--green)"></div> Meta</span>
-      </div>
-    </div>
-    <canvas id="evolutionChart" height="150"></canvas>
-  </div>
-
-  <!-- Fotos de progresso -->
-  <div class="hist-section-title">📸 Comparativo de progresso</div>
-  <div class="progress-compare">
-    <div class="progress-photo-slot" id="slot-before" onclick="pickProgressPhoto('before')">
-      <div class="progress-slot-icon">📷</div>
-      <div class="progress-slot-label">Antes<br><small style="font-size:0.6rem">Toque para adicionar foto</small></div>
-    </div>
-    <div class="progress-photo-slot" id="slot-after" onclick="pickProgressPhoto('after')">
-      <div class="progress-slot-icon">📷</div>
-      <div class="progress-slot-label">Depois<br><small style="font-size:0.6rem">Toque para adicionar foto</small></div>
-    </div>
-  </div>
-  <input type="file" id="progressPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="handleProgressPhoto(this)"/>
-
-  <!-- Export -->
-  <button class="export-btn" onclick="exportCSV()">
-    ⬇️ Exportar histórico como CSV
-  </button>
-
-  <div class="hist-section-title">🗂️ Histórico completo</div>
-  <div id="sessionList"></div>
 </div>
 
 <!-- ===================== BIOIMPEDÂNCIA ===================== -->
@@ -4253,6 +4255,24 @@
       <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoUpload(this)"/>
     </div>
 
+    <!-- RPE DO TREINO -->
+    <div class="form-group" style="margin-bottom:6px">
+      <label class="form-label">💪 Como foi o esforço? (RPE)</label>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px">
+        <button id="rpe-1"  onclick="setRPE(1)"  style="flex:1;min-width:28px;padding:7px 2px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:700;cursor:pointer">1</button>
+        <button id="rpe-2"  onclick="setRPE(2)"  style="flex:1;min-width:28px;padding:7px 2px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:700;cursor:pointer">2</button>
+        <button id="rpe-3"  onclick="setRPE(3)"  style="flex:1;min-width:28px;padding:7px 2px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:700;cursor:pointer">3</button>
+        <button id="rpe-4"  onclick="setRPE(4)"  style="flex:1;min-width:28px;padding:7px 2px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:700;cursor:pointer">4</button>
+        <button id="rpe-5"  onclick="setRPE(5)"  style="flex:1;min-width:28px;padding:7px 2px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:700;cursor:pointer">5</button>
+        <button id="rpe-6"  onclick="setRPE(6)"  style="flex:1;min-width:28px;padding:7px 2px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:700;cursor:pointer">6</button>
+        <button id="rpe-7"  onclick="setRPE(7)"  style="flex:1;min-width:28px;padding:7px 2px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:700;cursor:pointer">7</button>
+        <button id="rpe-8"  onclick="setRPE(8)"  style="flex:1;min-width:28px;padding:7px 2px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:700;cursor:pointer">8</button>
+        <button id="rpe-9"  onclick="setRPE(9)"  style="flex:1;min-width:28px;padding:7px 2px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:700;cursor:pointer">9</button>
+        <button id="rpe-10" onclick="setRPE(10)" style="flex:1;min-width:28px;padding:7px 2px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:700;cursor:pointer">10</button>
+      </div>
+      <div id="rpeLabel" style="font-size:0.72rem;color:var(--muted);margin-top:5px;text-align:center;min-height:16px"></div>
+    </div>
+
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
       <button class="btn-save" onclick="saveModal()">✅ Salvar</button>
@@ -4281,105 +4301,6 @@
 <!-- FLOATING REST TIMER -->
 
 <!-- ===================== DASHBOARD / PROJEÇÃO ===================== -->
-<div class="tab-content" id="tab-g">
-  <!-- WEEKLY SUMMARY -->
-  <div id="weeklySummaryCard"></div>
-
-  <!-- HOJE -->
-  <div class="dash-section" id="today-section">
-    <div class="dash-section-title">🗓️ Treino de Hoje</div>
-    <div id="today-content"><p style="color:var(--muted);font-size:0.8rem;text-align:center;padding:12px 0">Nenhum treino registrado hoje.<br>Complete um Treino A, B, C ou uma sessão de Jiu-Jitsu.</p></div>
-    <!-- Projeção de força -->
-    <div id="strength-proj-wrap" style="display:none;margin-top:14px">
-      <div style="font-size:0.72rem;font-weight:700;color:var(--accent);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">📈 Projeção de Força</div>
-      <div class="proj-tabs-wrap" style="margin-bottom:10px">
-        <button class="proj-tab-btn active" onclick="setStrengthHorizon(2,this)">2 sem</button>
-        <button class="proj-tab-btn" onclick="setStrengthHorizon(4,this)">4 sem</button>
-        <button class="proj-tab-btn" onclick="setStrengthHorizon(8,this)">8 sem</button>
-        <button class="proj-tab-btn" onclick="setStrengthHorizon(12,this)">12 sem</button>
-      </div>
-      <div id="strength-proj-cards" class="strength-proj-grid"></div>
-    </div>
-  </div>
-
-  <!-- ESTA SEMANA -->
-  <div class="dash-section" id="week-section">
-    <div class="dash-section-title">📅 Esta Semana</div>
-    <div id="week-summary-content"></div>
-    <canvas id="weekMiniChart" height="90" style="width:100%;display:block;margin-top:10px"></canvas>
-  </div>
-
-  <!-- SCORE HERO -->
-  <div class="dash-hero">
-    <div class="dash-score-wrap">
-      <canvas id="dashScoreRing" width="110" height="110"></canvas>
-      <div class="dash-score-center">
-        <span id="dashScoreVal">—</span>
-        <small>score</small>
-      </div>
-    </div>
-    <div class="dash-hero-info">
-      <div class="dash-hero-title" id="dashStatus">Calculando...</div>
-      <div class="dash-hero-sub" id="dashSubtitle">Registre treinos e dieta para ver sua projeção</div>
-      <div class="dash-pillars" id="dashPillars">
-        <span class="dash-pill" id="dpill-train">🏋️ Treino —%</span>
-        <span class="dash-pill" id="dpill-diet">🥗 Dieta —%</span>
-        <span class="dash-pill" id="dpill-bio">📊 Bio 0pts</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- TIMELINE -->
-  <div class="dash-section">
-    <div class="dash-section-title">📅 Linha do Tempo</div>
-    <div class="timeline-scroll-wrap">
-      <canvas id="timelineCanvas" height="140" style="width:100%;display:block"></canvas>
-    </div>
-    <div class="timeline-legend">
-      <span><span class="tl-dot" style="background:var(--accent)"></span>Treino</span>
-      <span><span class="tl-dot" style="background:#4fc3f7"></span>Bio</span>
-      <span><span class="tl-dot" style="background:#81c784"></span>Dieta</span>
-      <span><span class="tl-dot" style="background:var(--muted);border:2px dashed var(--muted)"></span>Projeção</span>
-    </div>
-  </div>
-
-  <!-- PROJEÇÃO COMPARATIVA -->
-  <div class="dash-section">
-    <div class="dash-section-title">🎯 Projeção de Resultados</div>
-    <div class="proj-tabs-wrap">
-      <button class="proj-tab-btn active" onclick="setProjHorizon(1,this)">1 mês</button>
-      <button class="proj-tab-btn" onclick="setProjHorizon(3,this)">3 meses</button>
-      <button class="proj-tab-btn" onclick="setProjHorizon(6,this)">6 meses</button>
-    </div>
-    <div id="projCards" class="proj-cards-grid"></div>
-  </div>
-
-  <!-- GRÁFICO PESO -->
-  <div class="dash-section">
-    <div class="dash-section-title">⚖️ Peso Corporal — Passado + Projeção</div>
-    <canvas id="weightProjChart" height="180" style="width:100%;display:block"></canvas>
-  </div>
-
-  <!-- GRÁFICOS TREINO / DIETA -->
-  <div class="dash-section">
-    <div class="dash-section-title">📊 Frequência Semanal</div>
-    <canvas id="trainFreqChart" height="150" style="width:100%;display:block"></canvas>
-  </div>
-
-  <!-- ANÁLISE CRUZADA -->
-  <div class="dash-section">
-    <div class="dash-section-title">🔬 Análise Cruzada</div>
-    <div id="crossAnalysis"></div>
-  </div>
-
-  <!-- INSIGHTS -->
-  <div class="dash-section">
-    <div class="dash-section-title">💡 Insights Automáticos</div>
-    <div id="dashInsights" class="dash-insights-list"></div>
-  </div>
-</div>
-
-
 <!-- ===================== TREINO LIVRE ===================== -->
 <div class="tab-content" id="tab-livre">
   <div class="intro-card">
@@ -4422,6 +4343,22 @@
   <div class="intro-card">
     <h3>🏃 Corrida — Treino Cardiovascular</h3>
     <p>Cronometre sua corrida ao vivo, registre distância e ritmo, ou salve uma sessão manualmente. O timer continua mesmo ao sair da tela.</p>
+  </div>
+
+  <!-- SEMANA DO PROTOCOLO -->
+  <div class="session-card" style="margin-bottom:14px" id="runProtocolCard">
+    <div class="dash-section-title" style="margin-bottom:8px">📅 Protocolo 8 Semanas</div>
+    <div id="runWeekDisplay" style="margin-bottom:10px"></div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-size:0.75rem;color:var(--muted)">Início do protocolo:</span>
+      <input type="date" id="runProtocolStart"
+        style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:5px 10px;color:var(--text);font-size:0.78rem"
+        onchange="saveRunProtocolStart(this.value);renderRunProtocolWeek()"/>
+      <button onclick="resetRunProtocol()"
+        style="background:none;border:1px solid var(--border);border-radius:8px;padding:5px 10px;color:var(--muted);font-size:0.72rem;cursor:pointer">
+        ↺ Resetar
+      </button>
+    </div>
   </div>
 
   <!-- CRONÔMETRO DE CORRIDA -->
@@ -4526,6 +4463,49 @@
     <div id="runWeekStats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
   </div>
 
+  <!-- PROTOCOLO 8 SEMANAS -->
+  <div class="session-card" style="margin-bottom:14px">
+    <div class="dash-section-title" style="margin-bottom:12px">📅 Protocolo Progressivo — 8 Semanas</div>
+    <p style="font-size:0.75rem;color:var(--muted);margin-bottom:14px">Sábado de manhã, após recuperação do JJ de sexta. Meta FC Zona 2: <strong style="color:var(--green)">140–155 bpm</strong>. Cadência ideal: 170–180 passos/min.</p>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+
+      <!-- SEM 1-2 -->
+      <div style="border-left:3px solid var(--green);padding:10px 12px;background:rgba(34,197,94,0.06);border-radius:0 10px 10px 0">
+        <div style="font-size:0.7rem;font-weight:800;color:var(--green);letter-spacing:.05em;margin-bottom:6px">SEM 1–2 · CONSTRUÇÃO DE BASE · 30 min</div>
+        <div style="font-size:0.78rem;color:var(--text);margin-bottom:4px"><strong>Sem 1:</strong> 20 min contínuos em ritmo de conversa. Se não conseguir, intercala: 5 min corrida + 2 min caminhada.</div>
+        <div style="font-size:0.78rem;color:var(--text)"><strong>Sem 2:</strong> 25 min contínuos no mesmo ritmo. Terminar sentindo que podia continuar mais 5 min.</div>
+      </div>
+
+      <!-- SEM 3-4 -->
+      <div style="border-left:3px solid #f0a500;padding:10px 12px;background:rgba(240,165,0,0.06);border-radius:0 10px 10px 0">
+        <div style="font-size:0.7rem;font-weight:800;color:var(--accent);letter-spacing:.05em;margin-bottom:6px">SEM 3–4 · VOLUME + PRIMEIRO INTERVALADO · 35 min</div>
+        <div style="font-size:0.78rem;color:var(--text);margin-bottom:4px"><strong>Sem 3:</strong> 5 min aquecimento → 20 min corrida leve → 5 min desaquecimento. Foco em respiração nasal.</div>
+        <div style="font-size:0.78rem;color:var(--text)"><strong>Sem 4:</strong> 35 min: 5 aq → 4× (3 min forte + 2 min leve) → 10 min leve. Forte = 7/10 esforço.</div>
+      </div>
+
+      <!-- SEM 5-6 → AJUSTADO (sem HIIT pesado) -->
+      <div style="border-left:3px solid #f0a500;padding:10px 12px;background:rgba(240,165,0,0.08);border-radius:0 10px 10px 0">
+        <div style="font-size:0.7rem;font-weight:800;color:var(--accent);letter-spacing:.05em;margin-bottom:2px">SEM 5–6 · TEMPO RUN · 38–40 min</div>
+        <div style="font-size:0.65rem;color:#22c55e;margin-bottom:6px">⚠️ AJUSTADO — HIIT removido do sábado (pós JJ sexta = risco de lesão)</div>
+        <div style="font-size:0.78rem;color:var(--text);margin-bottom:4px"><strong>Sem 5:</strong> Tempo run: 5 aq → 20 min a ritmo 8/10 → 5 desaq. Simula 2 rounds de JJ.</div>
+        <div style="font-size:0.78rem;color:var(--text)"><strong>Sem 6:</strong> 40 min: 5 aq → 6× (4 min moderado + 1 min leve) → 5 desaq. Mais volume, menos pico.</div>
+      </div>
+
+      <!-- SEM 7-8 -->
+      <div style="border-left:3px solid #ef4444;padding:10px 12px;background:rgba(239,68,68,0.06);border-radius:0 10px 10px 0">
+        <div style="font-size:0.7rem;font-weight:800;color:#ef4444;letter-spacing:.05em;margin-bottom:6px">SEM 7–8 · CONSOLIDAÇÃO + TESTE · 45 min</div>
+        <div style="font-size:0.78rem;color:var(--text);margin-bottom:4px"><strong>Sem 7:</strong> Progressiva: 10 leve → 10 médio → 10 forte → 5 leve. Intensidade crescente.</div>
+        <div style="font-size:0.78rem;color:var(--text)"><strong>Sem 8 (TESTE):</strong> Corra o máximo em 30 min. Compare com semana 1. Evolução esperada: +20–30% de distância.</div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:12px;padding:10px;background:var(--card2);border-radius:10px;font-size:0.72rem;color:var(--muted)">
+      💡 <strong style="color:var(--text)">Regra 10%:</strong> nunca aumente mais de 10% do volume semanal. · <strong style="color:var(--text)">Queda do pé:</strong> meia pisada ou antepé — nunca calcanhar primeiro.
+    </div>
+  </div>
+
   <!-- GRÁFICO -->
   <div class="session-card" style="margin-bottom:14px">
     <div class="dash-section-title" style="margin-bottom:8px">📈 Evolução — Distância & Ritmo</div>
@@ -4622,16 +4602,6 @@
 </div>
 
 <!-- ===================== CONQUISTAS ===================== -->
-<div class="tab-content" id="tab-conquistas">
-  <div class="intro-card">
-    <h3>🏆 Suas Conquistas</h3>
-    <p>Badges desbloqueados automaticamente com base na sua consistência e evolução. Continue treinando para desbloquear mais!</p>
-  </div>
-  <div id="conquistasGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px"></div>
-  <div id="conquistasLocked" style="margin-top:8px"></div>
-</div>
-
-
 <!-- ===================== MEDIDAS CORPORAIS ===================== -->
 <div class="tab-content" id="tab-medidas">
   <div class="intro-card">
@@ -4697,52 +4667,31 @@
 </div>
 
 <!-- ===================== EVOLUCAO POR EXERCICIO ===================== -->
-<div class="tab-content" id="tab-evolucao">
-  <div class="intro-card">
-    <h3>📊 Evolução por Exercício</h3>
-    <p>Veja a progressão de carga ao longo do tempo para cada exercício registrado.</p>
-  </div>
-  <select id="evolucaoSelect" class="evolucao-select" onchange="renderEvolucao()">
-    <option value="">— Selecione um exercício —</option>
-  </select>
-  <div class="evolucao-stats-row" id="evolucaoStats" style="display:none">
-    <div class="evolucao-stat">
-      <span class="evolucao-stat-val" id="evoMaxPR">—</span>
-      <span class="evolucao-stat-lbl">🏆 Recorde</span>
-    </div>
-    <div class="evolucao-stat">
-      <span class="evolucao-stat-val" id="evoLast">—</span>
-      <span class="evolucao-stat-lbl">📅 Último</span>
-    </div>
-    <div class="evolucao-stat">
-      <span class="evolucao-stat-val" id="evoGain">—</span>
-      <span class="evolucao-stat-lbl">📈 Ganho</span>
-    </div>
-    <div class="evolucao-stat">
-      <span class="evolucao-stat-val" id="evoSessions">—</span>
-      <span class="evolucao-stat-lbl">🔢 Sessões</span>
-    </div>
-  </div>
-  <div class="evolucao-chart-wrap" id="evolucaoChartWrap" style="display:none">
-    <canvas id="evolucaoChart" height="160" style="width:100%;display:block"></canvas>
-  </div>
-  <div id="evolucaoEmpty" class="intro-card" style="display:none">
-    <p>Nenhum dado registrado para este exercício. Use 💾 Salvar cargas nas abas de treino.</p>
-  </div>
-</div>
-
 <!-- ===================== RELATORIO MENSAL ===================== -->
-<div class="tab-content" id="tab-relatorio">
-  <div class="intro-card">
-    <h3>📅 Relatório Mensal</h3>
-    <p>Resumo completo da sua performance e evolução no mês selecionado.</p>
-  </div>
-  <select id="relatorioMes" class="evolucao-select" onchange="renderRelatorio()"></select>
-  <div id="relatorioConteudo"></div>
-</div>
-
 <!-- ===================== JIU-JITSU ===================== -->
 <div class="tab-content" id="tab-h">
+
+  <!-- MOBILIDADE PRÉ-JJ -->
+  <div class="session-card" style="margin-bottom:14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+      <div class="dash-section-title">🧘 Mobilidade Pré-JJ — 10 min</div>
+      <button onclick="toggleMobPanel()" id="mobToggleBtn"
+        style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:5px 12px;font-size:0.75rem;font-weight:700;cursor:pointer">
+        ▶ Iniciar
+      </button>
+    </div>
+    <p style="font-size:0.7rem;color:var(--muted);margin-bottom:10px">Execute antes de entrar no tatame. Quadril + coluna torácica + pescoço.</p>
+
+    <div id="mobPanel" style="display:none">
+      <div id="mobExList"></div>
+      <div id="mobTimerDisp" style="font-size:2.5rem;font-weight:900;color:var(--accent);text-align:center;font-variant-numeric:tabular-nums;margin:8px 0">—</div>
+      <div id="mobCurrentName" style="text-align:center;font-size:0.82rem;color:var(--text-muted);margin-bottom:8px">—</div>
+      <div style="display:flex;gap:8px;justify-content:center">
+        <button id="mobStartBtn" onclick="mobStart()" style="background:var(--green);color:#000;border:none;border-radius:10px;padding:10px 24px;font-weight:700;cursor:pointer;font-size:0.85rem">▶ Iniciar sequência</button>
+        <button onclick="mobSkip()" style="background:var(--card2);border:1px solid var(--border);color:var(--text-muted);border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer;font-size:0.85rem">⏭ Pular</button>
+      </div>
+    </div>
+  </div>
 
   <!-- QUICK REGISTER -->
   <div class="jj-register-card">
@@ -4891,6 +4840,7 @@
 // DATA
 // ─────────────────────────────────────────
 
+// Aquecimento genérico (Treino C)
 const warmupExercises = [
   { name: 'Mobilidade cervical e torácica', meta: '30 segundos', icon: '🔄', vid: 'ItUNZR8I3bg' },
   { name: 'Circundução de ombros + retração escapular', meta: '15 repetições', icon: '🔁', vid: 'D2GRzUmzDP0' },
@@ -4903,17 +4853,60 @@ const warmupExercises = [
   { name: 'Band pull-aparts / elástico manguito', meta: '15 repetições', icon: '🎯', vid: 'SuvO4TBwSu4' },
 ];
 
+// Aquecimento Treino A — PDF JJ Performance (8 min)
+const warmupA = [
+  { name: 'Arm circle', meta: '30s frente + 30s trás', icon: '🔄', vid: 'lzR7tzI1JUI' },
+  { name: 'Dislocates com cabo leve', meta: '10 repetições', icon: '🏋️', vid: 'gXE-gVzYD9w' },
+  { name: 'Hip circle', meta: '10x cada lado', icon: '🔁', vid: 'PZFKu9583Ms' },
+  { name: 'Knee hug walking', meta: '10 passos', icon: '🦵', vid: 'zTS-7kZ2ym0' },
+  { name: 'Inward hip rotation', meta: '10x cada lado', icon: '🦷', vid: 'o1Bd3-QpRwM' },
+  { name: 'Squat to stand', meta: '8 repetições', icon: '⬇️', vid: 'Hp0Sum0gCLc' },
+  { name: 'Thoracic rotation no chão', meta: '8 reps por lado', icon: '🌀', vid: 'neqNqlOm5n8' },
+];
+
+// Aquecimento Treino B — PDF JJ Performance (8 min)
+const warmupB = [
+  { name: 'Ponte de glúteo', meta: '15 repetições', icon: '🍑', vid: '1satDE63Bwc' },
+  { name: 'Bird-dog', meta: '8 reps por lado', icon: '🦅', vid: 'DqLL45uk2Tk' },
+  { name: 'Cat-cow', meta: '10 repetições', icon: '🐱', vid: 'aHZ2O2lM8Zs' },
+  { name: 'Lateral sem banda', meta: '15 passos por lado', icon: '↔️', vid: 'N28Hpdezg7Q' },
+  { name: 'Dead hang', meta: '30 segundos', icon: '🙌', vid: 'fq9gDvNZQ2c' },
+  { name: 'Scapular pulls', meta: '8 repetições', icon: '🔝', vid: '9M8ylnbriB0' },
+];
+
+// ── TREINO A — JJ PERFORMANCE: Empurrar + Core + Explosão ────────────────────
+// Bloco 1: Força Primária | Bloco 2: Superset Ombros | Bloco 3: Core JJ | Finalizador: Tríceps
 const treinoA = {
   main: [
-    { name: 'Barra fixa pronada', sets: '4', reps: '4 a 8 reps', rest: '2 min', restSecs: 120, vid: 'Av1D1XxBuo4' },
-    { name: 'Supino com halteres ou barra', sets: '4', reps: '5 a 6 reps', rest: '90 a 120s', restSecs: 105, vid: '-Q4QcFAn51M' },
-    { name: 'Remada curvada', sets: '3', reps: '6 a 8 reps', rest: '90s', restSecs: 90, vid: 'Lbee0MFo_Go' },
+    // BLOCO 1 — Força Primária
+    { name: 'Supino inclinado no Smith Machine', sets: '4', reps: '8 a 10 reps', rest: '90s', restSecs: 90,
+      note: 'Pegada larga, cotovelos a 45°. Desça 3 seg, empurra explosivo. Progressão: +2,5 kg/sem. 📍 JJ: Frame na guarda fechada · Criar espaço',
+      vid: 'VXaBbUYMfIs' },
+    { name: 'Desenvolvimento com halteres', sets: '4', reps: '10 a 12 reps', rest: '75s', restSecs: 75, vid: '5I7ogOjvdnc',
+      note: 'Cotovelos ligeiramente à frente. Não trave no topo. Desça até 90° no cotovelo. 📍 JJ: Underhook · Overhook · Proteção ombro' },
   ],
   acc: [
-    { name: 'Desenvolvimento com halteres', sets: '3', reps: '6 a 8 reps', rest: '75 a 90s', restSecs: 80, vid: '5I7ogOjvdnc' },
-    { name: 'Face pull com corda', sets: '3', reps: '12 a 15 reps', rest: '45 a 60s', restSecs: 52, vid: 'IeOqdw9WI90' },
-    { name: 'Hang na barra', sets: '3', reps: 'até falha técnica', rest: '60s', restSecs: 60, vid: 'fq9gDvNZQ2c' },
-    { name: 'Pallof press', sets: '3', reps: '10 a 12 reps por lado', rest: '45s', restSecs: 45, vid: 'vgkJb94lK10' },
+    // BLOCO 2 — Superset Ombros (3A+3B sem descanso · 60s entre rounds)
+    { name: 'Elevação lateral no cabo ⚡SUPERSET c/ Face Pull', sets: '3', reps: '12 reps', rest: '—', restSecs: 10,
+      note: 'SUPERSET: Execute com Face Pull sem descanso. Cabo de baixo atravessando o corpo. Sobe até altura do ombro. Cotovelo levemente flexionado.',
+      vid: 'jBB_CXESh9k' },
+    { name: 'Face pull no cabo ⚡SUPERSET — 60s antes do próximo round', sets: '3', reps: '15 reps', rest: '60s', restSecs: 60, vid: 'IeOqdw9WI90',
+      note: 'Polia na altura do rosto. Puxe abrindo cotovelos para fora e cima. Manguito rotador. 📍 JJ: Prevenção ombro · Kimura · Omoplata' },
+    // BLOCO 3 — Core JJ
+    { name: 'Woodchop no cabo', sets: '3', reps: '12 reps por lado', rest: '60s', restSecs: 60, vid: '8OZImYISmSg',
+      note: 'Movimento diagonal de cima para baixo. Gira o tronco, não os quadris. Controla a volta. 📍 JJ: Sweeps · Guard pass · Single-leg' },
+    { name: 'AB Wheel / Roda abdominal', sets: '3', reps: '8 a 12 reps', rest: '60s', restSecs: 60, vid: 'MinlHnG7j4k',
+      note: 'Extensão parcial (45°) no início. Contrai o core antes de rolar. Não afunde a lombar. 📍 JJ: Anti-extensão · Resistir ao passe de guarda' },
+    { name: 'Prancha lateral c/ rotação', sets: '3', reps: '10 reps por lado', rest: '45s', restSecs: 45,
+      note: 'Prancha no cotovelo. Braço gira por baixo do tronco e volta. Quadril não desce. 📍 JJ: Oblíquos · Base dos sweeps e viradas',
+      vid: 'XLKqUOMk7-w' },
+    // FINALIZADOR — Tríceps Superset (7A+7B sem descanso · 60s entre rounds)
+    { name: 'Tríceps corda no cabo ⚡SUPERSET c/ Tríceps testa', sets: '3', reps: '12 reps', rest: '—', restSecs: 10,
+      note: 'SUPERSET: Execute com Tríceps Testa sem descanso. Cotovelos fixos. Abre a corda no final da extensão. Controla a subida.',
+      vid: 'u36jNfqh8_U' },
+    { name: 'Tríceps testa c/ barra EZ ⚡SUPERSET — 60s antes do próximo round', sets: '3', reps: '10 reps', rest: '60s', restSecs: 60,
+      note: 'Desce para a testa, cotovelos não abrem. Extensão completa sem travar. 📍 JJ: Extensão de braço · Kimura · Americana',
+      vid: 'cIqScmVpqnc' },
   ],
   post: [
     { name: 'Peitoral na parede', meta: '30s por lado', icon: '🤲', vid: 'FwvrxUNwyIY' },
@@ -4923,16 +4916,36 @@ const treinoA = {
   ]
 };
 
+// ── TREINO B — JJ PERFORMANCE: Puxar + Pernas + Grip ─────────────────────────
+// Bloco 1: Puxada Vertical | Bloco 2: Pernas Funcionais | Bloco 3: Grip+Bíceps | Finalizador: Potência
 const treinoB = {
   main: [
-    { name: 'Agachamento livre ou Front Squat', sets: '4', reps: '4 a 6 reps', rest: '2 a 3 min', restSecs: 150, vid: 'NO-6L6Blneg' },
-    { name: 'Levantamento terra romeno', sets: '3', reps: '6 a 8 reps', rest: '90 a 120s', restSecs: 105, vid: '7mOXAuYCiH8' },
-    { name: 'Afundo búlgaro com halteres', sets: '3', reps: '8 reps por perna', rest: '60 a 90s', restSecs: 75, vid: 'hO2CAbuuV6A' },
+    // BLOCO 1 — Puxada Vertical
+    { name: 'Pulldown barra larga', sets: '4', reps: '8 a 10 reps', rest: '90s', restSecs: 90,
+      note: 'Peito estufado, escápulas deprimidas antes de puxar. Leve inclinação para trás. Excêntrico 3 seg. 📍 JJ: Guard pull · Clinch · Controle de posição',
+      vid: 'Lgr9JqdRp3M' },
+    { name: 'Remada curvada c/ barra', sets: '4', reps: '8 a 10 reps', rest: '90s', restSecs: 90, vid: 'Lbee0MFo_Go',
+      note: 'Tronco 45°, costas retas. Puxe para o umbigo, cotovelos colados. Encolhe escápulas no topo. 📍 JJ: Underhook · Dois-no-um · Turtle guard' },
   ],
   acc: [
-    { name: 'Kettlebell swing', sets: '3', reps: '12 a 15 reps', rest: '45 a 60s', restSecs: 52, vid: 'n1df4ASFeZU' },
-    { name: "Farmer's walk", sets: '3', reps: '3 voltas de 30 a 40m', rest: '60s', restSecs: 60, vid: '1uOs1hP3u4A' },
-    { name: 'Prancha com arrasto de anilha / RKC', sets: '3', reps: '30 a 40 segundos', rest: '45s', restSecs: 45, vid: 'Xvgw5ODIatQ', timerSecs: 40, timerLabel: 'HOLD — Prancha' },
+    // BLOCO 2 — Pernas Funcionais
+    { name: 'Agachamento no Smith Machine', sets: '3', reps: '10 reps', rest: '90s', restSecs: 90,
+      note: 'Pés afastados e virados para fora. Coxa paralela ou abaixo. Joelhos seguem os pés. Progressão: +2,5 kg/sem. 📍 JJ: Takedowns · Passagem em pé · Pressão no topo',
+      vid: 'iKCJCydYYrE' },
+    { name: 'Stiff deadlift c/ halteres', sets: '3', reps: '12 reps', rest: '75s', restSecs: 75, vid: '7mOXAuYCiH8',
+      note: 'Joelhos levemente flexionados, costas retas. Sente o posterior descendo. Sobe contraindo glúteo. 📍 JJ: Prevenção lombar · Hip bridge (escape de mount)' },
+    { name: 'Extensão de joelho na máquina', sets: '3', reps: '15 reps', rest: '60s', restSecs: 60,
+      note: 'Carga moderada, foco em sentir o quadríceps. Extensão completa e descida controlada. 📍 JJ: Proteção joelho · Heel hooks · Leg locks',
+      vid: 'PzIfB9MiiX8' },
+    // BLOCO 3 — Grip + Bíceps Superset (6A+6B sem descanso · 60s entre rounds)
+    { name: 'Rosca direta c/ barra EZ ⚡SUPERSET c/ Dead hang', sets: '3', reps: '10 reps', rest: '—', restSecs: 10,
+      note: 'SUPERSET: Execute com Dead Hang sem descanso. Cotovelos fixos ao corpo. Descida 3 seg. Sem balanço do tronco. 📍 JJ: Kimura · RNC · Puxar para a guarda',
+      vid: 'x6JCKfdzPJE' },
+    { name: 'Dead hang na barra ⚡SUPERSET — 60s antes do próximo round', sets: '3', reps: '30 a 60 segundos', rest: '60s', restSecs: 60, vid: 'fq9gDvNZQ2c',
+      note: 'Pendurado com escápulas deprimidas. Respira normalmente. Progride o tempo semanalmente. 📍 JJ: Grip — arma número 1 do grappling',
+      timerSecs: 60, timerLabel: 'HOLD — Dead Hang' },
+    // FINALIZADOR: Kettlebell swing movido para Treino C
+    // Volume de quinta já é alto — encerrar com o Dead hang
   ],
   post: [
     { name: 'Flexor de quadril', meta: '30s por lado', icon: '🦵', vid: 'K-8dxuHU79Y' },
@@ -4949,6 +4962,8 @@ const treinoC = {
     { name: 'Remada unilateral com halter', sets: '3', reps: '8 reps por lado', rest: '60 a 75s', restSecs: 67, vid: 'mjFIZX68F_8' },
   ],
   acc: [
+    { name: 'Kettlebell swing', sets: '3', reps: '12 a 15 reps', rest: '45s', restSecs: 45, vid: 'n1df4ASFeZU',
+      note: 'Movido do Treino B. Hip hinge explosivo. No topo: corpo reto, glúteos contraídos. 📍 JJ: Explosão de quadril · Double-leg · Hip bridge' },
     { name: 'Step-up alto com halteres', sets: '3', reps: '8 reps por perna', rest: '60s', restSecs: 60, vid: 'eybILuxUfEU' },
     { name: 'Woodchopper', sets: '3', reps: '10 reps', rest: '45 a 60s', restSecs: 52, vid: '8OZImYISmSg' },
   ],
@@ -5049,10 +5064,18 @@ function makeWarmCard(ex, tabId, idx) {
       <span class="chevron">▼</span>
     </div>
     <div class="video-panel">
-      <a class="video-thumb-wrap" href="${ytUrl(ex.vid)}" target="_blank" rel="noopener" title="Assistir no YouTube">
-        <img src="${thumbUrl(ex.vid)}" alt="Vídeo" onerror="this.style.display='none'" loading="lazy"/>
-        <div class="play-btn"><div class="play-circle"><div class="play-triangle"></div></div><span class="play-label">Assistir no YouTube</span></div>
-      </a>
+      ${ex.noVid
+        ? `<div style="background:rgba(240,165,0,0.08);border:1px dashed rgba(240,165,0,0.4);border-radius:10px;padding:14px;text-align:center;margin-bottom:8px">
+            <div style="font-size:1.5rem;margin-bottom:4px">⚠️</div>
+            <div style="font-size:0.78rem;color:var(--accent);font-weight:700">Vídeo pendente</div>
+            <div style="font-size:0.7rem;color:var(--muted);margin-top:2px">Aguardando link de demonstração</div>
+           </div>`
+        : `<a class="video-thumb-wrap" href="${ytUrl(ex.vid)}" target="_blank" rel="noopener" title="Assistir no YouTube">
+            <img src="${thumbUrl(ex.vid)}" alt="Vídeo" onerror="this.style.display='none'" loading="lazy"/>
+            <div class="play-btn"><div class="play-circle"><div class="play-triangle"></div></div><span class="play-label">Assistir no YouTube</span></div>
+           </a>`
+      }
+      ${ex.note ? `<div style="font-size:0.75rem;color:var(--text-muted);background:var(--card);border-radius:8px;padding:8px 10px;margin-bottom:8px;line-height:1.5">${ex.note}</div>` : ''}
       ${makeStopwatch(id)}
       ${makeSimpleRestTimer(id, 30)}
     </div>
@@ -5149,10 +5172,15 @@ function makePostCard(ex, tabId, idx) {
       <span class="chevron">▼</span>
     </div>
     <div class="video-panel">
-      <a class="video-thumb-wrap" href="${ytUrl(ex.vid)}" target="_blank" rel="noopener" title="Assistir no YouTube">
-        <img src="${thumbUrl(ex.vid)}" alt="Vídeo" onerror="this.style.display='none'" loading="lazy"/>
-        <div class="play-btn"><div class="play-circle"><div class="play-triangle"></div></div><span class="play-label">Assistir no YouTube</span></div>
-      </a>
+      ${ex.noVid
+        ? `<div style="background:rgba(240,165,0,0.06);border:1px dashed rgba(240,165,0,0.3);border-radius:10px;padding:10px;text-align:center;margin-bottom:6px">
+            <span style="font-size:0.72rem;color:var(--accent)">⚠️ Vídeo pendente — aguardando link</span>
+           </div>`
+        : `<a class="video-thumb-wrap" href="${ytUrl(ex.vid)}" target="_blank" rel="noopener" title="Assistir no YouTube">
+            <img src="${thumbUrl(ex.vid)}" alt="Vídeo" onerror="this.style.display='none'" loading="lazy"/>
+            <div class="play-btn"><div class="play-circle"><div class="play-triangle"></div></div><span class="play-label">Assistir no YouTube</span></div>
+           </a>`
+      }
       ${makeStopwatch(id)}
       ${makeSimpleRestTimer(id, 30)}
     </div>
@@ -5195,14 +5223,14 @@ function makeCircuitCard(exercises) {
 // ─────────────────────────────────────────
 
 function init() {
-  // TREINO A
-  document.getElementById('warm-a').innerHTML = warmupExercises.map((e, i) => makeWarmCard(e, 'a', i)).join('');
+  // TREINO A — aquecimento específico PDF JJ Performance
+  document.getElementById('warm-a').innerHTML = warmupA.map((e, i) => makeWarmCard(e, 'a', i)).join('');
   document.getElementById('main-a').innerHTML = treinoA.main.map((e, i) => makeExCard(e, 'a', 'main', i)).join('');
   document.getElementById('acc-a').innerHTML = treinoA.acc.map((e, i) => makeExCard(e, 'a', 'acc', i)).join('');
   document.getElementById('post-a').innerHTML = treinoA.post.map((e, i) => makePostCard(e, 'a', i)).join('');
 
-  // TREINO B
-  document.getElementById('warm-b').innerHTML = warmupExercises.map((e, i) => makeWarmCard(e, 'b', i)).join('');
+  // TREINO B — aquecimento específico PDF JJ Performance
+  document.getElementById('warm-b').innerHTML = warmupB.map((e, i) => makeWarmCard(e, 'b', i)).join('');
   document.getElementById('main-b').innerHTML = treinoB.main.map((e, i) => makeExCard(e, 'b', 'main', i)).join('');
   document.getElementById('acc-b').innerHTML = treinoB.acc.map((e, i) => makeExCard(e, 'b', 'acc', i)).join('');
   document.getElementById('post-b').innerHTML = treinoB.post.map((e, i) => makePostCard(e, 'b', i)).join('');
@@ -5383,7 +5411,7 @@ function switchTab(id) {
   if (id === 'missoes') { renderMissoes(); }
   if (id === 'recuperacao') { renderRecuperacao(); }
   if (id === 'saude') { renderSaude(); }
-  if (id === 'corrida') { renderCorridas(); }
+  if (id === 'corrida') { renderCorridas(); initRunProtocol(); }
   if (id === 'fisico') { renderFisico(); }
   if (id === 'tecnicas') { renderTecnicas(); }
   if (id === 'analise') { renderAnalise(); }
@@ -6247,7 +6275,7 @@ function renderHistoricoTab() {
   const wrap = document.getElementById('last-treino-wrap');
   if (last) {
     const icons = { A: '🏋️', B: '🦵', C: '⚡' };
-    const labels = { A: 'Tronco Superior', B: 'Pernas & Core', C: 'Potência' };
+    const labels = { A: 'Empurrar + Core', B: 'Puxar + Pernas', C: 'Potência' };
     const daysAgo = Math.round((new Date(todayStr()) - new Date(last.date + 'T12:00:00')) / 86400000);
     const when = daysAgo === 0 ? 'Hoje' : daysAgo === 1 ? 'Ontem' : `${daysAgo} dias atrás`;
     wrap.innerHTML = `
@@ -6368,7 +6396,7 @@ function updateSuggestionBanners() {
   const sessions = getSessions();
   const rotation = { A: 'B', B: 'C', C: 'A' };
   const icons = { A: '🏋️', B: '🦵', C: '⚡' };
-  const labels = { A: 'Tronco Superior', B: 'Pernas & Core', C: 'Potência' };
+  const labels = { A: 'Empurrar + Core', B: 'Puxar + Pernas', C: 'Potência' };
 
   ['a','b','c'].forEach(tab => {
     const banner = document.getElementById('suggestion-' + tab);
@@ -6646,7 +6674,7 @@ function showDayDetail(dateStr) {
   const MEALS_LABELS = {
     cafe:'☕ Café da manhã', almoco:'🍱 Almoço', lanche:'🍌 Lanche', jantar:'🌙 Jantar'
   };
-  const gymLabels = { A:'🏋️ Tronco Superior', B:'🦵 Pernas & Core', C:'⚡ Potência' };
+  const gymLabels = { A:'🏋️ Empurrar + Core', B:'🦵 Puxar + Pernas', C:'⚡ Potência' };
 
   let html = '';
 
@@ -6722,7 +6750,7 @@ function showDayDetail(dateStr) {
 
   // ── ACTION BUTTONS ──
   html += `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
-    <button class="dd-goto-btn" onclick="closeDayDetail();switchTab('d')">📋 Ver Histórico completo</button>
+    <button class="dd-goto-btn" onclick="closeDayDetail();switchPane('evolucao')">📋 Ver Evolução completa</button>
     ${isToday ? `<button class="dd-goto-btn" onclick="closeDayDetail();switchTab('f')">🥗 Registrar refeição</button>` : ''}
   </div>`;
 
@@ -7171,6 +7199,7 @@ function saveMetric(safeKey, cardId, numSets) {
   document.querySelectorAll(`[id^="set-row-${cardId}-"]`).forEach(r => r.classList.remove('active-set'));
   renderMetrics(safeKey, cardId);
   showToast('💪 Cargas registradas!');
+  checkProgressionSuggestion(safeKey);
 }
 
 function getMaxWeight(entry) {
@@ -7749,6 +7778,253 @@ function deleteRun(idx) {
   showToast('Corrida removida.');
 }
 
+// ═══════════════════════════════════════════════════════════════
+// FEATURE 1: Mobilidade Pré-JJ
+// ═══════════════════════════════════════════════════════════════
+var MOB_EXERCISES = [
+  { name:'Hip 90/90', desc:'Senta no chão, pernas a 90° frente e atrás. Inclina o tronco sobre a perna da frente.', secs:60, icon:'🦴' },
+  { name:"World's Greatest Stretch", desc:'Posição de avanço. Mão no chão, outro braço abre para o teto. 5 reps por lado.', secs:60, icon:'🌍' },
+  { name:'Thoracic Rotation no chão', desc:'Deita de lado, joelhos dobrados. Abre o braço superior para o outro lado. 8 reps por lado.', secs:60, icon:'🌀' },
+  { name:'Hip Flexor Lunge Stretch', desc:'Ajoelha uma perna. Quadril à frente. Sente o alongamento na frente do quadril. 30s por lado.', secs:60, icon:'🦵' },
+  { name:'Neck Rolls + Isométrico', desc:'Rotação suave do pescoço. Depois: mão na testa, empurra e resiste 5s. Repete para os lados e atrás.', secs:120, icon:'💪' },
+];
+
+var _mobIdx = 0, _mobRunning = false, _mobRemaining = 0, _mobInterval = null, _mobEndTime = 0;
+
+function toggleMobPanel() {
+  var p = document.getElementById('mobPanel');
+  var btn = document.getElementById('mobToggleBtn');
+  if (!p) return;
+  var open = p.style.display === 'block';
+  p.style.display = open ? 'none' : 'block';
+  if (btn) btn.textContent = open ? '▶ Iniciar' : '✕ Fechar';
+  if (!open) renderMobList();
+}
+
+function renderMobList() {
+  var el = document.getElementById('mobExList');
+  if (!el) return;
+  el.innerHTML = MOB_EXERCISES.map(function(e, i) {
+    return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:0.78rem">'
+      + '<span style="font-size:1rem">' + e.icon + '</span>'
+      + '<div style="flex:1"><strong>' + e.name + '</strong> · ' + Math.round(e.secs/60) + ' min</div>'
+      + '<div style="font-size:0.65rem;color:var(--muted)">' + e.secs + 's</div>'
+      + '</div>';
+  }).join('');
+}
+
+function mobStart() {
+  _mobIdx = 0;
+  mobStartCurrent();
+}
+
+function mobStartCurrent() {
+  if (_mobIdx >= MOB_EXERCISES.length) {
+    mobFinish(); return;
+  }
+  var ex = MOB_EXERCISES[_mobIdx];
+  _mobRemaining = ex.secs;
+  _mobEndTime = Date.now() + ex.secs * 1000;
+  _mobRunning = true;
+  var nameEl = document.getElementById('mobCurrentName');
+  if (nameEl) nameEl.textContent = ex.icon + ' ' + ex.name + ' — ' + ex.desc;
+  var startBtn = document.getElementById('mobStartBtn');
+  if (startBtn) startBtn.textContent = '⏸ Pausar';
+  if (_mobInterval) clearInterval(_mobInterval);
+  _mobInterval = setInterval(function() {
+    var rem = Math.max(0, Math.round((_mobEndTime - Date.now()) / 1000));
+    var disp = document.getElementById('mobTimerDisp');
+    if (disp) disp.textContent = rem + 's';
+    if (rem <= 0) {
+      clearInterval(_mobInterval); _mobRunning = false;
+      _mobIdx++;
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      if (_mobIdx < MOB_EXERCISES.length) {
+        showToast('✅ ' + MOB_EXERCISES[_mobIdx-1].name + ' — Próximo: ' + MOB_EXERCISES[_mobIdx].name);
+        setTimeout(mobStartCurrent, 1500);
+      } else {
+        mobFinish();
+      }
+    }
+  }, 400);
+}
+
+function mobSkip() {
+  if (_mobInterval) clearInterval(_mobInterval);
+  _mobRunning = false;
+  _mobIdx++;
+  if (_mobIdx < MOB_EXERCISES.length) mobStartCurrent();
+  else mobFinish();
+}
+
+function mobFinish() {
+  if (_mobInterval) clearInterval(_mobInterval);
+  _mobRunning = false;
+  var disp = document.getElementById('mobTimerDisp');
+  if (disp) disp.textContent = '✅';
+  var nameEl = document.getElementById('mobCurrentName');
+  if (nameEl) nameEl.textContent = 'Mobilidade completa! Boa aula 🥋';
+  var startBtn = document.getElementById('mobStartBtn');
+  if (startBtn) startBtn.textContent = '↺ Repetir';
+  if (navigator.vibrate) navigator.vibrate([400, 100, 400]);
+  showToast('🥋 Mobilidade completa! Hora do tatame.');
+}
+
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible' && _mobRunning && _mobEndTime) {
+    var rem = Math.max(0, Math.round((_mobEndTime - Date.now()) / 1000));
+    var disp = document.getElementById('mobTimerDisp');
+    if (disp) disp.textContent = rem + 's';
+    if (rem <= 0 && _mobRunning) mobSkip();
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// FEATURE 3: Quick-log peso no Home
+// ═══════════════════════════════════════════════════════════════
+var DAILY_WEIGHT_KEY = 'projeto_tatame_daily_weight';
+
+function saveQuickWeight() {
+  var el = document.getElementById('quickWeightInput');
+  if (!el) return;
+  var val = parseFloat(el.value);
+  if (!val || val < 30 || val > 250) { showToast('Informe um peso válido!'); return; }
+  var log = {};
+  try { log = JSON.parse(localStorage.getItem(DAILY_WEIGHT_KEY) || '{}'); } catch(e) {}
+  log[todayStr()] = val;
+  localStorage.setItem(DAILY_WEIGHT_KEY, JSON.stringify(log));
+  el.value = '';
+  el.placeholder = val.toFixed(1);
+  showToast('⚖️ Peso ' + val + ' kg registrado!');
+  renderHome();
+}
+
+function getLatestDailyWeight() {
+  try {
+    var log = JSON.parse(localStorage.getItem(DAILY_WEIGHT_KEY) || '{}');
+    var keys = Object.keys(log).sort();
+    if (keys.length) return { date: keys[keys.length-1], val: log[keys[keys.length-1]] };
+  } catch(e) {}
+  return null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FEATURE 6: Calendário semanal no Home
+// ═══════════════════════════════════════════════════════════════
+function buildWeekCal(sessions, jjSessions) {
+  var today = brDate();
+  var dow = today.getDay(); // 0=Dom
+  // Iniciar na segunda-feira
+  var mondayOffset = dow === 0 ? -6 : 1 - dow;
+  var monday = new Date(today); monday.setDate(today.getDate() + mondayOffset);
+  var days = ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+  var html = '';
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(monday); d.setDate(monday.getDate() + i);
+    var ds = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    var isToday = ds === todayStr();
+    var gymDone = sessions.some(function(s) { return s.date === ds; });
+    var jjDone  = jjSessions.some(function(s) { return s.date === ds; });
+    var icon = jjDone && gymDone ? '🥋🏋️' : jjDone ? '🥋' : gymDone ? '🏋️' : '';
+    var bg = isToday ? 'var(--accent)' : 'var(--card2)';
+    var col = isToday ? '#000' : icon ? 'var(--text)' : 'var(--muted)';
+    html += '<div style="background:' + bg + ';border-radius:10px;padding:6px 2px;text-align:center;border:1px solid ' + (isToday ? 'var(--accent)' : 'var(--border)') + '">'
+      + '<div style="font-size:0.58rem;font-weight:700;color:' + col + ';margin-bottom:2px">' + days[i] + '</div>'
+      + '<div style="font-size:0.72rem;font-weight:800;color:' + col + ';margin-bottom:2px">' + d.getDate() + '</div>'
+      + '<div style="font-size:0.75rem;min-height:18px;line-height:1">' + (icon || '·') + '</div>'
+      + '</div>';
+  }
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FEATURE 4: Semana do protocolo de corrida
+// ═══════════════════════════════════════════════════════════════
+var RUN_PROTOCOL_KEY = 'projeto_tatame_run_protocol_start';
+var RUN_WEEKS = [
+  { sem:'1–2', phase:'Construção de Base', color:'#22c55e',
+    week1:'20 min contínuos em ritmo de conversa. Se precisar, intercala: 5 min corrida + 2 min caminhada.',
+    week2:'25 min contínuos no mesmo ritmo. Terminar sentindo que podia continuar mais 5 min.' },
+  { sem:'3–4', phase:'Volume + Intervalado', color:'#f0a500',
+    week1:'30 min: 5 aq → 20 min leve → 5 desaq. Foco em respiração nasal.',
+    week2:'35 min: 5 aq → 4× (3 min forte + 2 min leve) → 10 min leve.' },
+  { sem:'5–6', phase:'Tempo Run', color:'#f0a500',
+    week1:'5 aq → 20 min a ritmo 8/10 → 5 desaq. Simula 2 rounds de JJ.',
+    week2:'40 min: 5 aq → 6× (4 min moderado + 1 min leve) → 5 desaq.' },
+  { sem:'7–8', phase:'Consolidação + Teste', color:'#ef4444',
+    week1:'Progressiva: 10 leve → 10 médio → 10 forte → 5 leve.',
+    week2:'TESTE: corra o máximo em 30 min. Compare com semana 1.' },
+];
+
+function saveRunProtocolStart(val) {
+  localStorage.setItem(RUN_PROTOCOL_KEY, val);
+}
+
+function resetRunProtocol() {
+  if (!confirm('Reiniciar o protocolo do zero?')) return;
+  localStorage.removeItem(RUN_PROTOCOL_KEY);
+  var el = document.getElementById('runProtocolStart');
+  if (el) el.value = '';
+  renderRunProtocolWeek();
+}
+
+function renderRunProtocolWeek() {
+  var el = document.getElementById('runWeekDisplay');
+  if (!el) return;
+  var startStr = localStorage.getItem(RUN_PROTOCOL_KEY);
+  // Inicializar o input com o valor salvo
+  var inp = document.getElementById('runProtocolStart');
+  if (inp && startStr && !inp.value) inp.value = startStr;
+  if (!startStr) {
+    el.innerHTML = '<div style="font-size:0.78rem;color:var(--muted)">Defina a data de início para acompanhar em qual semana você está.</div>';
+    return;
+  }
+  var start = new Date(startStr + 'T12:00:00');
+  var today = brDate();
+  var daysDiff = Math.floor((today - start) / 86400000);
+  var weekNum = Math.max(1, Math.min(8, Math.floor(daysDiff / 7) + 1));
+  var pairIdx = Math.floor((weekNum - 1) / 2);
+  var pair = RUN_WEEKS[pairIdx] || RUN_WEEKS[3];
+  var isWeek1 = weekNum % 2 !== 0;
+  var workout = isWeek1 ? pair.week1 : pair.week2;
+  el.innerHTML = '<div style="border-left:3px solid ' + pair.color + ';padding:8px 12px;background:rgba(0,0,0,0.15);border-radius:0 10px 10px 0;margin-bottom:4px">'
+    + '<div style="font-size:0.68rem;font-weight:800;color:' + pair.color + ';letter-spacing:.05em;margin-bottom:4px">SEMANA ' + weekNum + ' DE 8 · ' + pair.phase.toUpperCase() + '</div>'
+    + '<div style="font-size:0.8rem;color:var(--text);line-height:1.5">' + workout + '</div>'
+    + '</div>'
+    + (weekNum >= 8 ? '<div style="font-size:0.72rem;color:#22c55e;margin-top:4px">🏆 Protocolo concluído! Reinicie ou continue correndo.</div>' : '');
+}
+
+function initRunProtocol() {
+  var inp = document.getElementById('runProtocolStart');
+  var saved = localStorage.getItem(RUN_PROTOCOL_KEY);
+  if (inp && saved) inp.value = saved;
+  renderRunProtocolWeek();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FEATURE 5: Sugestão de progressão de carga
+// ═══════════════════════════════════════════════════════════════
+function checkProgressionSuggestion(exerciseKey) {
+  try {
+    var all = getAllMetrics ? getAllMetrics() : {};
+    var log = all[exerciseKey];
+    if (!log || !Array.isArray(log) || log.length < 3) return;
+    var last3 = log.slice(-3);
+    var weights = last3.map(function(entry) {
+      if (!entry || !entry.sets) return null;
+      var vals = Object.values(entry.sets).map(Number).filter(function(n) { return n > 0; });
+      return vals.length ? Math.max.apply(null, vals) : null;
+    }).filter(function(w) { return w !== null; });
+    if (weights.length < 3) return;
+    var same = weights[0] === weights[1] && weights[1] === weights[2];
+    if (same) {
+      var name = decodeURIComponent(exerciseKey);
+      showToast('💡 ' + name + ': 3 sessões com a mesma carga — considere +2,5 kg na próxima!');
+    }
+  } catch(e) {}
+}
+
+
 // ── Tirzepatida mini-widget para Bioimpedância ──────────────────────────────
 function renderTirzeBioWidget() {
   var nextEl = document.getElementById('tirze-bio-next');
@@ -8132,7 +8408,7 @@ function generateAnalysis(sessionId) {
 
   // ── Progressão de cargas dos exercícios desta sessão ──
   const exNames = { A: ['Barra fixa pronada','Supino','Remada curvada','Desenvolvimento','Face pull','Hang na barra','Pallof press'],
-                    B: ['Agachamento','Terra romeno','Afundo búlgaro','Kettlebell swing',"Farmer's walk",'Prancha'],
+                    B: ['Agachamento','Terra romeno','Stiff','Extensão joelho','Rosca','Dead hang'],
                     C: ['Trap bar deadlift','Clean','Snatch grip','Assault bike','Calistenia','Medball'] };
   const relevantKeys = Object.keys(allMetrics).filter(k => {
     const decoded = decodeURIComponent(k).toLowerCase();
@@ -8291,108 +8567,10 @@ const DIET_WEIGHT_KEY = 'projeto_tatame_dietweight';
 // Perfil calculado: TMB 1715 kcal, TDEE ~2610, déficit ~350
 // Com Tirzepatida: porções menores, 5-6 refeições, prioridade em proteína
 // Ajuste LDL alto: reduzir gordura saturada, aumentar fibra, ômega-3, evitar gema em excesso
-const DIET_TARGETS = {
-  train: { kcal: 1950, prot: 160, carb: 215, fat: 52 },
-  rest:  { kcal: 1650, prot: 145, carb: 170, fat: 44 }
-};
 
-const MEAL_PLANS = {
-  train: [
-    {
-      icon: '🌅', name: 'Café da manhã', time: '07:00', kcal: 490,
-      items: [
-        { name: 'Vitamina: leite em pó 30g + água 250ml + banana 1 + aveia s/glúten 35g + whey 30g', prot: '36g', carb: '50g', fat: '5g' },
-        { name: '3 claras + 1 gema mexidas no azeite (limitar gema p/ LDL)', prot: '14g', carb: '0g', fat: '7g' },
-      ],
-      tip: '⚕️ Tirzepatida após café. Aveia reduz LDL por beta-glucana — não pule!'
-    },
-    {
-      icon: '🍊', name: 'Lanche manhã', time: '10:00', kcal: 190,
-      items: [
-        { name: '3 claras cozidas (sem gema — controle LDL)', prot: '11g', carb: '0g', fat: '0g' },
-        { name: 'Uva roxa 120g (resveratrol + antioxidante)', prot: '1g', carb: '20g', fat: '0g' },
-        { name: '1 castanha-do-pará (selênio + gordura boa)', prot: '1g', carb: '0g', fat: '4g' },
-      ]
-    },
-    {
-      icon: '🍽️', name: 'Almoço', time: '12:30', kcal: 560,
-      items: [
-        { name: 'Frango grelhado (sem pele) 200g', prot: '46g', carb: '0g', fat: '5g' },
-        { name: 'Arroz integral 110g cozido (fibra p/ LDL)', prot: '3g', carb: '32g', fat: '0g' },
-        { name: 'Feijão/lentilha 80g cozido (fibra solúvel)', prot: '4g', carb: '11g', fat: '0g' },
-        { name: 'Salada folhas + tomate + azeite extra-virgem 1 fio', prot: '1g', carb: '5g', fat: '5g' },
-      ]
-    },
-    {
-      icon: '💪', name: 'Pré-treino', time: '1h antes do treino', kcal: 300,
-      items: [
-        { name: 'Cuscuz 130g cozido', prot: '4g', carb: '54g', fat: '1g' },
-        { name: '3 claras mexidas (sem queijo gorduroso — LDL)', prot: '11g', carb: '0g', fat: '0g' },
-      ],
-      tip: '⚕️ Evite gordura saturada antes do treino — náusea + impacto no LDL'
-    },
-    {
-      icon: '🔋', name: 'Pós-treino', time: 'Logo após treino', kcal: 220,
-      items: [
-        { name: 'Whey isolado 40g + água 300ml', prot: '36g', carb: '4g', fat: '1g' },
-        { name: '1 colher de mel', prot: '0g', carb: '17g', fat: '0g' },
-      ],
-      tip: '🥋 Janela anabólica — consuma em até 30min pós-treino'
-    },
-    {
-      icon: '🌙', name: 'Jantar', time: '19:30', kcal: 430,
-      items: [
-        { name: 'Sardinha/atum/salmão 150g (ômega-3 reduz LDL)', prot: '32g', carb: '0g', fat: '8g' },
-        { name: 'Ou: frango sem pele 200g (dias sem peixe)', prot: '46g', carb: '0g', fat: '5g' },
-        { name: 'Macarrão de arroz 80g (seco) ou cuscuz 110g', prot: '4g', carb: '54g', fat: '1g' },
-        { name: 'Azeite extra-virgem + salada verde', prot: '1g', carb: '4g', fat: '5g' },
-      ],
-      tip: '❤️ Priorize peixe 3–4x/semana — ômega-3 é a melhor estratégia contra LDL alto'
-    }
-  ],
-  rest: [
-    {
-      icon: '🌅', name: 'Café da manhã', time: '08:00', kcal: 370,
-      items: [
-        { name: 'Vitamina: leite em pó 25g + água 200ml + banana 1 + whey 30g', prot: '30g', carb: '36g', fat: '4g' },
-        { name: 'Aveia s/glúten 30g (fibra beta-glucana p/ LDL)', prot: '4g', carb: '20g', fat: '2g' },
-        { name: '2 claras mexidas no azeite', prot: '7g', carb: '0g', fat: '3g' },
-      ]
-    },
-    {
-      icon: '🍊', name: 'Lanche manhã', time: '10:30', kcal: 180,
-      items: [
-        { name: 'Iogurte zero lactose 150g (sem gordura)', prot: '10g', carb: '12g', fat: '0g' },
-        { name: 'Chia 10g + uva roxa 80g (fibra + antioxidante)', prot: '2g', carb: '22g', fat: '2g' },
-      ]
-    },
-    {
-      icon: '🍽️', name: 'Almoço', time: '12:30', kcal: 510,
-      items: [
-        { name: 'Frango sem pele 200g grelhado', prot: '46g', carb: '0g', fat: '5g' },
-        { name: 'Arroz integral 100g + Feijão/lentilha 80g', prot: '7g', carb: '40g', fat: '0g' },
-        { name: 'Salada + azeite extra-virgem', prot: '1g', carb: '5g', fat: '5g' },
-      ]
-    },
-    {
-      icon: '🍊', name: 'Lanche tarde', time: '15:30', kcal: 200,
-      items: [
-        { name: '3 claras cozidas + abacate 40g (gordura boa p/ LDL)', prot: '11g', carb: '2g', fat: '8g' },
-        { name: 'Castanha-do-pará 2un', prot: '2g', carb: '1g', fat: '6g' },
-      ]
-    },
-    {
-      icon: '🌙', name: 'Jantar', time: '19:00', kcal: 390,
-      items: [
-        { name: 'Sardinha/atum/salmão 150g (ômega-3)', prot: '32g', carb: '0g', fat: '8g' },
-        { name: 'Cuscuz 140g cozido', prot: '4g', carb: '52g', fat: '1g' },
-        { name: 'Salada verde + azeite', prot: '1g', carb: '4g', fat: '5g' },
-      ]
-    }
-  ]
-};
 
-let currentDietDay = 'train';
+
+
 
 function renderDietTab() {
   renderDietMacros();
@@ -8466,38 +8644,7 @@ function renderDietMacros() {
     </div>`).join('');
 }
 
-function switchDietDay(day) {
-  currentDietDay = day;
-  document.getElementById('diet-btn-train').classList.toggle('active', day === 'train');
-  document.getElementById('diet-btn-rest').classList.toggle('active', day === 'rest');
-  renderDietMacros();
-  renderDietPlan(day);
-}
 
-function renderDietPlan(day) {
-  const wrap = document.getElementById('dietPlanWrap');
-  if (!wrap) return;
-  const meals = MEAL_PLANS[day];
-  wrap.innerHTML = meals.map(m => `
-    <div class="meal-card">
-      <div class="meal-header">
-        <span class="meal-icon">${m.icon}</span>
-        <div style="flex:1">
-          <div class="meal-name">${m.name}</div>
-          <div class="meal-time">🕐 ${m.time}</div>
-        </div>
-        <span class="meal-kcal">~${m.kcal} kcal</span>
-      </div>
-      <div class="meal-items">
-        ${m.items.map(it => `
-          <div class="meal-item">
-            <span class="meal-item-name">${it.name}</span>
-            <span class="meal-item-macro">${it.prot && it.prot !== '0g' ? it.prot + ' prot' : ''} ${it.carb && it.carb !== '0g' ? '· ' + it.carb + ' carb' : ''}</span>
-          </div>`).join('')}
-        ${m.tip ? `<div class="meal-item-alert">${m.tip}</div>` : ''}
-      </div>
-    </div>`).join('');
-}
 
 function renderDietWeight() {
   try {
@@ -10256,6 +10403,7 @@ const BACKUP_KEYS = [
   'projeto_tatame_suplementos',
   'projeto_tatame_medicamentos',
   'projeto_tatame_corrida',
+  'projeto_tatame_daily_weight',
   'projeto_tatame_fisico_testes',
   'projeto_tatame_tecnicas_bjj',
   'projeto_tatame_macros_meta',
@@ -13039,8 +13187,9 @@ const SUBNAV_DEFS = {
     { label:'📸 Fotos',         tab:'i'          },
   ],
   nutricao: [
-    { label:'🥗 Dieta',  tab:'f'     },
-    { label:'🩺 Saúde',  tab:'saude' },
+    { label:'🥗 Dieta',       tab:'f'     },
+    { label:'💉 Tirzepatida', tab:'tirze' },
+    { label:'🩺 Saúde',       tab:'saude' },
   ],
   // Evolução = SEM sub-nav. Página única que rola.
   evolucao: [],
@@ -13269,6 +13418,24 @@ function renderHome() {
 
   // ─ Build HTML ─
   el.innerHTML = `
+    <!-- CALENDÁRIO SEMANAL -->
+    <div class="home-section-title">ESTA SEMANA</div>
+    <div id="homeWeekCal" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:14px">
+      ${buildWeekCal(sessions, jjS)}
+    </div>
+
+    <!-- QUICK PESO -->
+    <div style="display:flex;align-items:center;gap:8px;background:var(--card2);border-radius:12px;padding:10px 14px;margin-bottom:14px">
+      <span style="font-size:1.1rem">⚖️</span>
+      <span style="font-size:0.78rem;color:var(--text-muted);flex:1">Peso de hoje</span>
+      <input type="number" id="quickWeightInput" step="0.1" placeholder="${weight || '78.0'}"
+        style="width:72px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 8px;color:var(--text);font-size:0.9rem;font-weight:700;text-align:center"/>
+      <button onclick="saveQuickWeight()"
+        style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:6px 12px;font-size:0.8rem;font-weight:700;cursor:pointer">
+        ✓
+      </button>
+    </div>
+
     <div class="home-section-title">HOJE</div>
     <div class="home-grid">
 
@@ -13306,7 +13473,7 @@ function renderHome() {
       <!-- Peso / Gordura → direto para Bioimpedância -->
       <div class="home-card" onclick="switchPane('corpo')">
         <div class="hc-label">📊 Bioimpedância</div>
-        <div class="hc-value hc-blue">${weight ? weight + ' kg' : '—'}</div>
+        <div class="hc-value hc-blue">${(() => { const dw = getLatestDailyWeight(); return (dw ? dw.val : weight) ? (dw ? dw.val : weight) + ' kg' : '—'; })()}</div>
         <div class="hc-sub">${fatPct ? '🏃 ' + fatPct + '% gordura' : 'Toque para registrar'}</div>
       </div>
 
@@ -13329,7 +13496,7 @@ function renderHome() {
       </div>
 
       <!-- Tirzepatida -->
-      <div class="home-card" onclick="switchPaneTab('tirze')">
+      <div class="home-card" onclick="switchPane('nutricao');switchPaneTab('tirze')">
         <div class="hc-label">💉 Tirzepatida</div>
         <div class="hc-value" style="font-size:0.95rem">${tirzeHtml}</div>
         <div class="hc-sub">Próxima dose</div>
@@ -13349,7 +13516,7 @@ function renderHome() {
       <button class="home-action-btn" onclick="switchPane('treino')">➕ Registrar Treino</button>
       <button class="home-action-btn" onclick="switchPaneTab('recuperacao')">🛌 Recuperação</button>
       <button class="home-action-btn" onclick="switchPane('bjj')">🥋 Sessão BJJ</button>
-      <button class="home-action-btn" onclick="switchPaneTab('tirze')">💉 Tirzepatida</button>
+      <button class="home-action-btn" onclick="switchPane('nutricao');switchPaneTab('tirze')">💉 Tirzepatida</button>
       <button class="home-action-btn" onclick="switchPane('corpo')">📊 Bioimpedância</button>
       <button class="home-action-btn" onclick="switchPane('nutricao')">🥗 Macros</button>
       <button class="home-action-btn" onclick="switchPane('evolucao')">📈 Evolução</button>
@@ -13790,42 +13957,7 @@ var _origResetBodyDores = null;
 </script>
 
 <!-- ===================== COMPARTILHAR ===================== -->
-<div class="tab-content" id="tab-compartilhar">
-  <div class="intro-card">
-    <h3>📤 Compartilhar Progresso</h3>
-    <p>Gere uma imagem com seu resumo semanal ou mensal para salvar ou compartilhar onde quiser.</p>
-  </div>
-
-  <div class="share-period-sel">
-    <button class="share-period-btn active" id="sharePeriodSemana" onclick="setSharePeriod('semana', this)">📅 Esta semana</button>
-    <button class="share-period-btn" id="sharePeriodMes" onclick="setSharePeriod('mes', this)">📆 Este mês</button>
-  </div>
-
-  <div class="share-canvas-wrap">
-    <canvas id="shareCanvas" style="width:100%;display:block;border-radius:12px"></canvas>
-  </div>
-
-  <button class="share-btn share-btn-download" onclick="downloadShareImage()">
-    ⬇️ Salvar imagem
-  </button>
-</div>
-
-
 <!-- ===================== MISSÕES ===================== -->
-<div class="tab-content" id="tab-missoes">
-  <div class="intro-card">
-    <h3>🎯 Mini Missões</h3>
-    <p>Metas automáticas que se completam com base nos seus treinos registrados. Continue treinando para desbloquear!</p>
-  </div>
-  <div class="missao-tabs">
-    <button class="missao-tab-btn active" id="missaoTabSemana" onclick="setMissaoTab('semana',this)">📅 Esta semana</button>
-    <button class="missao-tab-btn" id="missaoTabMes" onclick="setMissaoTab('mes',this)">📆 Este mês</button>
-    <button class="missao-tab-btn" id="missaoTabTotal" onclick="setMissaoTab('total',this)">🏆 Total</button>
-  </div>
-  <div id="missoesLista"></div>
-</div>
-
-
 <!-- ===== RECUPERAÇÃO ===== -->
 <div class="tab-content" id="tab-recuperacao">
   <div class="intro-card"><h3>🛌 Recuperação Diária</h3><p>Registre seu estado físico e mental diariamente. Isso determina a intensidade ideal do seu treino.</p></div>
@@ -14131,53 +14263,6 @@ var _origResetBodyDores = null;
 </div>
 
 <!-- ===== TÉCNICAS BJJ ===== -->
-<div class="tab-content" id="tab-tecnicas">
-  <div class="intro-card"><h3>📚 Técnicas BJJ</h3><p>Registre tudo que você aprendeu em cada aula. É seu diário técnico pessoal — o segredo dos faixas preta.</p></div>
-  <div class="session-card" style="margin-bottom:14px">
-    <div class="dash-section-title" style="margin-bottom:10px">✏️ Nova Técnica</div>
-    <div class="rec-form-grid">
-      <div class="rec-field">
-        <span class="rec-field-label">📅 Data</span>
-        <input type="date" id="tecDate" class="metrics-input" style="width:100%"/>
-      </div>
-      <div class="rec-field">
-        <span class="rec-field-label">🏷 Categoria</span>
-        <select id="tecCat" class="evolucao-select" style="margin-top:0">
-          <option value="Guarda">🛡 Guarda</option>
-          <option value="Passagem">⚡ Passagem</option>
-          <option value="Finalização">🔒 Finalização</option>
-          <option value="Raspagem">🔄 Raspagem</option>
-          <option value="Defesa">🛡 Defesa</option>
-          <option value="Leg Lock">🦵 Leg Lock</option>
-          <option value="Takedown">🤼 Takedown</option>
-          <option value="Costas">🎯 Costas</option>
-          <option value="Montada">👑 Montada</option>
-          <option value="Outro">📌 Outro</option>
-        </select>
-      </div>
-    </div>
-    <div class="rec-field" style="margin:8px 0">
-      <span class="rec-field-label">Nome da técnica</span>
-      <input type="text" id="tecNome" class="metrics-input" placeholder="ex: Kimura da Meia Guarda" style="width:100%"/>
-    </div>
-    <div class="rec-field" style="margin-bottom:8px">
-      <span class="rec-field-label">Professor / fonte</span>
-      <input type="text" id="tecProf" class="metrics-input" placeholder="ex: Professor João, YouTube..." style="width:100%"/>
-    </div>
-    <div class="rec-field" style="margin-bottom:10px">
-      <span class="rec-field-label">📝 Detalhes / pontos-chave</span>
-      <textarea id="tecObs" class="jj-obs-input" placeholder="Detalhe os pontos importantes da técnica..." rows="3"></textarea>
-    </div>
-    <button class="btn-save" style="width:100%" onclick="saveTecnica()">💾 Salvar Técnica</button>
-  </div>
-
-  <div class="session-card">
-    <div class="dash-section-title" style="margin-bottom:8px">📖 Diário de Técnicas</div>
-    <div class="tecnica-filter-wrap" id="tecnicaFiltros"></div>
-    <div id="tecnicasLista"></div>
-  </div>
-</div>
-
 <!-- ===== ANÁLISE ===== -->
 <div class="tab-content" id="tab-analise">
   <div class="intro-card"><h3>🔬 Análise de Performance</h3><p>ACWR para prevenir lesões, periodização do treino e correlação entre recuperação e resultado.</p></div>
