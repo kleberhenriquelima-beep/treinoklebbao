@@ -35,7 +35,71 @@
     min-height: 100vh;
   }
 
-  /* HEADER */
+
+/* ═══════════════ CORRIDA ═══════════════ */
+.run-chrono {
+  background: var(--card2);
+  border-radius: 16px;
+  padding: 20px 16px;
+  text-align: center;
+  margin-bottom: 14px;
+  border: 2px solid rgba(34,197,94,0.3);
+}
+.run-chrono-display {
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: var(--green);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 6px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.run-chrono-display.running { color: #22c55e; text-shadow: 0 0 24px rgba(34,197,94,0.4); }
+.run-chrono-sub { font-size: 0.7rem; color: var(--muted); margin-bottom: 14px; }
+.run-chrono-btns { display: flex; gap: 8px; justify-content: center; }
+.run-btn { flex: 1; max-width: 130px; padding: 11px 16px; border-radius: 12px; border: none; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all .15s; touch-action: manipulation; }
+.run-btn.start { background: var(--green); color: #000; }
+.run-btn.start:active { transform: scale(.95); }
+.run-btn.stop  { background: #ef4444; color: #fff; }
+.run-btn.reset { background: var(--card); border: 1px solid var(--border); color: var(--muted); }
+.run-live-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+.run-live-chip {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 8px 4px;
+  text-align: center;
+}
+.run-live-val { font-size: 1.1rem; font-weight: 800; color: var(--green); }
+.run-live-lbl { font-size: 0.6rem; color: var(--muted); margin-top: 2px; }
+.run-type-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.run-type-btn {
+  padding: 7px 13px; border-radius: 20px; border: 1.5px solid var(--border);
+  background: var(--card2); color: var(--text-muted); font-size: 0.72rem;
+  font-weight: 700; cursor: pointer; transition: all .15s;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.run-type-btn.sel { border-color: var(--green); color: var(--green); background: rgba(34,197,94,0.1); }
+.run-hist-card {
+  background: var(--card2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border-left: 3px solid var(--green);
+}
+.run-hist-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.run-hist-date { font-size: 0.72rem; color: var(--muted); }
+.run-hist-dist { font-size: 1.1rem; font-weight: 800; color: var(--green); }
+.run-hist-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.run-hist-chip { font-size: 0.68rem; color: var(--text-muted); background: var(--card); border-radius: 8px; padding: 3px 8px; }
+
+    /* HEADER */
   header {
     background: linear-gradient(135deg, #1a1a1e 0%, #0d0d0f 100%);
     border-bottom: 2px solid var(--accent);
@@ -4352,6 +4416,131 @@
   <div id="livreHistorico"></div>
 </div>
 
+<!-- ===================== CORRIDA ===================== -->
+<div class="tab-content" id="tab-corrida">
+
+  <div class="intro-card">
+    <h3>🏃 Corrida — Treino Cardiovascular</h3>
+    <p>Cronometre sua corrida ao vivo, registre distância e ritmo, ou salve uma sessão manualmente. O timer continua mesmo ao sair da tela.</p>
+  </div>
+
+  <!-- CRONÔMETRO DE CORRIDA -->
+  <div class="run-chrono" id="runChronoWrap">
+    <div class="run-chrono-display" id="runChronoDisplay" onclick="toggleRunChrono()">00:00:00</div>
+    <div class="run-chrono-sub" id="runChronoSub">Toque no tempo ou no botão para iniciar</div>
+    <div class="run-chrono-btns">
+      <button class="run-btn start" id="runStartBtn" onclick="toggleRunChrono()">▶ Iniciar</button>
+      <button class="run-btn reset" onclick="resetRunChrono()">↺ Zerar</button>
+    </div>
+    <!-- Stats ao vivo -->
+    <div class="run-live-stats" id="runLiveStats" style="display:none">
+      <div class="run-live-chip">
+        <div class="run-live-val" id="runLiveDist">—</div>
+        <div class="run-live-lbl">km</div>
+      </div>
+      <div class="run-live-chip">
+        <div class="run-live-val" id="runLivePace">—</div>
+        <div class="run-live-lbl">min/km</div>
+      </div>
+      <div class="run-live-chip">
+        <div class="run-live-val" id="runLiveCal">—</div>
+        <div class="run-live-lbl">kcal est.</div>
+      </div>
+    </div>
+    <!-- Input de distância ao vivo -->
+    <div id="runLiveDistWrap" style="display:none;margin-top:10px">
+      <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px">Distância percorrida (km)</div>
+      <input type="number" id="runLiveDistInput" step="0.1" min="0" placeholder="ex: 5.2"
+        style="width:100%;background:var(--card);border:1px solid var(--green);border-radius:8px;padding:10px;color:var(--text);font-size:1.1rem;font-weight:700;text-align:center"
+        oninput="updateRunLiveStats()"/>
+    </div>
+  </div>
+
+  <!-- FORMULÁRIO DE REGISTRO -->
+  <div class="session-card" style="margin-bottom:14px">
+    <div class="dash-section-title" style="margin-bottom:10px">📝 Registrar Sessão</div>
+
+    <div class="rec-form-grid">
+      <div class="rec-field">
+        <span class="rec-field-label">📅 Data</span>
+        <input type="date" id="runDate" class="metrics-input" style="width:100%"/>
+      </div>
+      <div class="rec-field">
+        <span class="rec-field-label">📏 Distância (km)</span>
+        <input type="number" id="runDist" step="0.1" min="0" placeholder="5.0" class="metrics-input" style="width:100%" oninput="calcRunPace()"/>
+      </div>
+      <div class="rec-field">
+        <span class="rec-field-label">⏱ Duração (min)</span>
+        <input type="number" id="runDurMin" step="1" min="0" placeholder="30" class="metrics-input" style="width:100%" oninput="calcRunPace()"/>
+      </div>
+      <div class="rec-field">
+        <span class="rec-field-label">💓 FC média (bpm)</span>
+        <input type="number" id="runFC" step="1" min="0" placeholder="150" class="metrics-input" style="width:100%"/>
+      </div>
+    </div>
+
+    <!-- Pace calculado -->
+    <div id="runPaceDisplay" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:10px;text-align:center;margin-bottom:10px;display:none">
+      <span style="font-size:1.4rem;font-weight:900;color:var(--green)" id="runPaceVal">—</span>
+      <span style="font-size:0.75rem;color:var(--muted)"> min/km · </span>
+      <span style="font-size:0.85rem;font-weight:700;color:var(--text)" id="runPaceZone"></span>
+    </div>
+
+    <!-- Tipo de corrida -->
+    <div class="rec-field-label" style="margin-bottom:6px">🏷 Tipo de corrida</div>
+    <div class="run-type-grid" id="runTypeGrid">
+      <button class="run-type-btn sel" data-tipo="Leve" onclick="selectRunType(this)">🟢 Leve</button>
+      <button class="run-type-btn" data-tipo="Moderada" onclick="selectRunType(this)">🟡 Moderada</button>
+      <button class="run-type-btn" data-tipo="Tempo" onclick="selectRunType(this)">🟠 Tempo</button>
+      <button class="run-type-btn" data-tipo="Intervalado" onclick="selectRunType(this)">🔴 Intervalado</button>
+      <button class="run-type-btn" data-tipo="Longa" onclick="selectRunType(this)">🔵 Longa</button>
+      <button class="run-type-btn" data-tipo="Trail" onclick="selectRunType(this)">🌿 Trail</button>
+    </div>
+
+    <!-- RPE -->
+    <div class="rec-field-label" style="margin-bottom:6px;margin-top:4px">💪 Esforço percebido (RPE)</div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px" id="runRpeGrid">
+      <button class="run-type-btn" data-rpe="1"  onclick="selectRunRpe(this)">1</button>
+      <button class="run-type-btn" data-rpe="2"  onclick="selectRunRpe(this)">2</button>
+      <button class="run-type-btn" data-rpe="3"  onclick="selectRunRpe(this)">3</button>
+      <button class="run-type-btn" data-rpe="4"  onclick="selectRunRpe(this)">4</button>
+      <button class="run-type-btn" data-rpe="5"  onclick="selectRunRpe(this)">5</button>
+      <button class="run-type-btn" data-rpe="6"  onclick="selectRunRpe(this)">6</button>
+      <button class="run-type-btn" data-rpe="7"  onclick="selectRunRpe(this)">7</button>
+      <button class="run-type-btn" data-rpe="8"  onclick="selectRunRpe(this)">8</button>
+      <button class="run-type-btn" data-rpe="9"  onclick="selectRunRpe(this)">9</button>
+      <button class="run-type-btn" data-rpe="10" onclick="selectRunRpe(this)">10</button>
+    </div>
+
+    <div class="rec-field">
+      <span class="rec-field-label">📝 Observações</span>
+      <textarea id="runNotes" class="jj-obs-input" placeholder="Ex: Treino leve pelo bairro, joelho ok, clima bom..." rows="2"></textarea>
+    </div>
+
+    <button class="btn-save" style="width:100%;margin-top:10px" onclick="saveRun()">✅ Salvar Corrida</button>
+  </div>
+
+  <!-- STATS DA SEMANA -->
+  <div class="session-card" style="margin-bottom:14px">
+    <div class="dash-section-title" style="margin-bottom:10px">📊 Esta semana</div>
+    <div id="runWeekStats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
+  </div>
+
+  <!-- GRÁFICO -->
+  <div class="session-card" style="margin-bottom:14px">
+    <div class="dash-section-title" style="margin-bottom:8px">📈 Evolução — Distância & Ritmo</div>
+    <canvas id="runChart" height="140" style="width:100%;display:block"></canvas>
+    <div id="runChartEmpty" style="text-align:center;color:var(--muted);font-size:0.8rem;padding:20px;display:none">
+      Registre pelo menos 2 corridas para ver o gráfico.
+    </div>
+  </div>
+
+  <!-- HISTÓRICO -->
+  <div class="dash-section-title" style="margin-bottom:8px">🗂️ Histórico de corridas</div>
+  <div id="runHistorico"></div>
+
+</div>
+
 <!-- ===================== TIRZEPATIDA ===================== -->
 <div class="tab-content" id="tab-tirze">
   <div class="intro-card">
@@ -5174,7 +5363,7 @@ const TAB_NAMES = {
   a:'🏋️ Treino A', b:'🦵 Treino B', c:'⚡ Treino C',
   d:'📋 Histórico', e:'📊 Bioimpedância', f:'🥗 Dieta',
   g:'📈 Projeção', h:'🥋 Jiu-Jitsu', i:'📸 Fotos',
-  livre:'🏋️ Treino Livre', tirze:'💉 Tirzepatida', conquistas:'🏆 Conquistas', medidas:'📏 Medidas', evolucao:'📊 Evolução', relatorio:'📅 Relatório', compartilhar:'📤 Compartilhar', missoes:'🎯 Missões', recuperacao:'🛌 Recuperação', saude:'🩺 Saúde', fisico:'💪 Físico', tecnicas:'📚 Técnicas', analise:'🔬 Análise', evo:'📊 Evolução'
+  livre:'🏋️ Treino Livre', tirze:'💉 Tirzepatida', conquistas:'🏆 Conquistas', medidas:'📏 Medidas', evolucao:'📊 Evolução', relatorio:'📅 Relatório', compartilhar:'📤 Compartilhar', missoes:'🎯 Missões', recuperacao:'🛌 Recuperação', saude:'🩺 Saúde', fisico:'💪 Físico', tecnicas:'📚 Técnicas', analise:'🔬 Análise', evo:'📊 Evolução', corrida:'🏃 Corrida'
 };
 function switchTab(id) {
   document.querySelectorAll('[data-tab]').forEach(b => {
@@ -5194,6 +5383,7 @@ function switchTab(id) {
   if (id === 'missoes') { renderMissoes(); }
   if (id === 'recuperacao') { renderRecuperacao(); }
   if (id === 'saude') { renderSaude(); }
+  if (id === 'corrida') { renderCorridas(); }
   if (id === 'fisico') { renderFisico(); }
   if (id === 'tecnicas') { renderTecnicas(); }
   if (id === 'analise') { renderAnalise(); }
@@ -7203,6 +7393,361 @@ function deleteBioEntry(date) {
   renderBioTab();
 }
 
+
+// ═══════════════════════════════════════════════════════════
+// CORRIDA — Cronômetro + Registro + Histórico
+// ═══════════════════════════════════════════════════════════
+const CORRIDA_KEY = 'projeto_tatame_corrida';
+
+function getCorridas() {
+  try { return JSON.parse(localStorage.getItem(CORRIDA_KEY) || '[]'); } catch(e) { return []; }
+}
+
+// ── Cronômetro de corrida (count-up, epoch-based) ────────────────────────────
+var _runTimer = { running: false, startEpoch: 0, elapsed: 0, interval: null };
+
+function toggleRunChrono() {
+  if (_runTimer.running) {
+    // Pausar
+    clearInterval(_runTimer.interval);
+    _runTimer.elapsed += Date.now() - _runTimer.startEpoch;
+    _runTimer.running = false;
+    var btn = document.getElementById('runStartBtn');
+    if (btn) btn.textContent = '▶ Continuar';
+    var disp = document.getElementById('runChronoDisplay');
+    if (disp) disp.classList.remove('running');
+    var sub = document.getElementById('runChronoSub');
+    if (sub) sub.textContent = 'Pausado — toque para continuar';
+  } else {
+    // Iniciar / continuar
+    _runTimer.startEpoch = Date.now();
+    _runTimer.running = true;
+    var btn = document.getElementById('runStartBtn');
+    if (btn) { btn.textContent = '⏸ Pausar'; btn.className = 'run-btn stop'; }
+    var disp = document.getElementById('runChronoDisplay');
+    if (disp) disp.classList.add('running');
+    // Mostrar inputs ao vivo
+    var ls = document.getElementById('runLiveStats');
+    var ld = document.getElementById('runLiveDistWrap');
+    if (ls) ls.style.display = 'grid';
+    if (ld) ld.style.display = 'block';
+    var sub = document.getElementById('runChronoSub');
+    if (sub) sub.textContent = 'Correndo — toque para pausar';
+
+    _runTimer.interval = setInterval(function() {
+      var totalMs = _runTimer.elapsed + (Date.now() - _runTimer.startEpoch);
+      var totalSec = Math.floor(totalMs / 1000);
+      var h = Math.floor(totalSec / 3600);
+      var m = Math.floor((totalSec % 3600) / 60);
+      var s = totalSec % 60;
+      var display = (h > 0 ? String(h).padStart(2,'0') + ':' : '') +
+                    String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+      var dispEl = document.getElementById('runChronoDisplay');
+      if (dispEl) dispEl.textContent = display;
+      updateRunLiveStats();
+    }, 500);
+  }
+}
+
+function resetRunChrono() {
+  clearInterval(_runTimer.interval);
+  _runTimer = { running: false, startEpoch: 0, elapsed: 0, interval: null };
+  var disp = document.getElementById('runChronoDisplay');
+  if (disp) { disp.textContent = '00:00:00'; disp.classList.remove('running'); }
+  var btn = document.getElementById('runStartBtn');
+  if (btn) { btn.textContent = '▶ Iniciar'; btn.className = 'run-btn start'; }
+  var sub = document.getElementById('runChronoSub');
+  if (sub) sub.textContent = 'Toque no tempo ou no botão para iniciar';
+  var ls = document.getElementById('runLiveStats');
+  var ld = document.getElementById('runLiveDistWrap');
+  if (ls) ls.style.display = 'none';
+  if (ld) ld.style.display = 'none';
+}
+
+function updateRunLiveStats() {
+  var distEl = document.getElementById('runLiveDistInput');
+  var dist = distEl ? parseFloat(distEl.value) || 0 : 0;
+  var totalSec = Math.floor((_runTimer.elapsed + (_runTimer.running ? Date.now() - _runTimer.startEpoch : 0)) / 1000);
+  var totalMin = totalSec / 60;
+
+  var distDisp = document.getElementById('runLiveDist');
+  var paceDisp = document.getElementById('runLivePace');
+  var calDisp  = document.getElementById('runLiveCal');
+
+  if (distDisp) distDisp.textContent = dist > 0 ? dist.toFixed(1) : '—';
+
+  if (dist > 0 && totalMin > 0) {
+    var pace = totalMin / dist;
+    var pm = Math.floor(pace);
+    var ps = Math.round((pace - pm) * 60);
+    if (paceDisp) paceDisp.textContent = pm + ':' + String(ps).padStart(2,'0');
+    // Estimativa kcal: ~65 kcal/km para 78kg
+    var kcal = Math.round(dist * 65);
+    if (calDisp) calDisp.textContent = kcal;
+  } else {
+    if (paceDisp) paceDisp.textContent = '—';
+    if (calDisp) calDisp.textContent = '—';
+  }
+
+  // Preencher campo de duração do formulário com o tempo atual
+  var dur = document.getElementById('runDurMin');
+  if (dur && totalMin > 0) { dur.value = Math.round(totalMin); calcRunPace(); }
+}
+
+// visibilitychange: sync cronômetro ao voltar
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible' && _runTimer.running) {
+    updateRunLiveStats();
+    var totalMs = _runTimer.elapsed + (Date.now() - _runTimer.startEpoch);
+    var totalSec = Math.floor(totalMs / 1000);
+    var h = Math.floor(totalSec / 3600);
+    var m = Math.floor((totalSec % 3600) / 60);
+    var s = totalSec % 60;
+    var display = (h > 0 ? String(h).padStart(2,'0') + ':' : '') +
+                  String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    var dispEl = document.getElementById('runChronoDisplay');
+    if (dispEl) dispEl.textContent = display;
+  }
+});
+
+// ── Cálculo de pace e zona ────────────────────────────────────────────────────
+function calcRunPace() {
+  var dist = parseFloat((document.getElementById('runDist') || {}).value) || 0;
+  var min  = parseFloat((document.getElementById('runDurMin') || {}).value) || 0;
+  var pd   = document.getElementById('runPaceDisplay');
+  var pv   = document.getElementById('runPaceVal');
+  var pz   = document.getElementById('runPaceZone');
+  if (!pd) return;
+  if (dist <= 0 || min <= 0) { pd.style.display = 'none'; return; }
+
+  var pace = min / dist;
+  var pm = Math.floor(pace);
+  var ps = Math.round((pace - pm) * 60);
+  var paceStr = pm + ':' + String(ps).padStart(2,'0') + ' min/km';
+
+  var zone = '';
+  if (pace < 4.0)      zone = '🔴 Muito intenso';
+  else if (pace < 5.0) zone = '🟠 Tempo / limiar';
+  else if (pace < 6.0) zone = '🟡 Moderado';
+  else if (pace < 7.5) zone = '🟢 Aeróbico leve';
+  else                 zone = '🔵 Caminhada rápida';
+
+  pd.style.display = 'block';
+  if (pv) pv.textContent = paceStr;
+  if (pz) pz.textContent = zone;
+}
+
+// ── Seleção de tipo e RPE ─────────────────────────────────────────────────────
+var _runTipoSel = 'Leve';
+var _runRpeSel  = null;
+
+function selectRunType(btn) {
+  document.querySelectorAll('.run-type-btn[data-tipo]').forEach(function(b) { b.classList.remove('sel'); });
+  btn.classList.add('sel');
+  _runTipoSel = btn.dataset.tipo;
+}
+
+function selectRunRpe(btn) {
+  document.querySelectorAll('.run-type-btn[data-rpe]').forEach(function(b) { b.classList.remove('sel'); });
+  btn.classList.add('sel');
+  _runRpeSel = parseInt(btn.dataset.rpe);
+}
+
+// ── Salvar corrida ────────────────────────────────────────────────────────────
+function saveRun() {
+  var date = (document.getElementById('runDate') || {}).value || todayStr();
+  var dist = parseFloat((document.getElementById('runDist') || {}).value) || 0;
+  var min  = parseFloat((document.getElementById('runDurMin') || {}).value) || 0;
+  var fc   = parseInt((document.getElementById('runFC') || {}).value) || 0;
+  var notes = ((document.getElementById('runNotes') || {}).value || '').trim();
+
+  if (!dist && !min) { showToast('Preencha ao menos distância ou duração!'); return; }
+
+  var pace = (dist > 0 && min > 0) ? min / dist : 0;
+  var kcal = dist > 0 ? Math.round(dist * 65) : Math.round(min * 8);
+
+  var arr = getCorridas();
+  arr.unshift({
+    date: date, dist: dist, min: min, pace: pace,
+    fc: fc, tipo: _runTipoSel, rpe: _runRpeSel,
+    kcal: kcal, notes: notes, ts: Date.now()
+  });
+  localStorage.setItem(CORRIDA_KEY, JSON.stringify(arr));
+
+  // Limpar form
+  ['runDist','runDurMin','runFC','runNotes'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('runPaceDisplay').style.display = 'none';
+  _runRpeSel = null;
+  document.querySelectorAll('.run-type-btn[data-rpe]').forEach(function(b) { b.classList.remove('sel'); });
+  resetRunChrono();
+
+  showToast('🏃 Corrida salva!');
+  renderCorridas();
+}
+
+// ── Renderizar ────────────────────────────────────────────────────────────────
+function renderCorridas() {
+  var arr = getCorridas();
+  renderRunWeekStats(arr);
+  renderRunChart(arr);
+  renderRunHistorico(arr);
+  // Inicializar data
+  var d = document.getElementById('runDate');
+  if (d && !d.value) d.value = todayStr();
+}
+
+function renderRunWeekStats(arr) {
+  var el = document.getElementById('runWeekStats');
+  if (!el) return;
+  var ws = getWeekStart();
+  var week = arr.filter(function(r) { return r.date >= ws; });
+  var totalKm   = week.reduce(function(s,r) { return s + (r.dist||0); }, 0);
+  var totalMin  = week.reduce(function(s,r) { return s + (r.min||0); }, 0);
+  var totalSess = week.length;
+  var avgPace   = totalKm > 0 && totalMin > 0 ? totalMin / totalKm : 0;
+  var pm = Math.floor(avgPace);
+  var ps = Math.round((avgPace - pm) * 60);
+
+  el.innerHTML = [
+    { val: totalSess,                       lbl: 'corridas',   icon: '🏃' },
+    { val: totalKm.toFixed(1) + ' km',     lbl: 'esta semana', icon: '📏' },
+    { val: avgPace > 0 ? pm+':'+String(ps).padStart(2,'0') : '—', lbl: 'ritmo médio', icon: '⏱' }
+  ].map(function(s) {
+    return '<div style="background:var(--card2);border-radius:10px;padding:10px;text-align:center">'
+      + '<div style="font-size:1.3rem">' + s.icon + '</div>'
+      + '<div style="font-size:1rem;font-weight:800;color:var(--green)">' + s.val + '</div>'
+      + '<div style="font-size:0.62rem;color:var(--muted)">' + s.lbl + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function renderRunChart(arr) {
+  var canvas = document.getElementById('runChart');
+  var empty  = document.getElementById('runChartEmpty');
+  if (!canvas) return;
+  var data = arr.slice(0, 20).reverse();
+  if (data.length < 2) {
+    canvas.style.display = 'none';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  canvas.style.display = 'block';
+  if (empty) empty.style.display = 'none';
+
+  var W = canvas.offsetWidth || 300, H = 140;
+  canvas.width = W; canvas.height = H;
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, W, H);
+
+  var PAD = { t: 16, b: 28, l: 38, r: 8 };
+  var cW = W - PAD.l - PAD.r;
+  var n  = data.length;
+
+  // Distância como barras
+  var maxDist = Math.max.apply(null, data.map(function(r) { return r.dist || 0; }));
+  if (maxDist === 0) maxDist = 1;
+  var barW = Math.max(4, (cW / n) - 3);
+
+  data.forEach(function(r, i) {
+    var x = PAD.l + i * (cW / n) + (cW / n - barW) / 2;
+    var bH = maxDist > 0 ? ((r.dist || 0) / maxDist) * (H - PAD.t - PAD.b) : 0;
+    var y = PAD.t + (H - PAD.t - PAD.b) - bH;
+    ctx.fillStyle = 'rgba(34,197,94,0.35)';
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(x, y, barW, bH, [4, 4, 0, 0]);
+    else ctx.rect(x, y, barW, bH);
+    ctx.fill();
+  });
+
+  // Pace como linha (invertida: menor = melhor = mais alto)
+  var paces = data.map(function(r) { return r.pace || 0; }).filter(function(p) { return p > 0; });
+  if (paces.length > 1) {
+    var minP = Math.min.apply(null, paces);
+    var maxP = Math.max.apply(null, paces);
+    var rng  = maxP - minP || 1;
+    var yP   = function(p) { return PAD.t + ((p - minP) / rng) * (H - PAD.t - PAD.b); }; // menor pace = topo
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#f0a500';
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'round';
+    var first = true;
+    data.forEach(function(r, i) {
+      if (!r.pace) return;
+      var x = PAD.l + i * (cW / n) + (cW / n) / 2;
+      var y = yP(r.pace);
+      if (first) { ctx.moveTo(x, y); first = false; }
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+
+  // Labels datas
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.font = '9px sans-serif';
+  ctx.textAlign = 'center';
+  data.forEach(function(r, i) {
+    if (i % Math.max(1, Math.floor(n / 5)) === 0 || i === n - 1) {
+      var x = PAD.l + i * (cW / n) + (cW / n) / 2;
+      var parts = (r.date || '').split('-');
+      ctx.fillText(parts[2] + '/' + parts[1], x, H - 6);
+    }
+  });
+
+  // Legenda
+  ctx.fillStyle = 'rgba(34,197,94,0.7)';
+  ctx.fillRect(PAD.l, 4, 10, 8);
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.textAlign = 'left';
+  ctx.fillText('km', PAD.l + 13, 11);
+  ctx.fillStyle = '#f0a500';
+  ctx.fillRect(PAD.l + 38, 4, 10, 3);
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.fillText('ritmo', PAD.l + 51, 11);
+}
+
+function renderRunHistorico(arr) {
+  var el = document.getElementById('runHistorico');
+  if (!el) return;
+  if (!arr.length) {
+    el.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px;font-size:0.82rem">Nenhuma corrida registrada ainda.<br>Inicie o cronômetro ou preencha o formulário acima.</p>';
+    return;
+  }
+  el.innerHTML = arr.slice(0, 30).map(function(r, i) {
+    var pace = r.pace > 0 ? (function() {
+      var pm = Math.floor(r.pace); var ps = Math.round((r.pace - pm) * 60);
+      return pm + ':' + String(ps).padStart(2, '0') + ' min/km';
+    })() : '—';
+    var chips = [];
+    if (r.min)  chips.push('⏱ ' + Math.round(r.min) + ' min');
+    if (pace !== '—') chips.push('🏎️ ' + pace);
+    if (r.fc)   chips.push('💓 ' + r.fc + ' bpm');
+    if (r.kcal) chips.push('🔥 ' + r.kcal + ' kcal');
+    if (r.rpe)  chips.push('💪 RPE ' + r.rpe);
+    if (r.tipo) chips.push('🏷 ' + r.tipo);
+
+    return '<div class="run-hist-card">'
+      + '<div class="run-hist-top">'
+      + '<span class="run-hist-date">' + (r.date||'').split('-').reverse().join('/') + '</span>'
+      + '<span class="run-hist-dist">' + (r.dist ? r.dist.toFixed(1) + ' km' : '— km') + '</span>'
+      + '<button onclick="deleteRun(' + i + ')" style="background:none;border:none;color:var(--muted);font-size:0.9rem;cursor:pointer;padding:2px 6px">✕</button>'
+      + '</div>'
+      + (chips.length ? '<div class="run-hist-chips">' + chips.map(function(c) { return '<span class="run-hist-chip">' + c + '</span>'; }).join('') + '</div>' : '')
+      + (r.notes ? '<div style="font-size:0.72rem;color:var(--muted);margin-top:6px;font-style:italic">' + r.notes + '</div>' : '')
+      + '</div>';
+  }).join('');
+}
+
+function deleteRun(idx) {
+  if (!confirm('Remover esta corrida?')) return;
+  var arr = getCorridas();
+  arr.splice(idx, 1);
+  localStorage.setItem(CORRIDA_KEY, JSON.stringify(arr));
+  renderCorridas();
+  showToast('Corrida removida.');
+}
 
 // ── Tirzepatida mini-widget para Bioimpedância ──────────────────────────────
 function renderTirzeBioWidget() {
@@ -9710,6 +10255,7 @@ const BACKUP_KEYS = [
   'projeto_tatame_exames',
   'projeto_tatame_suplementos',
   'projeto_tatame_medicamentos',
+  'projeto_tatame_corrida',
   'projeto_tatame_fisico_testes',
   'projeto_tatame_tecnicas_bjj',
   'projeto_tatame_macros_meta',
@@ -12476,10 +13022,11 @@ const PANE_DEFAULTS = {
 const SUBNAV_DEFS = {
   home:     [],  // sem sub-nav
   treino: [
-    { label:'🏋️ Treino A', tab:'a'    },
-    { label:'🦵 Treino B', tab:'b'    },
-    { label:'⚡ Treino C',  tab:'c'    },
-    { label:'🏋️ Livre',   tab:'livre' },
+    { label:'🏋️ Treino A', tab:'a'       },
+    { label:'🦵 Treino B', tab:'b'       },
+    { label:'⚡ Treino C',  tab:'c'       },
+    { label:'🏋️ Livre',   tab:'livre'   },
+    { label:'🏃 Corrida',  tab:'corrida' },
   ],
   bjj: [
     { label:'🥋 Sessões BJJ', tab:'h' },
