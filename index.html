@@ -13676,43 +13676,46 @@ function renderEvoUnificado() {
     } else {
       const r = acwr.ratio;
       let zone, col, icon, msg;
-      if (r < 0.8)       { zone='Treino baixo';     col='#60a5fa'; icon='😴'; msg='Você está treinando abaixo do seu nível habitual. Tudo bem se for descanso intencional, mas se não for, aumente a frequência.'; }
-      else if (r <= 1.3) { zone='Zona ideal ✅';    col='#22c55e'; icon='💪'; msg='Perfeito! Sua carga desta semana está equilibrada com as últimas 4 semanas. Risco de lesão baixo, adaptação boa.'; }
-      else if (r <= 1.5) { zone='Atenção — carga alta'; col='#eab308'; icon='⚠️'; msg='Você aumentou bastante a carga essa semana comparado ao seu histórico. Durma bem e priorize recuperação.'; }
-      else               { zone='Alto risco';        col='#ef4444'; icon='🚨'; msg='Aumento de carga muito brusco. Risco elevado de lesão. Reduza o volume e cuide do sono.'; }
+      if (r < 0.8)       { zone='Treino baixo';          col='#60a5fa'; icon='😴'; msg='Você está treinando abaixo do seu nível habitual. Tudo bem se for descanso, mas se não for, aumente a frequência.'; }
+      else if (r <= 1.3) { zone='Zona ideal ✅';          col='#22c55e'; icon='💪'; msg='Perfeito! Sua carga desta semana está equilibrada com as últimas 4 semanas. Risco de lesão baixo.'; }
+      else if (r <= 1.5) { zone='Atenção — carga alta';  col='#eab308'; icon='⚠️'; msg='Você aumentou bastante a carga essa semana. Durma bem e priorize recuperação.'; }
+      else               { zone='Alto risco';             col='#ef4444'; icon='🚨'; msg='Aumento de carga muito brusco. Risco elevado de lesão. Reduza o volume.'; }
       const pct = Math.min(100, Math.round(r / 2 * 100));
-      // Semanas individuais
-      const w = [acwr.week1||0, acwr.week2||0, acwr.week3||0, acwr.week4||0];
-      const wMax = Math.max(...w, 1);
+      // Barras das 4 semanas (string concat, sem template literals)
+      const weeks = [acwr.week1||0, acwr.week2||0, acwr.week3||0, acwr.week4||0];
+      const wMax  = Math.max.apply(null, weeks.concat([1]));
       const wLabels = ['Esta sem.','Sem -1','Sem -2','Sem -3'];
-      const wBars = w.map((v,i) => {
-        const wp = Math.min(100, Math.round(v/wMax*100));
-        const wc = i===0 ? col : '#555';
-        return \`<div style="flex:1;text-align:center">
-          <div style="background:var(--card2);border-radius:6px;height:40px;display:flex;align-items:flex-end;overflow:hidden;margin-bottom:3px">
-            <div style="width:100%;height:\${wp}%;background:\${wc};border-radius:4px 4px 0 0;transition:height .3s"></div>
-          </div>
-          <div style="font-size:0.6rem;color:var(--muted)">\${wLabels[i]}</div>
-          <div style="font-size:0.65rem;font-weight:700;color:\${i===0?col:'var(--text)'}">\${Math.round(v)}</div>
-        </div>\`;
-      }).join('');
-      cargaHtml = \`
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <div style="font-size:2.2rem">\${icon}</div>
-          <div style="flex:1">
-            <div style="font-size:1.5rem;font-weight:900;color:\${col};line-height:1">\${r.toFixed(2)}</div>
-            <div style="font-size:0.8rem;font-weight:700;color:\${col}">\${zone}</div>
-          </div>
-        </div>
-        <div style="font-size:0.72rem;color:var(--text);background:var(--card2);border-radius:8px;padding:8px 10px;margin-bottom:10px;line-height:1.4">\${msg}</div>
-        <div style="display:flex;gap:4px;align-items:flex-end;height:60px;margin-bottom:6px">\${wBars}</div>
-        <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:var(--muted);margin-bottom:4px">
-          <span>Carga aguda (7d): <strong style="color:var(--text)">\${Math.round(acwr.acute)}</strong></span>
-          <span>Crônica (28d): <strong style="color:var(--text)">\${Math.round(acwr.chronic)}</strong></span>
-        </div>
-        <div class="hc-bar-wrap"><div class="hc-bar-fill" style="width:\${pct}%;background:\${col}"></div></div>
-        <div style="font-size:0.62rem;color:var(--muted);margin-top:5px">ACWR = carga desta semana ÷ média das últimas 4 semanas. Ideal: 0.8 – 1.3</div>\`;
-    }
+      let wBars = '';
+      weeks.forEach(function(v, i) {
+        var wp  = Math.min(100, Math.round(v / wMax * 100));
+        var wc  = i === 0 ? col : '#555';
+        var wtx = i === 0 ? col : 'var(--text)';
+        wBars +=
+          '<div style="flex:1;text-align:center">' +
+            '<div style="background:var(--card2);border-radius:6px;height:40px;display:flex;align-items:flex-end;overflow:hidden;margin-bottom:3px">' +
+              '<div style="width:100%;height:' + wp + '%;background:' + wc + ';border-radius:4px 4px 0 0"></div>' +
+            '</div>' +
+            '<div style="font-size:0.6rem;color:var(--muted)">' + wLabels[i] + '</div>' +
+            '<div style="font-size:0.65rem;font-weight:700;color:' + wtx + '">' + Math.round(v) + '</div>' +
+          '</div>';
+      });
+      cargaHtml =
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">' +
+          '<div style="font-size:2.2rem">' + icon + '</div>' +
+          '<div style="flex:1">' +
+            '<div style="font-size:1.5rem;font-weight:900;color:' + col + ';line-height:1">' + r.toFixed(2) + '</div>' +
+            '<div style="font-size:0.8rem;font-weight:700;color:' + col + '">' + zone + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="font-size:0.72rem;color:var(--text);background:var(--card2);border-radius:8px;padding:8px 10px;margin-bottom:10px;line-height:1.4">' + msg + '</div>' +
+        '<div style="display:flex;gap:4px;align-items:flex-end;height:60px;margin-bottom:6px">' + wBars + '</div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:0.65rem;color:var(--muted);margin-bottom:4px">' +
+          '<span>Carga aguda (7d): <strong style="color:var(--text)">' + Math.round(acwr.acute) + '</strong></span>' +
+          '<span>Crônica (28d): <strong style="color:var(--text)">' + Math.round(acwr.chronic) + '</strong></span>' +
+        '</div>' +
+        '<div class="hc-bar-wrap"><div class="hc-bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div>' +
+        '<div style="font-size:0.62rem;color:var(--muted);margin-top:5px">ACWR = carga desta semana ÷ média das últimas 4 semanas. Ideal: 0.8 – 1.3</div>';
+    }  // fecha else
   } catch(e) { cargaHtml = '<div class="evo-empty">Sem dados suficientes.</div>'; }
 
   // ── SEÇÃO 5: Macros recentes ─────────────────────────────────
