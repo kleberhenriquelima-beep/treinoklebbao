@@ -3471,10 +3471,10 @@
 
     <div class="drawer-group-label" style="margin-top:10px">🏋️ TREINO</div>
     <button class="drawer-item" onclick="switchPane('treino');closeDrawer()">
-      <span class="di-icon">🏋️</span><span class="di-text">Treino A — Empurrar + Core</span>
+      <span class="di-icon">🏋️</span><span class="di-text">Treino A — Tração + Core</span>
     </button>
     <button class="drawer-item" onclick="switchPane('treino');switchPaneTab('b');closeDrawer()">
-      <span class="di-icon">🦵</span><span class="di-text">Treino B — Puxar + Pernas</span>
+      <span class="di-icon">🦵</span><span class="di-text">Treino B — Empurrada + Pernas</span>
     </button>
     <button class="drawer-item" onclick="switchPane('treino');switchPaneTab('c');closeDrawer()">
       <span class="di-icon">⚡</span><span class="di-text">Treino C — Potência</span>
@@ -3509,9 +3509,7 @@
     <button class="drawer-item" onclick="switchPane('nutricao');closeDrawer()">
       <span class="di-icon">🥗</span><span class="di-text">Dieta & Macros</span>
     </button>
-    <button class="drawer-item" onclick="switchPane('nutricao');switchPaneTab('saude');closeDrawer()">
-      <span class="di-icon">🩺</span><span class="di-text">Saúde & Exames</span>
-    </button>
+
 
     <div class="drawer-group-label" style="margin-top:10px">📈 EVOLUÇÃO</div>
     <button class="drawer-item" onclick="switchPane('evolucao');closeDrawer()">
@@ -3671,8 +3669,8 @@
   <div class="suggestion-banner hidden" id="suggestion-a"></div>
 
   <div class="intro-card">
-    <h3>🎯 Treino A — Empurrar + Core + Explosão</h3>
-    <p>~55 min · Peito · Ombro · Tríceps · Core. <em style="color:var(--accent)">Transferência JJ:</em> Press = criar espaço na guarda. Core rotacional = base de toda passagem e sweep. Ombros fortes = não ser controlado.</p>
+    <h3>🎯 Treino A — Tração + Core Anti-Rotação</h3>
+    <p>~55 min · Costas · Core · Grip · HIIT. <em style="color:var(--accent)">Transferência JJ:</em> Pull-up = guard pull e raspagem. Remada = underhook e clinch. KB Swing = explosão de quadril. Core anti-rotação = base de toda passagem.</p>
   </div>
 
   <div class="session-start-bar">
@@ -3746,8 +3744,8 @@
   <div class="suggestion-banner hidden" id="suggestion-b"></div>
 
   <div class="intro-card">
-    <h3>🎯 Treino B — Puxar + Pernas + Grip</h3>
-    <p>~60 min · Costas · Bíceps · Pernas · Grip. <em style="color:var(--accent)">Transferência JJ:</em> Costas e bíceps = clinch, underhook, guard pull. Pernas = base de tudo. Grip = quem segura mais tempo controla a luta.</p>
+    <h3>🎯 Treino B — Empurrada + Pernas + Resistência</h3>
+    <p>~55 min · Peito · Ombros · Pernas · Pescoço. <em style="color:var(--accent)">Transferência JJ:</em> Supino = criar espaço e frame. Goblet squat = base e explosão. KB complexo = resistência de luta. Pescoço = prevenção de lesão.</p>
   </div>
 
   <div class="session-start-bar">
@@ -4394,6 +4392,62 @@
   </div>
 
   <!-- FORMULÁRIO DE REGISTRO -->
+  <!-- CARD HIIT ESTEIRA -->
+  <div class="session-card" style="margin-bottom:14px;border:1px solid rgba(240,165,0,0.3);background:linear-gradient(135deg,var(--card) 0%,rgba(240,165,0,0.04) 100%)">
+    <div class="dash-section-title" style="margin-bottom:4px">⚡ HIIT Esteira — Protocolo Klebbao</div>
+    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:12px;line-height:1.5">
+      10 min caminhada aquecimento → 8× (20s sprint intenso + 10s caminhada) → repete 2–3x conforme energia
+    </div>
+
+    <!-- Blocos visuais do protocolo -->
+    <div style="display:flex;gap:4px;align-items:stretch;margin-bottom:12px;border-radius:8px;overflow:hidden">
+      <div style="flex:2;background:rgba(96,165,250,0.15);padding:6px 8px;text-align:center;border-radius:6px 0 0 6px">
+        <div style="font-size:1rem">🚶</div>
+        <div style="font-size:0.6rem;font-weight:700;color:#60a5fa">AQUECIMENTO</div>
+        <div style="font-size:0.68rem;color:var(--text)">10 min</div>
+        <div style="font-size:0.58rem;color:var(--muted)">caminhada leve</div>
+      </div>
+      <div style="flex:3;background:rgba(239,68,68,0.12);padding:6px 8px;text-align:center">
+        <div style="font-size:1rem">🔥</div>
+        <div style="font-size:0.6rem;font-weight:700;color:#ef4444">TIRO</div>
+        <div style="font-size:0.68rem;color:var(--text)">20s</div>
+        <div style="font-size:0.58rem;color:var(--muted)">sprint máximo</div>
+      </div>
+      <div style="flex:1.5;background:rgba(34,197,94,0.1);padding:6px 4px;text-align:center">
+        <div style="font-size:0.9rem">💨</div>
+        <div style="font-size:0.6rem;font-weight:700;color:#22c55e">DESCANSO</div>
+        <div style="font-size:0.68rem;color:var(--text)">10s</div>
+      </div>
+      <div style="flex:1.5;background:rgba(240,165,0,0.12);padding:6px 4px;text-align:center;border-radius:0 6px 6px 0">
+        <div style="font-size:0.9rem">🔄</div>
+        <div style="font-size:0.6rem;font-weight:700;color:#f0a500">8×</div>
+        <div style="font-size:0.58rem;color:var(--muted)">repete</div>
+      </div>
+    </div>
+
+    <!-- Seletor de rounds -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="font-size:0.73rem;color:var(--muted);flex:1">Quantos blocos de 8 tiros fez?</span>
+      <div style="display:flex;gap:4px">
+        <button id="hiit-r1" class="run-type-btn sel" onclick="selectHiitRounds(1)" style="padding:5px 12px">1×</button>
+        <button id="hiit-r2" class="run-type-btn" onclick="selectHiitRounds(2)" style="padding:5px 12px">2×</button>
+        <button id="hiit-r3" class="run-type-btn" onclick="selectHiitRounds(3)" style="padding:5px 12px">3×</button>
+      </div>
+    </div>
+
+    <!-- FC opcional -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="font-size:0.73rem;color:var(--muted);flex:1">💓 FC média (opcional)</span>
+      <input type="number" id="hiitFC" placeholder="165" min="0"
+        style="width:80px;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:6px 8px;color:var(--text);font-size:0.85rem;text-align:center"/>
+      <span style="font-size:0.68rem;color:var(--muted)">bpm</span>
+    </div>
+
+    <button onclick="saveHIIT()" style="width:100%;background:linear-gradient(135deg,#f0a500,#ef4444);color:#fff;border:none;border-radius:10px;padding:11px;font-size:0.88rem;font-weight:800;cursor:pointer;letter-spacing:0.02em">
+      ⚡ Registrar HIIT
+    </button>
+  </div>
+
   <div class="session-card" style="margin-bottom:14px">
     <div class="dash-section-title" style="margin-bottom:10px">📝 Registrar Sessão</div>
 
@@ -4430,6 +4484,7 @@
       <button class="run-type-btn" data-tipo="Moderada" onclick="selectRunType(this)">🟡 Moderada</button>
       <button class="run-type-btn" data-tipo="Tempo" onclick="selectRunType(this)">🟠 Tempo</button>
       <button class="run-type-btn" data-tipo="Intervalado" onclick="selectRunType(this)">🔴 Intervalado</button>
+      <button class="run-type-btn" data-tipo="HIIT Esteira" onclick="selectRunType(this)">⚡ HIIT Esteira</button>
       <button class="run-type-btn" data-tipo="Longa" onclick="selectRunType(this)">🔵 Longa</button>
       <button class="run-type-btn" data-tipo="Trail" onclick="selectRunType(this)">🌿 Trail</button>
     </div>
@@ -4853,105 +4908,137 @@ const warmupExercises = [
   { name: 'Band pull-aparts / elástico manguito', meta: '15 repetições', icon: '🎯', vid: 'SuvO4TBwSu4' },
 ];
 
-// Aquecimento Treino A — PDF JJ Performance (8 min)
+// Aquecimento Treino A — Protocolo BJJ (5 min)
 const warmupA = [
-  { name: 'Arm circle', meta: '30s frente + 30s trás', icon: '🔄', vid: 'lzR7tzI1JUI' },
-  { name: 'Dislocates com cabo leve', meta: '10 repetições', icon: '🏋️', vid: 'gXE-gVzYD9w' },
-  { name: 'Hip circle', meta: '10x cada lado', icon: '🔁', vid: 'PZFKu9583Ms' },
-  { name: 'Knee hug walking', meta: '10 passos', icon: '🦵', vid: 'zTS-7kZ2ym0' },
-  { name: 'Inward hip rotation', meta: '10x cada lado', icon: '🦷', vid: 'o1Bd3-QpRwM' },
-  { name: 'Squat to stand', meta: '8 repetições', icon: '⬇️', vid: 'Hp0Sum0gCLc' },
-  { name: 'Thoracic rotation no chão', meta: '8 reps por lado', icon: '🌀', vid: 'neqNqlOm5n8' },
+  { name: 'Subida das escadas (16° ao 21°)', meta: '5 andares — ritmo moderado', icon: '🏢', noVid: true, note: 'Sobe os 5 andares para chegar à academia. Já conta como aquecimento cardio! Quer mais gás? Desce e sobe de novo antes de entrar.' },
+  { name: 'Mobilidade de quadril (4 direções)', meta: '1 min — 10 reps cada direção', icon: '🦴', noVid: true, note: 'Flexão, extensão, abdução e rotação. Segura 2 seg em cada ponto de amplitude.' },
+  { name: 'Arm circles + rotação torácica', meta: '1 min — controle', icon: '🔄', vid: 'lzR7tzI1JUI', note: 'Círculos de braço frente e trás, depois rotação torácica deitado.' },
 ];
 
-// Aquecimento Treino B — PDF JJ Performance (8 min)
+// Aquecimento Treino B — Protocolo BJJ (5 min)
 const warmupB = [
-  { name: 'Ponte de glúteo', meta: '15 repetições', icon: '🍑', vid: '1satDE63Bwc' },
-  { name: 'Bird-dog', meta: '8 reps por lado', icon: '🦅', vid: 'DqLL45uk2Tk' },
-  { name: 'Cat-cow', meta: '10 repetições', icon: '🐱', vid: 'aHZ2O2lM8Zs' },
-  { name: 'Lateral sem banda', meta: '15 passos por lado', icon: '↔️', vid: 'N28Hpdezg7Q' },
-  { name: 'Dead hang', meta: '30 segundos', icon: '🙌', vid: 'fq9gDvNZQ2c' },
-  { name: 'Scapular pulls', meta: '8 repetições', icon: '🔝', vid: '9M8ylnbriB0' },
+  { name: 'Subida das escadas (16° ao 21°)', meta: '5 andares — 2x se quiser intensificar', icon: '🏢', noVid: true, note: 'Sobe os 5 andares para chegar à academia. Para intensificar antes do Treino B: desce e sobe de novo. 5 andares × 2 = aquecimento de pernas sem precisar da esteira.' },
+  { name: 'Agachamento Goblet c/ KB', meta: '1 min — KB 8 kg, ritmo lento', icon: '🏋️', noVid: true, note: 'Segura o KB no peito, calcanhares no chão, joelhos para fora. Desça devagar, 3 seg de descida.' },
+  { name: 'Rotação de ombros + band pull-apart', meta: '1 min — sem carga ou elástico', icon: '🔄', noVid: true, note: 'Ativa manguito rotador antes do trabalho de empurrada. Pode fazer sem elástico se não tiver.' },
 ];
 
-// ── TREINO A — JJ PERFORMANCE: Empurrar + Core + Explosão ────────────────────
-// Bloco 1: Força Primária | Bloco 2: Superset Ombros | Bloco 3: Core JJ | Finalizador: Tríceps
+// ── TREINO A — PROTOCOLO BJJ: Força de Tração + Core Anti-Rotação ─────────────
+// Foco: Puxada · Grip · Cadeia posterior · Estabilidade
 const treinoA = {
   main: [
-    // BLOCO 1 — Força Primária
-    { name: 'Supino inclinado no Smith Machine', sets: '4', reps: '8 a 10 reps', rest: '90s', restSecs: 90,
-      note: 'Pegada larga, cotovelos a 45°. Desça 3 seg, empurra explosivo. Progressão: +2,5 kg/sem. 📍 JJ: Frame na guarda fechada · Criar espaço',
-      vid: 'VXaBbUYMfIs' },
-    { name: 'Desenvolvimento com halteres', sets: '4', reps: '10 a 12 reps', rest: '75s', restSecs: 75, vid: '5I7ogOjvdnc',
-      note: 'Cotovelos ligeiramente à frente. Não trave no topo. Desça até 90° no cotovelo. 📍 JJ: Underhook · Overhook · Proteção ombro' },
+    // SUPERSET 1 — Puxada + Remada (sem descanso · 90s entre rounds)
+    { name: 'Pull-up / Barra fixa ⚡SUPERSET c/ Remada baixa polia', sets: '4', reps: '6 a 8 reps', rest: '10s', restSecs: 10,
+      note: 'SUPERSET: Execute com Remada baixa polia sem descanso. Functional Trainer — barra topo. Pegada na largura dos ombros. Desce até extensão completa. 📍 BJJ: Raspagens · Clinch · Guard pull',
+      vid: 'eGo4IYlbE5g' },
+    { name: 'Remada baixa polia (cabo) ⚡SUPERSET — 90s antes do próximo round', sets: '4', reps: '10 a 12 reps', rest: '90s', restSecs: 90,
+      note: 'Functional Trainer — polia baixa, carga 15–25 kg no stack. Cotovelos perto do corpo, retração escapular no final. Excêntrico 3 seg. 📍 BJJ: Quebrar postura no guard · Finalizações',
+      vid: 'GZbfZ033f74' },
   ],
   acc: [
-    // BLOCO 2 — Superset Ombros (3A+3B sem descanso · 60s entre rounds)
-    { name: 'Elevação lateral no cabo ⚡SUPERSET c/ Face Pull', sets: '3', reps: '12 reps', rest: '—', restSecs: 10,
-      note: 'SUPERSET: Execute com Face Pull sem descanso. Cabo de baixo atravessando o corpo. Sobe até altura do ombro. Cotovelo levemente flexionado.',
-      vid: 'jBB_CXESh9k' },
-    { name: 'Face pull no cabo ⚡SUPERSET — 60s antes do próximo round', sets: '3', reps: '15 reps', rest: '60s', restSecs: 60, vid: 'IeOqdw9WI90',
-      note: 'Polia na altura do rosto. Puxe abrindo cotovelos para fora e cima. Manguito rotador. 📍 JJ: Prevenção ombro · Kimura · Omoplata' },
-    // BLOCO 3 — Core JJ
-    { name: 'Woodchop no cabo', sets: '3', reps: '12 reps por lado', rest: '60s', restSecs: 60, vid: '8OZImYISmSg',
-      note: 'Movimento diagonal de cima para baixo. Gira o tronco, não os quadris. Controla a volta. 📍 JJ: Sweeps · Guard pass · Single-leg' },
-    { name: 'AB Wheel / Roda abdominal', sets: '3', reps: '8 a 12 reps', rest: '60s', restSecs: 60, vid: 'MinlHnG7j4k',
-      note: 'Extensão parcial (45°) no início. Contrai o core antes de rolar. Não afunde a lombar. 📍 JJ: Anti-extensão · Resistir ao passe de guarda' },
-    { name: 'Prancha lateral c/ rotação', sets: '3', reps: '10 reps por lado', rest: '45s', restSecs: 45,
-      note: 'Prancha no cotovelo. Braço gira por baixo do tronco e volta. Quadril não desce. 📍 JJ: Oblíquos · Base dos sweeps e viradas',
-      vid: 'XLKqUOMk7-w' },
-    // FINALIZADOR — Tríceps Superset (7A+7B sem descanso · 60s entre rounds)
-    { name: 'Tríceps corda no cabo ⚡SUPERSET c/ Tríceps testa', sets: '3', reps: '12 reps', rest: '—', restSecs: 10,
-      note: 'SUPERSET: Execute com Tríceps Testa sem descanso. Cotovelos fixos. Abre a corda no final da extensão. Controla a subida.',
-      vid: 'u36jNfqh8_U' },
-    { name: 'Tríceps testa c/ barra EZ ⚡SUPERSET — 60s antes do próximo round', sets: '3', reps: '10 reps', rest: '60s', restSecs: 60,
-      note: 'Desce para a testa, cotovelos não abrem. Extensão completa sem travar. 📍 JJ: Extensão de braço · Kimura · Americana',
-      vid: 'cIqScmVpqnc' },
+    // SUPERSET 2 — KB Swing + Prancha com alcance (sem descanso · 60s entre rounds)
+    { name: 'KB Swing ⚡SUPERSET c/ Prancha com alcance', sets: '4', reps: '15 reps', rest: '10s', restSecs: 10,
+      note: 'SUPERSET: Execute com Prancha com alcance sem descanso. KB 12 kg. Dobradiça de quadril — não é agachamento. Quadril explode no topo, corpo reto, glúteos contraídos. 📍 BJJ: Explosão de quadril · Levantadas · Takedowns',
+      vid: 'n1df4ASFeZU' },
+    { name: 'Prancha com alcance (Plank reach) ⚡SUPERSET — 60s antes do próximo round', sets: '4', reps: '8 reps cada lado', rest: '60s', restSecs: 60,
+      note: 'Solo / tapete. Prancha alta (braços estendidos). Alcança um braço à frente sem deixar o quadril girar. Só o braço se move. 📍 BJJ: Anti-rotação · Estabilidade no guard',
+      noVid: true },
+    // HIIT BJJ — vem depois da força pesada (SS1), antes dos acessórios
+    // 🏃 ALTERNATIVA NA ESTEIRA: 8 rounds × (20s sprint 14-18 km/h + 10s a 4 km/h) = 4 min. Repete 3x com 60s pausa.
+    { name: '🔥 HIIT — Burpee ⚡ c/ Sprawl → Mountain climber → Jump squat', sets: '3', reps: '20 segundos', rest: '10s', restSecs: 10,
+      timerSecs: 20, timerLabel: '🔥 HIIT — Burpee',
+      note: 'CIRCUITO HIIT BJJ: 4 exercícios × 20s | 10s entre cada | 60s entre rounds. 3 rounds = ~10 min.\n🏃 ALTERNATIVA NA ESTEIRA: 8 rounds × (20s sprint 14–18 km/h + 10s em 4 km/h) = 4 min. Repete 3x com 60s de pausa entre blocos = ~15 min. 📍 BJJ: Condicionamento · Gás no roll · Resistência de luta',
+      noVid: true },
+    { name: '🔥 HIIT — Sprawl (defesa double-leg)', sets: '3', reps: '20 segundos', rest: '10s', restSecs: 10,
+      timerSecs: 20, timerLabel: '🔥 HIIT — Sprawl',
+      note: 'Empurra os quadris para baixo e para trás como se defendesse um double-leg. Explode de volta em pé. Movimento mais específico do BJJ no HIIT.\n🏃 Na esteira: segue o protocolo de sprints. 📍 BJJ: Defesa de queda · Transição rápida',
+      noVid: true },
+    { name: '🔥 HIIT — Mountain climber', sets: '3', reps: '20 segundos', rest: '10s', restSecs: 10,
+      timerSecs: 20, timerLabel: '🔥 HIIT — Mountain climber',
+      note: 'Prancha alta, joelhos alternados ao peito em ritmo rápido. Core sempre ativo.\n🏃 Na esteira: segue o protocolo de sprints. 📍 BJJ: Core dinâmico · Escape de posições de baixo',
+      noVid: true },
+    { name: '🔥 HIIT — Jump squat — 60s antes do próximo round', sets: '3', reps: '20 segundos', rest: '60s', restSecs: 60,
+      timerSecs: 20, timerLabel: '🔥 HIIT — Jump squat',
+      note: 'Agacha e salta explosivo. Aterrissa com joelhos levemente flexionados.\n🏃 Na esteira: fim do round — descansa 60s e começa o próximo bloco de 8 sprints. 📍 BJJ: Explosão de perna · Levantadas · Posição de luta',
+      noVid: true },
+    // FINALIZADOR — Farmer's Carry
+    { name: "Farmer's Carry", sets: '3', reps: '20 m ida e volta', rest: '60s', restSecs: 60,
+      note: 'Halteres 10 kg cada mão. Peito aberto, ombros para trás. Passos firmes, core contraído. Não deixa o peso balançar. 📍 BJJ: Grip · Core lateral · Postura sob fadiga',
+      vid: 'w76_JnzMfXM' },
+    // ISOLADO — Flexora
+    { name: 'Cadeira flexora', sets: '3', reps: '12 a 15 reps', rest: '60s', restSecs: 60,
+      note: 'Carga leve-moderada. Ângulo de quadril neutro. Movimento controlado na subida e descida. 📍 BJJ: Isquiotibiais — base das raspagens e manutenção do guard',
+      vid: '1Tq3QdYUuHs' },
+    { name: '🔥 HIIT — Sprawl (defesa double-leg)', sets: '3', reps: '20 segundos', rest: '10s', restSecs: 10,
+      timerSecs: 20, timerLabel: '🔥 HIIT — Sprawl',
+      note: 'Do pé: empurra os quadris para baixo e para trás como se defendesse um double-leg. Explode de volta em pé. Movimento mais específico do BJJ no HIIT.\n🏃 Na esteira: segue o protocolo de sprints do card anterior. 📍 BJJ: Defesa de queda · Transição rápida',
+      noVid: true },
+    { name: '🔥 HIIT — Mountain climber', sets: '3', reps: '20 segundos', rest: '10s', restSecs: 10,
+      timerSecs: 20, timerLabel: '🔥 HIIT — Mountain climber',
+      note: 'Prancha alta, joelhos alternados ao peito em ritmo rápido. Core sempre ativo.\n🏃 Na esteira: segue o protocolo de sprints do card anterior. 📍 BJJ: Core dinâmico · Escape de posições de baixo',
+      noVid: true },
+    { name: '🔥 HIIT — Jump squat — 60s antes do próximo round', sets: '3', reps: '20 segundos', rest: '60s', restSecs: 60,
+      timerSecs: 20, timerLabel: '🔥 HIIT — Jump squat',
+      note: 'Agacha e salta explosivo. Aterrissa com joelhos levemente flexionados e volta ao agachamento.\n🏃 Na esteira: este é o fim do round — descansa 60s e começa o próximo bloco de 8 sprints. 📍 BJJ: Explosão de perna · Levantadas · Posição de luta',
+      noVid: true },
+    // GRIP TRAINING — Força de preensão e saúde dos tendões
+    { name: '🤜 Plate pinch (anilha pela borda)', sets: '3', reps: '30s cada mão', rest: '45s', restSecs: 45,
+      timerSecs: 30, timerLabel: 'HOLD — Plate pinch',
+      note: 'Segura uma anilha de 10 kg pela borda entre o polegar e os demais dedos. Mantém estático. Se fácil, usa 15 kg. Se difícil, começa com 5 kg. Troca de mão sem descanso entre os lados. 📍 BJJ: Grip de finalização · Controle de lapela · Resistir ao desprendimento',
+      noVid: true },
+    { name: '🤙 Extensão de dedos c/ elástico', sets: '3', reps: '15 reps cada mão', rest: '30s', restSecs: 30,
+      note: 'Coloca o elástico nos dedos, fecha a mão e depois abre completamente contra a resistência. Contrai lentamente. Equilibra os flexores que você acabou de trabalhar nos pulls. 📍 BJJ: Prevenção de lesão de tendão · Equilíbrio muscular do antebraço',
+      noVid: true },
+    // BÔNUS SAÚDE DO OMBRO — Face pull (mantido do programa anterior)
+    { name: 'Face pull no cabo', sets: '3', reps: '15 reps', rest: '60s', restSecs: 60, vid: 'IeOqdw9WI90',
+      note: 'Polia na altura do rosto. Puxe abrindo cotovelos para fora e para cima. Protege o manguito rotador. 📍 BJJ: Prevenção de lesão no ombro · Kimura · Omoplata' },
   ],
   post: [
-    { name: 'Peitoral na parede', meta: '30s por lado', icon: '🤲', vid: 'FwvrxUNwyIY' },
+    { name: 'Alongamento de isquiotibial (solo)', meta: '1 min cada perna', icon: '🦿', noVid: true },
+    { name: 'Rotação de coluna deitado', meta: '1 min cada lado', icon: '🌀', vid: 'neqNqlOm5n8' },
     { name: 'Latíssimo / dorsal', meta: '30s por lado', icon: '🦅', vid: 'M83xWLmNncs' },
-    { name: 'Rotação torácica', meta: '8 reps por lado', icon: '🔄', vid: 'neqNqlOm5n8' },
     { name: 'Alongamento de antebraço e punho', meta: '20 a 30s por lado', icon: '🙌', vid: 'vlZvr38ro9A' },
   ]
 };
 
-// ── TREINO B — JJ PERFORMANCE: Puxar + Pernas + Grip ─────────────────────────
-// Bloco 1: Puxada Vertical | Bloco 2: Pernas Funcionais | Bloco 3: Grip+Bíceps | Finalizador: Potência
+// ── TREINO B — PROTOCOLO BJJ: Empurrada + Pernas + Resistência ────────────────
+// Foco: Pressão · Explosão · Resistência cardiovascular
 const treinoB = {
   main: [
-    // BLOCO 1 — Puxada Vertical
-    { name: 'Pulldown barra larga', sets: '4', reps: '8 a 10 reps', rest: '90s', restSecs: 90,
-      note: 'Peito estufado, escápulas deprimidas antes de puxar. Leve inclinação para trás. Excêntrico 3 seg. 📍 JJ: Guard pull · Clinch · Controle de posição',
-      vid: 'Lgr9JqdRp3M' },
-    { name: 'Remada curvada c/ barra', sets: '4', reps: '8 a 10 reps', rest: '90s', restSecs: 90, vid: 'Lbee0MFo_Go',
-      note: 'Tronco 45°, costas retas. Puxe para o umbigo, cotovelos colados. Encolhe escápulas no topo. 📍 JJ: Underhook · Dois-no-um · Turtle guard' },
+    // SUPERSET 1 — Empurrada (sem descanso · 90s entre rounds)
+    { name: 'Supino c/ halteres banco inclinado 35° ⚡SUPERSET c/ Press unilateral polia', sets: '4', reps: '8 a 10 reps', rest: '10s', restSecs: 10,
+      note: 'SUPERSET: Execute com Press unilateral polia sem descanso. Banco a 35°, halteres 8–10 kg cada. Cotovelos a 45° do corpo. Desça até nível do peito, empurra explosivo. 📍 BJJ: Empurrada no guard · Half guard · Kimura reverso',
+      vid: '8iPEnn-ltC8' },
+    { name: 'Press unilateral na polia (cabo cruzado) ⚡SUPERSET — 90s antes do próximo round', sets: '4', reps: '10 reps cada lado', rest: '90s', restSecs: 90,
+      note: 'Functional Trainer — polia média. Carga leve-moderada. Rotação leve de tronco no fim do movimento. Simula o padrão diagonal de empurrada no BJJ. 📍 BJJ: Força diagonal · Criação de espaço',
+      noVid: true },
   ],
   acc: [
-    // BLOCO 2 — Pernas Funcionais
-    { name: 'Agachamento no Smith Machine', sets: '3', reps: '10 reps', rest: '90s', restSecs: 90,
-      note: 'Pés afastados e virados para fora. Coxa paralela ou abaixo. Joelhos seguem os pés. Progressão: +2,5 kg/sem. 📍 JJ: Takedowns · Passagem em pé · Pressão no topo',
-      vid: 'iKCJCydYYrE' },
-    { name: 'Stiff deadlift c/ halteres', sets: '3', reps: '12 reps', rest: '75s', restSecs: 75, vid: '7mOXAuYCiH8',
-      note: 'Joelhos levemente flexionados, costas retas. Sente o posterior descendo. Sobe contraindo glúteo. 📍 JJ: Prevenção lombar · Hip bridge (escape de mount)' },
-    { name: 'Extensão de joelho na máquina', sets: '3', reps: '15 reps', rest: '60s', restSecs: 60,
-      note: 'Carga moderada, foco em sentir o quadríceps. Extensão completa e descida controlada. 📍 JJ: Proteção joelho · Heel hooks · Leg locks',
-      vid: 'PzIfB9MiiX8' },
-    // BLOCO 3 — Grip + Bíceps Superset (6A+6B sem descanso · 60s entre rounds)
-    { name: 'Rosca direta c/ barra EZ ⚡SUPERSET c/ Dead hang', sets: '3', reps: '10 reps', rest: '—', restSecs: 10,
-      note: 'SUPERSET: Execute com Dead Hang sem descanso. Cotovelos fixos ao corpo. Descida 3 seg. Sem balanço do tronco. 📍 JJ: Kimura · RNC · Puxar para a guarda',
-      vid: 'x6JCKfdzPJE' },
-    { name: 'Dead hang na barra ⚡SUPERSET — 60s antes do próximo round', sets: '3', reps: '30 a 60 segundos', rest: '60s', restSecs: 60, vid: 'fq9gDvNZQ2c',
-      note: 'Pendurado com escápulas deprimidas. Respira normalmente. Progride o tempo semanalmente. 📍 JJ: Grip — arma número 1 do grappling',
-      timerSecs: 60, timerLabel: 'HOLD — Dead Hang' },
-    // FINALIZADOR: Kettlebell swing movido para Treino C
-    // Volume de quinta já é alto — encerrar com o Dead hang
+    // SUPERSET 2 — Pernas (sem descanso · 90s entre rounds)
+    { name: 'Agachamento Goblet c/ KB ⚡SUPERSET c/ Adutora (cadeira)', sets: '4', reps: '12 reps', rest: '10s', restSecs: 10,
+      note: 'SUPERSET: Execute com Adutora sem descanso. KB 12 ou 16 kg. Calcanhares no chão, joelhos para fora. Desça até coxa paralela. 📍 BJJ: Base · Takedowns · Levantadas do chão',
+      vid: 'MeIiIdhvXT4' },
+    { name: 'Adutora (cadeira) ⚡SUPERSET — 90s antes do próximo round', sets: '4', reps: '15 reps', rest: '90s', restSecs: 90,
+      note: 'Carga moderada. Movimento controlado — não joga o peso. Fecha devagar, abre devagar. 📍 BJJ: Triângulo · Omoplata · Guard fechado — controle de quadril',
+      noVid: true },
+    // FINALIZADOR METABÓLICO — KB Complexo
+    { name: 'KB Complexo — Swing → Clean → Press', sets: '3', reps: '5 reps cada mov. × 3 rodadas', rest: '45s', restSecs: 45,
+      note: 'KB 12 kg. Sem pausa entre os 3 movimentos. 45 s de descanso entre séries. Swing (hip hinge) → Clean (subir o KB para o ombro) → Press (empurrar acima da cabeça). 📍 BJJ: Condicionamento · Explosão · Resistência de força no 5° minuto',
+      vid: 'n1df4ASFeZU' },
+    // ISOLADO — Abdutor
+    { name: 'Abdutor c/ caneleira (polia baixa ou livre)', sets: '3', reps: '15 reps cada perna', rest: '45s', restSecs: 45,
+      note: 'Caneleira 3–5 kg. Movimento lateral controlado. Sem balançar o tronco. 📍 BJJ: Abdutores — controle de guard · Varreduras · Manutenção do guard aberto',
+      noVid: true },
+    // FORTALECIMENTO DE PESCOÇO — BJJ essencial (defesa de chokes)
+    { name: '💪 Isométrico de pescoço (4 direções)', sets: '3', reps: '10s cada direção', rest: '30s', restSecs: 30,
+      timerSecs: 10, timerLabel: 'HOLD — Pescoço isométrico',
+      note: 'Mão como resistência — cabeça NÃO se move: 1) Mão na testa → empurra pra trás (flexão). 2) Mão na nuca → empurra pra frente (extensão). 3) Mão na têmpora D → lateral. 4) Mão na têmpora E → lateral. 10s cada direção, sem mover a cabeça. 📍 BJJ: Defesa de chokes · Posições de cabeça · Neck cranks',
+      noVid: true },
   ],
   post: [
+    { name: 'Alongamento de quadríceps em pé', meta: '1 min cada perna', icon: '🦵', vid: 'q_6SR2GVOPc' },
+    { name: 'Pigeon pose (abertura de quadril)', meta: '1 min cada lado', icon: '🧘', noVid: true },
     { name: 'Flexor de quadril', meta: '30s por lado', icon: '🦵', vid: 'K-8dxuHU79Y' },
     { name: 'Posterior de coxa', meta: '30s por lado', icon: '🦿', vid: 'JBTjqXO2kwU' },
-    { name: 'Mobilidade de tornozelo na parede', meta: '10 reps por lado', icon: '🦶', vid: '_3dMj5JYqQw' },
-    { name: 'Posição da criança com alcance lateral', meta: '30s por lado', icon: '🧘', vid: 'wZeTxUenFdc' },
   ]
 };
 
@@ -5391,7 +5478,7 @@ const TAB_NAMES = {
   a:'🏋️ Treino A', b:'🦵 Treino B', c:'⚡ Treino C',
   d:'📋 Histórico', e:'📊 Bioimpedância', f:'🥗 Dieta',
   g:'📈 Projeção', h:'🥋 Jiu-Jitsu', i:'📸 Fotos',
-  livre:'🏋️ Treino Livre', tirze:'💉 Tirzepatida', conquistas:'🏆 Conquistas', medidas:'📏 Medidas', evolucao:'📊 Evolução', relatorio:'📅 Relatório', compartilhar:'📤 Compartilhar', missoes:'🎯 Missões', recuperacao:'🛌 Recuperação', saude:'🩺 Saúde', fisico:'💪 Físico', tecnicas:'📚 Técnicas', analise:'🔬 Análise', evo:'📊 Evolução', corrida:'🏃 Corrida'
+  livre:'🏋️ Treino Livre', tirze:'💉 Tirzepatida', conquistas:'🏆 Conquistas', medidas:'📏 Medidas', evolucao:'📊 Evolução', relatorio:'📅 Relatório', compartilhar:'📤 Compartilhar', missoes:'🎯 Missões', recuperacao:'🛌 Recuperação', fisico:'💪 Físico', tecnicas:'📚 Técnicas', analise:'🔬 Análise', evo:'📊 Evolução', corrida:'🏃 Corrida'
 };
 function switchTab(id) {
   document.querySelectorAll('[data-tab]').forEach(b => {
@@ -5410,7 +5497,6 @@ function switchTab(id) {
   if (id === 'compartilhar') { renderShareCard(); }
   if (id === 'missoes') { renderMissoes(); }
   if (id === 'recuperacao') { renderRecuperacao(); }
-  if (id === 'saude') { renderSaude(); }
   if (id === 'corrida') { renderCorridas(); initRunProtocol(); }
   if (id === 'fisico') { renderFisico(); }
   if (id === 'tecnicas') { renderTecnicas(); }
@@ -6275,7 +6361,7 @@ function renderHistoricoTab() {
   const wrap = document.getElementById('last-treino-wrap');
   if (last) {
     const icons = { A: '🏋️', B: '🦵', C: '⚡' };
-    const labels = { A: 'Empurrar + Core', B: 'Puxar + Pernas', C: 'Potência' };
+    const labels = { A: 'Tração + Core', B: 'Empurrada + Pernas', C: 'Potência' };
     const daysAgo = Math.round((new Date(todayStr()) - new Date(last.date + 'T12:00:00')) / 86400000);
     const when = daysAgo === 0 ? 'Hoje' : daysAgo === 1 ? 'Ontem' : `${daysAgo} dias atrás`;
     wrap.innerHTML = `
@@ -6396,7 +6482,7 @@ function updateSuggestionBanners() {
   const sessions = getSessions();
   const rotation = { A: 'B', B: 'C', C: 'A' };
   const icons = { A: '🏋️', B: '🦵', C: '⚡' };
-  const labels = { A: 'Empurrar + Core', B: 'Puxar + Pernas', C: 'Potência' };
+  const labels = { A: 'Tração + Core', B: 'Empurrada + Pernas', C: 'Potência' };
 
   ['a','b','c'].forEach(tab => {
     const banner = document.getElementById('suggestion-' + tab);
@@ -6674,7 +6760,7 @@ function showDayDetail(dateStr) {
   const MEALS_LABELS = {
     cafe:'☕ Café da manhã', almoco:'🍱 Almoço', lanche:'🍌 Lanche', jantar:'🌙 Jantar'
   };
-  const gymLabels = { A:'🏋️ Empurrar + Core', B:'🦵 Puxar + Pernas', C:'⚡ Potência' };
+  const gymLabels = { A:'🏋️ Tração + Core', B:'🦵 Empurrada + Pernas', C:'⚡ Potência' };
 
   let html = '';
 
@@ -6907,7 +6993,8 @@ function renderEvolutionChart() {
     grad.addColorStop(1, isGoalMet ? 'rgba(34,197,94,0.3)' : 'rgba(240,165,0,0.3)');
     ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.roundRect(x, y, barW, barH, [4, 4, 0, 0]);
+    if (ctx.roundRect) ctx.roundRect(x, y, barW, barH, [4, 4, 0, 0]);
+    else ctx.rect(x, y, barW, barH);
     ctx.fill();
 
     // Count label on bar
@@ -7616,6 +7703,50 @@ function saveRun() {
   renderCorridas();
 }
 
+// ── HIIT Esteira ──────────────────────────────────────────────────────────────
+var _hiitRounds = 1;
+
+function selectHiitRounds(n) {
+  _hiitRounds = n;
+  [1,2,3].forEach(function(r) {
+    var btn = document.getElementById('hiit-r' + r);
+    if (btn) btn.classList.toggle('sel', r === n);
+  });
+}
+
+function saveHIIT() {
+  // Protocolo: 10min aquecimento + rounds × (8×30s = 4min por bloco) ≈ 14-22min total
+  var duracaoMin = 10 + _hiitRounds * 4;
+  var fc = parseInt((document.getElementById('hiitFC') || {}).value) || 0;
+  var date = todayStr();
+
+  // Calorias estimadas: ~12 kcal/min para HIIT
+  var kcal = Math.round(duracaoMin * 12);
+
+  var arr = getCorridas();
+  arr.unshift({
+    date: date,
+    dist: 0,
+    min: duracaoMin,
+    pace: 0,
+    fc: fc,
+    tipo: 'HIIT Esteira',
+    rpe: 8,
+    kcal: kcal,
+    notes: _hiitRounds + ' bloco(s) × 8 tiros de 20s | 10s descanso. Aquecimento 10min.',
+    ts: Date.now()
+  });
+  localStorage.setItem(CORRIDA_KEY, JSON.stringify(arr));
+
+  // Reset
+  var fcEl = document.getElementById('hiitFC');
+  if (fcEl) fcEl.value = '';
+  selectHiitRounds(1);
+
+  showToast('⚡ HIIT registrado! ' + duracaoMin + ' min · ' + kcal + ' kcal');
+  renderCorridas();
+}
+
 // ── Renderizar ────────────────────────────────────────────────────────────────
 function renderCorridas() {
   var arr = getCorridas();
@@ -7755,12 +7886,13 @@ function renderRunHistorico(arr) {
     if (r.fc)   chips.push('💓 ' + r.fc + ' bpm');
     if (r.kcal) chips.push('🔥 ' + r.kcal + ' kcal');
     if (r.rpe)  chips.push('💪 RPE ' + r.rpe);
-    if (r.tipo) chips.push('🏷 ' + r.tipo);
+    if (r.tipo === 'HIIT Esteira') chips.push('⚡ HIIT Esteira');
+    else if (r.tipo) chips.push('🏷 ' + r.tipo);
 
     return '<div class="run-hist-card">'
       + '<div class="run-hist-top">'
       + '<span class="run-hist-date">' + (r.date||'').split('-').reverse().join('/') + '</span>'
-      + '<span class="run-hist-dist">' + (r.dist ? r.dist.toFixed(1) + ' km' : '— km') + '</span>'
+      + '<span class="run-hist-dist">' + (r.tipo==='HIIT Esteira' ? '⚡ HIIT' : (r.dist ? r.dist.toFixed(1) + ' km' : '— km')) + '</span>'
       + '<button onclick="deleteRun(' + i + ')" style="background:none;border:none;color:var(--muted);font-size:0.9rem;cursor:pointer;padding:2px 6px">✕</button>'
       + '</div>'
       + (chips.length ? '<div class="run-hist-chips">' + chips.map(function(c) { return '<span class="run-hist-chip">' + c + '</span>'; }).join('') + '</div>' : '')
@@ -10399,8 +10531,6 @@ const BACKUP_KEYS = [
   'projeto_tatame_tirze',
   'projeto_tatame_medidas',
   'projeto_tatame_recuperacao',
-  'projeto_tatame_exames',
-  'projeto_tatame_suplementos',
   'projeto_tatame_medicamentos',
   'projeto_tatame_corrida',
   'projeto_tatame_daily_weight',
@@ -10409,12 +10539,13 @@ const BACKUP_KEYS = [
   'projeto_tatame_macros_meta',
   'projeto_tatame_macros_log',
   'projeto_tatame_periodizacao',
+  'projeto_tatame_conquistas',
   'weeklyGoal',
   'theme',
-        'projeto_tatame_livre',
-        'projeto_tatame_ws',
-        'projeto_tatame_profile'
-      ];
+  'projeto_tatame_livre',
+  'projeto_tatame_ws',
+  'projeto_tatame_profile'
+];
 
 const SB_CONFIG_KEY = 'projeto_tatame_sbconfig';
 const SQL_SCHEMA = `-- Execute no SQL Editor do Supabase (supabase.com → projeto → SQL Editor)
@@ -11423,6 +11554,7 @@ function renderEvolucao() {
   var lastW = weights.length ? weights[weights.length - 1] : 0;
   var firstW = weights.length ? weights[0] : 0;
   var gain = lastW - firstW;
+  var gainPct = firstW > 0 ? ((gain / firstW) * 100) : 0;
   var prEl = document.getElementById('evoMaxPR');
   var lastEl = document.getElementById('evoLast');
   var gainEl = document.getElementById('evoGain');
@@ -11430,38 +11562,67 @@ function renderEvolucao() {
   if (prEl) prEl.textContent = maxPR > 0 ? maxPR + 'kg' : '—';
   if (lastEl) lastEl.textContent = lastW > 0 ? lastW + 'kg' : '—';
   if (gainEl) {
-    gainEl.textContent = gain !== 0 ? (gain > 0 ? '+' : '') + gain.toFixed(1) + 'kg' : '—';
+    var gainTxt = gain !== 0 ? (gain > 0 ? '+' : '') + gain.toFixed(1) + 'kg' : '—';
+    if (gainPct !== 0 && firstW > 0) gainTxt += ' (' + (gainPct > 0 ? '+' : '') + gainPct.toFixed(0) + '%)';
+    gainEl.textContent = gainTxt;
     gainEl.style.color = gain > 0 ? '#22c55e' : gain < 0 ? '#f87171' : '#a855f7';
   }
   if (sessEl) sessEl.textContent = log.length;
   var canvas = document.getElementById('evolucaoChart');
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
   var W = canvas.offsetWidth || 300;
-  var H = 160;
-  canvas.width = W; canvas.height = H;
+  var H = 200;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
   ctx.clearRect(0, 0, W, H);
   var data = log.map(function(e){ return getMaxWeight(e); });
   var labels = log.map(function(e){ var p=e.date.split('-'); return p[2]+'/'+p[1]; });
   var validD = data.filter(function(v){ return v>0; });
   if (!validD.length) return;
-  var minV = Math.min.apply(null,validD)*0.92;
-  var maxV = Math.max.apply(null,validD)*1.08;
-  var pad = {t:16,r:12,b:32,l:40};
+  var minV = Math.min.apply(null,validD)*0.90;
+  var maxV = Math.max.apply(null,validD)*1.10;
+  var pad = {t:24,r:16,b:36,l:44};
   var cW = W-pad.l-pad.r; var cH = H-pad.t-pad.b;
   var n = data.length;
   function xPos(i){ return pad.l+(n>1?i/(n-1):0.5)*cW; }
   function yPos(v){ return v<=0?pad.t+cH:pad.t+cH-((v-minV)/(maxV-minV))*cH; }
-  ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
+  // Grid
+  ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=1;
   for(var g=0;g<=4;g++){
     var gy=pad.t+(g/4)*cH;
     ctx.beginPath(); ctx.moveTo(pad.l,gy); ctx.lineTo(pad.l+cW,gy); ctx.stroke();
     var gv=maxV-(g/4)*(maxV-minV);
-    ctx.fillStyle='rgba(255,255,255,0.35)'; ctx.font='10px sans-serif';
+    ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='10px sans-serif';
     ctx.textAlign='right'; ctx.fillText(gv.toFixed(1),pad.l-4,gy+4);
   }
+  // Linha de tendência (regressão linear)
+  if (weights.length >= 3) {
+    var tIdx = data.map(function(v,i){return{v:v,i:i};}).filter(function(p){return p.v>0;});
+    var tN = tIdx.length, sumX=0, sumY=0, sumXY=0, sumX2=0;
+    tIdx.forEach(function(p){ sumX+=p.i; sumY+=p.v; sumXY+=p.i*p.v; sumX2+=p.i*p.i; });
+    var slope=(tN*sumXY-sumX*sumY)/(tN*sumX2-sumX*sumX)||0;
+    var intercept=(sumY-slope*sumX)/tN;
+    var tx0=xPos(tIdx[0].i), ty0=yPos(intercept+slope*tIdx[0].i);
+    var tx1=xPos(tIdx[tIdx.length-1].i), ty1=yPos(intercept+slope*tIdx[tIdx.length-1].i);
+    ctx.beginPath();
+    ctx.setLineDash([4,4]);
+    ctx.strokeStyle = slope >= 0 ? 'rgba(34,197,94,0.5)' : 'rgba(248,113,113,0.5)';
+    ctx.lineWidth = 1.5;
+    ctx.moveTo(tx0, ty0); ctx.lineTo(tx1, ty1);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Rótulo da tendência
+    var trendLbl = slope > 0.01 ? '↑ tendência positiva' : slope < -0.01 ? '↓ tendência negativa' : '→ estável';
+    var trendColor = slope > 0.01 ? '#22c55e' : slope < -0.01 ? '#f87171' : '#a855f7';
+    ctx.fillStyle = trendColor; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText(trendLbl, pad.l + cW, pad.t - 6);
+  }
+  // Área
   var grad=ctx.createLinearGradient(0,pad.t,0,pad.t+cH);
-  grad.addColorStop(0,'rgba(168,85,247,0.35)');
+  grad.addColorStop(0,'rgba(168,85,247,0.30)');
   grad.addColorStop(1,'rgba(168,85,247,0.02)');
   ctx.beginPath();
   data.forEach(function(v,i){
@@ -11470,26 +11631,59 @@ function renderEvolucao() {
   });
   ctx.lineTo(xPos(n-1),pad.t+cH); ctx.lineTo(xPos(0),pad.t+cH);
   ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+  // Linha
   ctx.beginPath(); ctx.strokeStyle='#a855f7'; ctx.lineWidth=2.5; ctx.lineJoin='round';
   data.forEach(function(v,i){
     var x=xPos(i),y=v>0?yPos(v):pad.t+cH;
     i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
   });
   ctx.stroke();
+  // Pontos + labels em todos (se poucos) ou só nos relevantes (se muitos)
+  var showAll = n <= 8;
   data.forEach(function(v,i){
     if(v<=0) return;
-    var x=xPos(i),y=yPos(v),isMax=(v===maxPR);
-    ctx.beginPath(); ctx.arc(x,y,isMax?5:3.5,0,Math.PI*2);
-    ctx.fillStyle=isMax?'#f0a500':'#a855f7'; ctx.fill();
-    if(i===0||i===n-1||isMax){
-      ctx.fillStyle='rgba(255,255,255,0.8)'; ctx.font='10px sans-serif';
-      ctx.textAlign='center'; ctx.fillText(v+'kg',x,y-9);
+    var x=xPos(i),y=yPos(v),isMax=(v===maxPR),isLast=(i===n-1),isFirst=(i===0);
+    // Ponto
+    ctx.beginPath();
+    ctx.arc(x,y,isMax?6:isLast?4.5:3,0,Math.PI*2);
+    if (isMax) {
+      ctx.fillStyle='#f0a500';
+    } else if (isLast) {
+      ctx.fillStyle='#a855f7';
+    } else {
+      ctx.fillStyle='rgba(168,85,247,0.6)';
+    }
+    ctx.fill();
+    // Borda branca no PR
+    if (isMax) {
+      ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2);
+      ctx.strokeStyle='rgba(255,255,255,0.8)'; ctx.lineWidth=1.5; ctx.stroke();
+    }
+    // Label de kg
+    var showLabel = showAll || isMax || isLast || isFirst;
+    if (showLabel) {
+      ctx.fillStyle = isMax ? '#f0a500' : 'rgba(255,255,255,0.85)';
+      ctx.font = isMax ? 'bold 11px sans-serif' : '10px sans-serif';
+      ctx.textAlign = 'center';
+      // Evitar sobreposição no topo
+      var labelY = y - 9;
+      if (labelY < pad.t + 4) labelY = y + 16;
+      ctx.fillText(v+'kg', x, labelY);
+      // Badge PR
+      if (isMax) {
+        ctx.fillStyle='rgba(240,165,0,0.2)';
+        var pw=ctx.measureText('PR').width+8;
+        ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(x-pw/2,labelY-22,pw,14,4); else ctx.rect(x-pw/2,labelY-22,pw,14); ctx.fill();
+        ctx.fillStyle='#f0a500'; ctx.font='bold 9px sans-serif';
+        ctx.fillText('PR',x,labelY-12);
+      }
     }
   });
-  ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='10px sans-serif'; ctx.textAlign='center';
-  var step=Math.max(1,Math.floor(n/6));
+  // Datas no eixo X
+  ctx.fillStyle='rgba(255,255,255,0.45)'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+  var step=Math.max(1,Math.floor(n/5));
   labels.forEach(function(lbl,i){
-    if(i%step===0||i===n-1) ctx.fillText(lbl,xPos(i),H-8);
+    if(showAll||i%step===0||i===n-1) ctx.fillText(lbl,xPos(i),H-6);
   });
 }
 
@@ -12487,230 +12681,6 @@ function renderMacros() {
 }
 
 // ============================================================
-// EXAMES DE SANGUE
-// ============================================================
-var _exametipoSel = 'LDL';
-var EXAME_REFS = { LDL:{min:0,max:100,unit:'mg/dL'}, HDL:{min:40,max:999,unit:'mg/dL'}, Glicemia:{min:70,max:100,unit:'mg/dL'}, 'Triglicérides':{min:0,max:150,unit:'mg/dL'}, Testosterona:{min:300,max:1000,unit:'ng/dL'}, Hemoglobina:{min:13.5,max:17.5,unit:'g/dL'}, 'Vitamina D':{min:30,max:100,unit:'ng/mL'}, Ferritina:{min:30,max:300,unit:'ng/mL'}, TSH:{min:0.4,max:4.0,unit:'mUI/L'}, PCR:{min:0,max:3,unit:'mg/L'} };
-
-function selectExameTipo(btn) {
-  document.querySelectorAll('.exame-type-btn').forEach(function(b){ b.classList.remove('sel'); });
-  btn.classList.add('sel');
-  _exametipoSel = btn.dataset.tipo;
-  renderExameChart();
-}
-
-function getExames() {
-  try { return JSON.parse(localStorage.getItem('projeto_tatame_exames')||'[]'); } catch(e){ return []; }
-}
-
-function saveExame() {
-  var date=(document.getElementById('exameDate')||{}).value||todayStr();
-  var val=parseFloat((document.getElementById('exameVal')||{}).value||'');
-  var obs=((document.getElementById('exameObs')||{}).value||'').trim();
-  if(isNaN(val)) { showToast('Informe o valor do exame!'); return; }
-  var arr=getExames();
-  arr.push({date:date,tipo:_exametipoSel,val:val,obs:obs,ts:Date.now()});
-  arr.sort(function(a,b){return a.date.localeCompare(b.date);});
-  localStorage.setItem('projeto_tatame_exames',JSON.stringify(arr));
-  if(document.getElementById('exameVal')) document.getElementById('exameVal').value='';
-  if(document.getElementById('exameObs')) document.getElementById('exameObs').value='';
-  showToast('🧪 Exame salvo!');
-  renderSaude();
-}
-
-function renderExameChartSel() {
-  var sel=document.getElementById('exameChartSel');
-  if(!sel) return;
-  var tipos=Object.keys(EXAME_REFS);
-  sel.innerHTML=tipos.map(function(t){return '<option value="'+t+'"'+(t===_exametipoSel?' selected':'')+'>'+t+'</option>';}).join('');
-}
-
-function renderExameChart() {
-  var sel=document.getElementById('exameChartSel');
-  var tipo=sel?sel.value:_exametipoSel;
-  var all=getExames().filter(function(e){return e.tipo===tipo;});
-  var histEl=document.getElementById('exameHistorico');
-  var canvas=document.getElementById('exameChart');
-  if(histEl){
-    if(!all.length){histEl.innerHTML='<p style="color:var(--muted);text-align:center;padding:12px">Nenhum '+tipo+' registrado.</p>';return;}
-    var ref=EXAME_REFS[tipo]||{};
-    histEl.innerHTML=all.slice().reverse().slice(0,10).map(function(e){
-      var p=e.date.split('-');
-      var inRange=(ref.min!=null?e.val>=ref.min:true)&&(ref.max!=null?e.val<=ref.max:true);
-      var col=inRange?'#22c55e':'#f87171';
-      return '<div class="exame-hist-item"><span style="font-size:0.78rem;color:var(--muted)">'+p[2]+'/'+p[1]+'/'+p[0]+'</span><span class="exame-val" style="color:'+col+'">'+e.val+' <span class="exame-ref">'+ref.unit+'</span></span></div>';
-    }).join('');
-  }
-  if(!canvas||!all.length) return;
-  var W=canvas.offsetWidth||300,H=140;
-  canvas.width=W;canvas.height=H;
-  var ctx=canvas.getContext('2d');
-  ctx.clearRect(0,0,W,H);
-  var data=all.map(function(e){return e.val;});
-  var labels=all.map(function(e){var p=e.date.split('-');return p[2]+'/'+p[1];});
-  var ref2=EXAME_REFS[tipo]||{};
-  var minV=Math.min.apply(null,data)*0.9,maxV=Math.max.apply(null,data)*1.1;
-  if(ref2.min!=null) minV=Math.min(minV,ref2.min*0.9);
-  if(ref2.max!=null) maxV=Math.max(maxV,ref2.max*1.1);
-  var pad={t:14,r:10,b:24,l:40},n=data.length;
-  var cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
-  function xP(i){return pad.l+(n>1?i/(n-1):0.5)*cW;}
-  function yP(v){return pad.t+cH-((v-minV)/(maxV-minV))*cH;}
-  // ref zone
-  if(ref2.min!=null&&ref2.max!=null){
-    ctx.fillStyle='rgba(34,197,94,0.1)';
-    var y1=Math.max(pad.t,yP(ref2.max)),y2=Math.min(pad.t+cH,yP(ref2.min));
-    ctx.fillRect(pad.l,y1,cW,y2-y1);
-  }
-  [2,4].forEach(function(d){
-    var v=minV+d*(maxV-minV)/4;
-    ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(pad.l,yP(v));ctx.lineTo(pad.l+cW,yP(v));ctx.stroke();
-    ctx.fillStyle='rgba(255,255,255,0.3)';ctx.font='9px sans-serif';ctx.textAlign='right';
-    ctx.fillText(Math.round(v),pad.l-3,yP(v)+3);
-  });
-  ctx.beginPath();ctx.strokeStyle='#a855f7';ctx.lineWidth=2.5;ctx.lineJoin='round';
-  data.forEach(function(v,i){i===0?ctx.moveTo(xP(i),yP(v)):ctx.lineTo(xP(i),yP(v));});
-  ctx.stroke();
-  data.forEach(function(v,i){
-    var inR=(ref2.min!=null?v>=ref2.min:true)&&(ref2.max!=null?v<=ref2.max:true);
-    ctx.beginPath();ctx.arc(xP(i),yP(v),4,0,Math.PI*2);ctx.fillStyle=inR?'#22c55e':'#f87171';ctx.fill();
-    if(i===0||i===n-1){ctx.fillStyle='rgba(255,255,255,0.8)';ctx.font='9px sans-serif';ctx.textAlign='center';ctx.fillText(v,xP(i),yP(v)-8);}
-  });
-  ctx.fillStyle='rgba(255,255,255,0.35)';ctx.font='9px sans-serif';ctx.textAlign='center';
-  var step=Math.max(1,Math.floor(n/5));
-  labels.forEach(function(l,i){if(i%step===0||i===n-1)ctx.fillText(l,xP(i),H-6);});
-}
-
-
-// ============================================================
-// MEDICAMENTOS
-// ============================================================
-var MED_KEY = 'projeto_tatame_medicamentos';
-
-function getMeds() {
-  try { return JSON.parse(localStorage.getItem(MED_KEY)||'[]'); } catch(e){ return []; }
-}
-
-function saveMedicamento() {
-  var nome=((document.getElementById('medNome')||{}).value||'').trim();
-  var dose=((document.getElementById('medDose')||{}).value||'').trim();
-  var freq=((document.getElementById('medFreq')||{}).value||'').trim();
-  var hor=((document.getElementById('medHorario')||{}).value||'').trim();
-  var obs=((document.getElementById('medObs')||{}).value||'').trim();
-  if(!nome) { showToast('Informe o nome do medicamento!'); return; }
-  var arr=getMeds();
-  arr.push({nome:nome,dose:dose,freq:freq,horario:hor,obs:obs,ativo:true,ts:Date.now()});
-  localStorage.setItem(MED_KEY,JSON.stringify(arr));
-  ['medNome','medDose','medHorario','medObs'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
-  var sel=document.getElementById('medFreq'); if(sel) sel.value='Semanal';
-  showToast('💊 Medicamento salvo!');
-  renderMedLista();
-}
-
-function toggleMed(idx) {
-  var arr=getMeds();
-  if(arr[idx]) arr[idx].ativo=!arr[idx].ativo;
-  localStorage.setItem(MED_KEY,JSON.stringify(arr));
-  renderMedLista();
-}
-
-function deleteMed(idx) {
-  if(!confirm('Remover medicamento?')) return;
-  var arr=getMeds();
-  arr.splice(idx,1);
-  localStorage.setItem(MED_KEY,JSON.stringify(arr));
-  renderMedLista();
-}
-
-function renderMedLista() {
-  var el=document.getElementById('medLista');
-  if(!el) return;
-  var arr=getMeds();
-  if(!arr.length){
-    el.innerHTML='<p style="color:var(--muted);text-align:center;padding:12px;font-size:0.8rem">Nenhum medicamento cadastrado.<br>Adicione Tirzepatida, Creatina etc.</p>';
-    return;
-  }
-  el.innerHTML=arr.map(function(m,i){
-    var badge = m.ativo
-      ? '<span style="color:#22c55e;font-size:0.7rem;font-weight:700">● ATIVO</span>'
-      : '<span style="color:#f87171;font-size:0.7rem;font-weight:700">● PAUSADO</span>';
-    var icon = '💊';
-    var n = (m.nome||'').toLowerCase();
-    if(n.includes('tirzepatida')||n.includes('tirze')) icon='💉';
-    else if(n.includes('creatina')) icon='🔵';
-    else if(n.includes('beta')||n.includes('alanina')) icon='⚡';
-    var detail = [m.dose, m.freq, m.horario].filter(Boolean).join(' · ');
-    return '<div class="supl-card'+(m.ativo?'':' pausado')+'" style="gap:10px">'
-      +'<span style="font-size:1.6rem;flex-shrink:0">'+icon+'</span>'
-      +'<div class="supl-info" style="flex:1">'
-        +'<div class="supl-nome" style="display:flex;align-items:center;gap:8px">'+m.nome+' '+badge+'</div>'
-        +(detail?'<div class="supl-detail">'+detail+'</div>':'')
-        +(m.obs?'<div class="supl-detail" style="color:var(--muted);font-style:italic">'+m.obs+'</div>':'')
-      +'</div>'
-      +'<div class="supl-actions">'
-        +'<button class="supl-toggle-btn" onclick="toggleMed('+i+')">'+(m.ativo?'Pausar':'Retomar')+'</button>'
-        +'<button onclick="deleteMed('+i+')" style="background:none;border:none;color:#f87171;cursor:pointer;font-size:0.85rem;padding:4px">✕</button>'
-      +'</div>'
-    +'</div>';
-  }).join('');
-}
-
-// SUPLEMENTOS
-function getSupl() {
-  try { return JSON.parse(localStorage.getItem('projeto_tatame_suplementos')||'[]'); } catch(e){ return []; }
-}
-
-function saveSuplemento() {
-  var nome=((document.getElementById('suplNome')||{}).value||'').trim();
-  var dose=((document.getElementById('suplDose')||{}).value||'').trim();
-  var hor=((document.getElementById('suplHorario')||{}).value||'').trim();
-  if(!nome) { showToast('Informe o nome do suplemento!'); return; }
-  var arr=getSupl();
-  arr.push({nome:nome,dose:dose,horario:hor,ativo:true,ts:Date.now()});
-  localStorage.setItem('projeto_tatame_suplementos',JSON.stringify(arr));
-  ['suplNome','suplDose','suplHorario'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
-  showToast('💊 Suplemento adicionado!');
-  renderSuplLista();
-}
-
-function toggleSupl(idx) {
-  var arr=getSupl();
-  if(arr[idx]) arr[idx].ativo=!arr[idx].ativo;
-  localStorage.setItem('projeto_tatame_suplementos',JSON.stringify(arr));
-  renderSuplLista();
-}
-
-function deleteSupl(idx) {
-  var arr=getSupl();
-  arr.splice(idx,1);
-  localStorage.setItem('projeto_tatame_suplementos',JSON.stringify(arr));
-  renderSuplLista();
-}
-
-function renderSuplLista() {
-  var el=document.getElementById('suplLista');
-  if(!el) return;
-  var arr=getSupl();
-  if(!arr.length){el.innerHTML='<p style="color:var(--muted);text-align:center;padding:12px">Nenhum suplemento cadastrado.</p>';return;}
-  el.innerHTML=arr.map(function(s,i){
-    return '<div class="supl-card'+(s.ativo?'':' pausado')+'">'
-      +'<span style="font-size:1.5rem">💊</span>'
-      +'<div class="supl-info"><div class="supl-nome">'+s.nome+'</div><div class="supl-detail">'+(s.dose||'')+(s.horario?' · '+s.horario:'')+(s.ativo?' · <span style="color:#22c55e">Ativo</span>':' · <span style="color:#f87171">Pausado</span>')+'</div></div>'
-      +'<div class="supl-actions"><button class="supl-toggle-btn" onclick="toggleSupl('+i+')">'+(s.ativo?'Pausar':'Retomar')+'</button>'
-      +'<button onclick="deleteSupl('+i+')" style="background:none;border:none;color:#f87171;cursor:pointer;font-size:0.85rem">✕</button></div></div>';
-  }).join('');
-}
-
-function renderSaude() {
-  renderExameChartSel();
-  renderExameChart();
-  renderSuplLista();
-  renderMedLista();
-  var d=document.getElementById('exameDate');if(d&&!d.value)d.value=todayStr();
-}
-
-// ============================================================
 // FÍSICO — 1RM + TESTES
 // ============================================================
 function calc1RMPreview() {
@@ -12964,7 +12934,7 @@ function calcACWR() {
   var week4=totalLoad(28)-totalLoad(21);
   var chronic=(acute+week2+week3+week4)/4;
   var ratio=chronic>0?Math.round(acute/chronic*100)/100:0;
-  return {acute:acute,chronic:Math.round(chronic),ratio:ratio};
+  return {acute:acute,chronic:Math.round(chronic),ratio:ratio,week1:acute,week2:week2,week3:week3,week4:week4};
 }
 
 function renderACWR() {
@@ -13189,7 +13159,6 @@ const SUBNAV_DEFS = {
   nutricao: [
     { label:'🥗 Dieta',       tab:'f'     },
     { label:'💉 Tirzepatida', tab:'tirze' },
-    { label:'🩺 Saúde',       tab:'saude' },
   ],
   // Evolução = SEM sub-nav. Página única que rola.
   evolucao: [],
@@ -13706,21 +13675,43 @@ function renderEvoUnificado() {
       cargaHtml = '<div class="evo-empty">Registre ao menos 4 semanas para calcular ACWR.</div>';
     } else {
       const r = acwr.ratio;
-      let zone, col, desc;
-      if (r < 0.8)       { zone = 'Baixo — treino pouco';   col = '#60a5fa'; }
-      else if (r <= 1.3) { zone = 'Ótimo — zona segura';    col = '#22c55e'; }
-      else if (r <= 1.5) { zone = 'Atenção — carga alta';   col = '#eab308'; }
-      else               { zone = 'Alto risco — recupere';  col = '#ef4444'; }
+      let zone, col, icon, msg;
+      if (r < 0.8)       { zone='Treino baixo';     col='#60a5fa'; icon='😴'; msg='Você está treinando abaixo do seu nível habitual. Tudo bem se for descanso intencional, mas se não for, aumente a frequência.'; }
+      else if (r <= 1.3) { zone='Zona ideal ✅';    col='#22c55e'; icon='💪'; msg='Perfeito! Sua carga desta semana está equilibrada com as últimas 4 semanas. Risco de lesão baixo, adaptação boa.'; }
+      else if (r <= 1.5) { zone='Atenção — carga alta'; col='#eab308'; icon='⚠️'; msg='Você aumentou bastante a carga essa semana comparado ao seu histórico. Durma bem e priorize recuperação.'; }
+      else               { zone='Alto risco';        col='#ef4444'; icon='🚨'; msg='Aumento de carga muito brusco. Risco elevado de lesão. Reduza o volume e cuide do sono.'; }
       const pct = Math.min(100, Math.round(r / 2 * 100));
-      cargaHtml = `
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-          <div style="font-size:1.8rem; font-weight:900; color:${col}">${r.toFixed(2)}</div>
-          <div>
-            <div style="font-size:0.8rem; font-weight:700; color:${col}">${zone}</div>
-            <div style="font-size:0.7rem; color:var(--muted)">Carga aguda: ${acwr.acute} · Crônica: ${acwr.chronic}</div>
+      // Semanas individuais
+      const w = [acwr.week1||0, acwr.week2||0, acwr.week3||0, acwr.week4||0];
+      const wMax = Math.max(...w, 1);
+      const wLabels = ['Esta sem.','Sem -1','Sem -2','Sem -3'];
+      const wBars = w.map((v,i) => {
+        const wp = Math.min(100, Math.round(v/wMax*100));
+        const wc = i===0 ? col : '#555';
+        return \`<div style="flex:1;text-align:center">
+          <div style="background:var(--card2);border-radius:6px;height:40px;display:flex;align-items:flex-end;overflow:hidden;margin-bottom:3px">
+            <div style="width:100%;height:\${wp}%;background:\${wc};border-radius:4px 4px 0 0;transition:height .3s"></div>
+          </div>
+          <div style="font-size:0.6rem;color:var(--muted)">\${wLabels[i]}</div>
+          <div style="font-size:0.65rem;font-weight:700;color:\${i===0?col:'var(--text)'}">\${Math.round(v)}</div>
+        </div>\`;
+      }).join('');
+      cargaHtml = \`
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="font-size:2.2rem">\${icon}</div>
+          <div style="flex:1">
+            <div style="font-size:1.5rem;font-weight:900;color:\${col};line-height:1">\${r.toFixed(2)}</div>
+            <div style="font-size:0.8rem;font-weight:700;color:\${col}">\${zone}</div>
           </div>
         </div>
-        <div class="hc-bar-wrap"><div class="hc-bar-fill" style="width:${pct}%;background:${col}"></div></div>`;
+        <div style="font-size:0.72rem;color:var(--text);background:var(--card2);border-radius:8px;padding:8px 10px;margin-bottom:10px;line-height:1.4">\${msg}</div>
+        <div style="display:flex;gap:4px;align-items:flex-end;height:60px;margin-bottom:6px">\${wBars}</div>
+        <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:var(--muted);margin-bottom:4px">
+          <span>Carga aguda (7d): <strong style="color:var(--text)">\${Math.round(acwr.acute)}</strong></span>
+          <span>Crônica (28d): <strong style="color:var(--text)">\${Math.round(acwr.chronic)}</strong></span>
+        </div>
+        <div class="hc-bar-wrap"><div class="hc-bar-fill" style="width:\${pct}%;background:\${col}"></div></div>
+        <div style="font-size:0.62rem;color:var(--muted);margin-top:5px">ACWR = carga desta semana ÷ média das últimas 4 semanas. Ideal: 0.8 – 1.3</div>\`;
     }
   } catch(e) { cargaHtml = '<div class="evo-empty">Sem dados suficientes.</div>'; }
 
@@ -14088,113 +14079,7 @@ var _origResetBodyDores = null;
     <div class="evolucao-chart-wrap" style="margin-bottom:10px">
       <canvas id="recChart" height="120" style="width:100%;display:block"></canvas>
     </div>
-    <div id="recHistorico"></div>
-  </div>
-</div>
-
-<!-- ===== SAÚDE ===== -->
-<div class="tab-content" id="tab-saude">
-  <div class="intro-card"><h3>🩺 Saúde</h3><p>Registre exames de sangue e suplementos. Acompanhe marcadores como LDL, glicemia e testosterona ao longo do tempo.</p></div>
-
-  <!-- EXAMES -->
-  <div class="session-card" style="margin-bottom:14px">
-    <div class="dash-section-title" style="margin-bottom:10px">🧪 Registrar Exame</div>
-    <div class="rec-form-grid">
-      <div class="rec-field">
-        <span class="rec-field-label">📅 Data</span>
-        <input type="date" id="exameDate" class="metrics-input" style="width:100%"/>
-      </div>
-      <div class="rec-field">
-        <span class="rec-field-label">🔬 Valor</span>
-        <input type="number" id="exameVal" class="metrics-input" placeholder="ex: 140" step="0.1" style="width:100%"/>
-      </div>
-    </div>
-    <div style="margin-bottom:10px">
-      <span class="rec-field-label">Tipo de exame</span>
-      <div class="exame-type-sel" id="exameTypeSel">
-        <button class="exame-type-btn sel" data-tipo="LDL" onclick="selectExameTipo(this)">LDL (mg/dL)</button>
-        <button class="exame-type-btn" data-tipo="HDL" onclick="selectExameTipo(this)">HDL (mg/dL)</button>
-        <button class="exame-type-btn" data-tipo="Glicemia" onclick="selectExameTipo(this)">Glicemia (mg/dL)</button>
-        <button class="exame-type-btn" data-tipo="Triglicérides" onclick="selectExameTipo(this)">Triglicérides</button>
-        <button class="exame-type-btn" data-tipo="Testosterona" onclick="selectExameTipo(this)">Testosterona (ng/dL)</button>
-        <button class="exame-type-btn" data-tipo="Hemoglobina" onclick="selectExameTipo(this)">Hemoglobina (g/dL)</button>
-        <button class="exame-type-btn" data-tipo="Vitamina D" onclick="selectExameTipo(this)">Vitamina D (ng/mL)</button>
-        <button class="exame-type-btn" data-tipo="Ferritina" onclick="selectExameTipo(this)">Ferritina (ng/mL)</button>
-        <button class="exame-type-btn" data-tipo="TSH" onclick="selectExameTipo(this)">TSH (mUI/L)</button>
-        <button class="exame-type-btn" data-tipo="PCR" onclick="selectExameTipo(this)">PCR (mg/L)</button>
-      </div>
-    </div>
-    <input id="exameObs" class="metrics-input" placeholder="Observação (opcional)" style="width:100%;margin-bottom:10px"/>
-    <button class="btn-save" style="width:100%" onclick="saveExame()">💾 Salvar Exame</button>
-  </div>
-
-  <div class="session-card" style="margin-bottom:14px">
-    <div class="dash-section-title" style="margin-bottom:8px">📊 Evolução dos exames</div>
-    <select id="exameChartSel" class="evolucao-select" onchange="renderExameChart()" style="margin-bottom:10px"></select>
-    <div class="evolucao-chart-wrap"><canvas id="exameChart" height="140" style="width:100%;display:block"></canvas></div>
-    <div id="exameHistorico" style="margin-top:10px"></div>
-  </div>
-
-  <!-- MEDICAMENTOS -->
-  <div class="session-card" style="margin-bottom:14px">
-    <div class="dash-section-title" style="margin-bottom:10px">💊 Medicamentos</div>
-    <p style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">Remédios com prescrição médica, uso contínuo ou controlado.</p>
-    <div class="rec-form-grid" style="margin-bottom:10px">
-      <div class="rec-field">
-        <span class="rec-field-label">Nome</span>
-        <input type="text" id="medNome" class="metrics-input" placeholder="ex: Tirzepatida" style="width:100%"/>
-      </div>
-      <div class="rec-field">
-        <span class="rec-field-label">Dose</span>
-        <input type="text" id="medDose" class="metrics-input" placeholder="ex: 2.5 mg" style="width:100%"/>
-      </div>
-      <div class="rec-field">
-        <span class="rec-field-label">Frequência</span>
-        <select id="medFreq" class="evolucao-select" style="margin-top:0">
-          <option value="Diário">Diário</option>
-          <option value="Semanal" selected>Semanal</option>
-          <option value="Quinzenal">Quinzenal</option>
-          <option value="Mensal">Mensal</option>
-          <option value="Conforme necessário">Conforme necessário</option>
-        </select>
-      </div>
-      <div class="rec-field">
-        <span class="rec-field-label">Horário / Via</span>
-        <input type="text" id="medHorario" class="metrics-input" placeholder="ex: Noite / Subcutâneo" style="width:100%"/>
-      </div>
-    </div>
-    <input id="medObs" class="metrics-input" placeholder="Observações (médico, indicação...)" style="width:100%;margin-bottom:10px"/>
-    <button class="btn-save" style="width:100%" onclick="saveMedicamento()">＋ Adicionar Medicamento</button>
-    <div id="medLista" style="margin-top:12px"></div>
-  </div>
-
-  <!-- SUPLEMENTOS -->
-  <div class="session-card">
-    <div class="dash-section-title" style="margin-bottom:10px">🥤 Suplementos</div>
-    <p style="font-size:0.72rem;color:var(--muted);margin-bottom:10px">Suplementos nutricionais (sem prescrição).</p>
-    <div class="rec-form-grid" style="margin-bottom:10px">
-      <div class="rec-field">
-        <span class="rec-field-label">Nome</span>
-        <input type="text" id="suplNome" class="metrics-input" placeholder="ex: Creatina" style="width:100%"/>
-      </div>
-      <div class="rec-field">
-        <span class="rec-field-label">Dose</span>
-        <input type="text" id="suplDose" class="metrics-input" placeholder="ex: 5g" style="width:100%"/>
-      </div>
-      <div class="rec-field">
-        <span class="rec-field-label">Horário</span>
-        <input type="text" id="suplHorario" class="metrics-input" placeholder="ex: Pós-treino" style="width:100%"/>
-      </div>
-      <div class="rec-field" style="display:flex;align-items:flex-end">
-        <button class="btn-save" style="width:100%;padding:9px" onclick="saveSuplemento()">＋ Add</button>
-      </div>
-    </div>
-    <div id="suplLista"></div>
-  </div>
-</div>
-
-<!-- ===== FÍSICO ===== -->
-<div class="tab-content" id="tab-fisico">
+    <div class="tab-content" id="tab-fisico">
   <div class="intro-card"><h3>💪 Físico</h3><p>Calcule seu 1RM por exercício e registre testes físicos mensais para medir sua evolução atlética real.</p></div>
 
   <!-- 1RM -->
