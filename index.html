@@ -12918,23 +12918,47 @@ function setTecFiltro(cat) {
 var _faseSel = '';
 
 function calcACWR() {
-  var sessions=getSessions();
-  var jjS=typeof getJJSessions==='function'?getJJSessions():[];
-  var all=sessions.map(function(s){return {date:s.date,load:(s.rpe||5)*(parseInt(s.duration)||45)};})
-    .concat(jjS.map(function(s){return {date:s.date,load:5*(parseInt(s.duration)||60)};}));
-  var today=brDate();
-  function totalLoad(days){
-    var cutoff=new Date(today.getTime()-days*86400000);
-    var cutStr=cutoff.getFullYear()+'-'+String(cutoff.getMonth()+1).padStart(2,'0')+'-'+String(cutoff.getDate()).padStart(2,'0');
-    return all.filter(function(s){return s.date>=cutStr;}).reduce(function(a,s){return a+s.load;},0);
+  var sessions  = getSessions();
+  var jjS       = typeof getJJSessions === 'function' ? getJJSessions() : [];
+  var corridas  = typeof getCorridas   === 'function' ? getCorridas()   : [];
+
+  var all = sessions.map(function(s) {
+    return { date: s.date, load: (s.rpe||5) * (parseInt(s.duration)||45), tipo: 'gym' };
+  })
+  .concat(jjS.map(function(s) {
+    return { date: s.date, load: 7 * (parseInt(s.duration)||60), tipo: 'bjj' };
+  }))
+  .concat(corridas.map(function(s) {
+    return { date: s.date, load: (s.rpe||6) * (parseInt(s.min)||30), tipo: 'run' };
+  }));
+
+  var today = brDate();
+  function cutStr(days) {
+    var d = new Date(today.getTime() - days * 86400000);
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
   }
-  var acute=totalLoad(7);
-  var week2=totalLoad(14)-acute;
-  var week3=totalLoad(21)-totalLoad(14);
-  var week4=totalLoad(28)-totalLoad(21);
-  var chronic=(acute+week2+week3+week4)/4;
-  var ratio=chronic>0?Math.round(acute/chronic*100)/100:0;
-  return {acute:acute,chronic:Math.round(chronic),ratio:ratio,week1:acute,week2:week2,week3:week3,week4:week4};
+  function totalLoad(days) {
+    var c = cutStr(days);
+    return all.filter(function(s){ return s.date >= c; }).reduce(function(a,s){ return a+s.load; }, 0);
+  }
+
+  var cut7 = cutStr(7);
+  var loadGym  = all.filter(function(s){ return s.tipo==='gym' && s.date>=cut7; }).reduce(function(a,s){ return a+s.load; },0);
+  var loadBJJ  = all.filter(function(s){ return s.tipo==='bjj' && s.date>=cut7; }).reduce(function(a,s){ return a+s.load; },0);
+  var loadRun  = all.filter(function(s){ return s.tipo==='run' && s.date>=cut7; }).reduce(function(a,s){ return a+s.load; },0);
+
+  var acute   = totalLoad(7);
+  var week2   = totalLoad(14) - acute;
+  var week3   = totalLoad(21) - totalLoad(14);
+  var week4   = totalLoad(28) - totalLoad(21);
+  var chronic = (acute + week2 + week3 + week4) / 4;
+  var ratio   = chronic > 0 ? Math.round(acute/chronic*100)/100 : 0;
+
+  return {
+    acute: acute, chronic: Math.round(chronic), ratio: ratio,
+    week1: acute, week2: week2, week3: week3, week4: week4,
+    loadGym: loadGym, loadBJJ: loadBJJ, loadRun: loadRun
+  };
 }
 
 function renderACWR() {
@@ -13561,6 +13585,7 @@ function renderEvoUnificado() {
   const sessions  = getSessions();
   const jjS       = typeof getJJSessions === 'function' ? getJJSessions() : [];
   const bios      = getBioEntries();
+  const corridas  = typeof getCorridas === 'function' ? getCorridas() : [];
   const today     = todayStr();
 
   // ── helpers ──────────────────────────────────────────────────
@@ -13672,49 +13697,124 @@ function renderEvoUnificado() {
   try {
     const acwr = calcACWR();
     if (!acwr.chronic) {
-      cargaHtml = '<div class="evo-empty">Registre ao menos 4 semanas para calcular ACWR.</div>';
+      cargaHtml = '<div class="evo-empty" style="padding:16px;text-align:center">Registre ao menos 4 semanas de treinos<br>para calcular o ACWR.</div>';
     } else {
       const r = acwr.ratio;
-      let zone, col, icon, msg;
-      if (r < 0.8)       { zone='Treino baixo';          col='#60a5fa'; icon='😴'; msg='Você está treinando abaixo do seu nível habitual. Tudo bem se for descanso, mas se não for, aumente a frequência.'; }
-      else if (r <= 1.3) { zone='Zona ideal ✅';          col='#22c55e'; icon='💪'; msg='Perfeito! Sua carga desta semana está equilibrada com as últimas 4 semanas. Risco de lesão baixo.'; }
-      else if (r <= 1.5) { zone='Atenção — carga alta';  col='#eab308'; icon='⚠️'; msg='Você aumentou bastante a carga essa semana. Durma bem e priorize recuperação.'; }
-      else               { zone='Alto risco';             col='#ef4444'; icon='🚨'; msg='Aumento de carga muito brusco. Risco elevado de lesão. Reduza o volume.'; }
-      const pct = Math.min(100, Math.round(r / 2 * 100));
-      // Barras das 4 semanas (string concat, sem template literals)
-      const weeks = [acwr.week1||0, acwr.week2||0, acwr.week3||0, acwr.week4||0];
-      const wMax  = Math.max.apply(null, weeks.concat([1]));
+      let zone, col, icon, msg, rec;
+      if (r < 0.8) {
+        zone='Treino Baixo'; col='#60a5fa'; icon='😴';
+        msg='Sua carga esta semana está bem abaixo do seu histórico. Isso pode ser bom (semana de recuperação) ou um sinal de queda na consistência.';
+        rec='Aumente gradualmente o volume ou a intensidade nos próximos treinos.';
+      } else if (r <= 1.3) {
+        zone='Zona Ideal ✅'; col='#22c55e'; icon='💪';
+        msg='Perfeito! Sua carga desta semana está equilibrada com as últimas 4 semanas. Risco de lesão baixo.';
+        rec='Mantenha o ritmo. Pode adicionar ~10% de volume ou intensidade na próxima semana se quiser progredir.';
+      } else if (r <= 1.5) {
+        zone='Carga Alta ⚠️'; col='#eab308'; icon='⚠️';
+        msg='Você aumentou bastante a carga essa semana em relação ao seu histórico. Isso não é proibido, mas exige atenção.';
+        rec='Priorize sono, hidratação e alimentação. Evite outro pico de carga na próxima semana.';
+      } else {
+        zone='Alto Risco 🚨'; col='#ef4444'; icon='🚨';
+        msg='Aumento de carga muito brusco em relação ao seu histórico. Risco elevado de lesão, overtraining ou queda de rendimento.';
+        rec='Reduza o volume esta semana. Descanse. Reavalie seu planejamento de treino.';
+      }
+
+      // Zone ruler positions (escala 0 → 2.0)
+      const markerPct = Math.min(98, Math.max(2, Math.round(r / 2.0 * 100)));
+
+      // Breakdown bar total
+      const brkTotal = Math.max(1, acwr.loadGym + acwr.loadBJJ + acwr.loadRun);
+      const brkGym   = Math.round(acwr.loadGym / brkTotal * 100);
+      const brkBJJ   = Math.round(acwr.loadBJJ / brkTotal * 100);
+      const brkRun   = Math.round(acwr.loadRun / brkTotal * 100);
+
+      // Week bars
+      const weeks   = [acwr.week1||0, acwr.week2||0, acwr.week3||0, acwr.week4||0];
+      const wMax    = Math.max.apply(null, weeks.concat([1]));
       const wLabels = ['Esta sem.','Sem -1','Sem -2','Sem -3'];
       let wBars = '';
       weeks.forEach(function(v, i) {
         var wp  = Math.min(100, Math.round(v / wMax * 100));
-        var wc  = i === 0 ? col : '#555';
+        var wc  = i === 0 ? col : '#444';
         var wtx = i === 0 ? col : 'var(--text)';
         wBars +=
           '<div style="flex:1;text-align:center">' +
-            '<div style="background:var(--card2);border-radius:6px;height:40px;display:flex;align-items:flex-end;overflow:hidden;margin-bottom:3px">' +
-              '<div style="width:100%;height:' + wp + '%;background:' + wc + ';border-radius:4px 4px 0 0"></div>' +
+            '<div style="background:var(--card2);border-radius:6px 6px 0 0;height:44px;display:flex;align-items:flex-end;overflow:hidden;margin-bottom:3px">' +
+              '<div style="width:100%;height:' + wp + '%;background:' + wc + ';border-radius:4px 4px 0 0;transition:height 0.4s"></div>' +
             '</div>' +
             '<div style="font-size:0.6rem;color:var(--muted)">' + wLabels[i] + '</div>' +
             '<div style="font-size:0.65rem;font-weight:700;color:' + wtx + '">' + Math.round(v) + '</div>' +
           '</div>';
       });
+
+      // Breakdown bar HTML (only show if there's data)
+      let brkHtml = '';
+      if (brkTotal > 1) {
+        let brkParts = '';
+        if (acwr.loadGym > 0)  brkParts += '<div style="height:100%;width:' + brkGym + '%;background:#818cf8;border-radius:3px 0 0 3px" title="Academia"></div>';
+        if (acwr.loadBJJ > 0)  brkParts += '<div style="height:100%;width:' + brkBJJ + '%;background:#f472b6" title="BJJ"></div>';
+        if (acwr.loadRun > 0)  brkParts += '<div style="height:100%;width:' + brkRun + '%;background:#34d399;border-radius:0 3px 3px 0" title="Corrida/HIIT"></div>';
+        let brkLegend = '';
+        if (acwr.loadGym > 0) brkLegend += '<span style="color:#818cf8">■ Academia ' + Math.round(acwr.loadGym) + '</span>';
+        if (acwr.loadBJJ > 0) brkLegend += ' <span style="color:#f472b6">■ BJJ ' + Math.round(acwr.loadBJJ) + '</span>';
+        if (acwr.loadRun > 0) brkLegend += ' <span style="color:#34d399">■ Corrida ' + Math.round(acwr.loadRun) + '</span>';
+        brkHtml =
+          '<div style="margin-bottom:12px">' +
+            '<div style="font-size:0.65rem;color:var(--muted);margin-bottom:4px">Composição da carga (esta semana)</div>' +
+            '<div style="display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--card2)">' + brkParts + '</div>' +
+            '<div style="display:flex;gap:8px;font-size:0.6rem;margin-top:4px;flex-wrap:wrap">' + brkLegend + '</div>' +
+          '</div>';
+      }
+
       cargaHtml =
-        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">' +
-          '<div style="font-size:2.2rem">' + icon + '</div>' +
+        // ── Header: icon + número + zona ──
+        '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">' +
+          '<div style="font-size:2.5rem;line-height:1">' + icon + '</div>' +
           '<div style="flex:1">' +
-            '<div style="font-size:1.5rem;font-weight:900;color:' + col + ';line-height:1">' + r.toFixed(2) + '</div>' +
-            '<div style="font-size:0.8rem;font-weight:700;color:' + col + '">' + zone + '</div>' +
+            '<div style="font-size:2rem;font-weight:900;color:' + col + ';line-height:1">' + r.toFixed(2) + '</div>' +
+            '<div style="font-size:0.85rem;font-weight:700;color:' + col + '">' + zone + '</div>' +
+          '</div>' +
+          '<div style="text-align:right;font-size:0.65rem;color:var(--muted);line-height:1.5">' +
+            '<div>Aguda: <strong style="color:var(--text)">' + Math.round(acwr.acute) + '</strong></div>' +
+            '<div>Crônica: <strong style="color:var(--text)">' + Math.round(acwr.chronic) + '</strong></div>' +
           '</div>' +
         '</div>' +
-        '<div style="font-size:0.72rem;color:var(--text);background:var(--card2);border-radius:8px;padding:8px 10px;margin-bottom:10px;line-height:1.4">' + msg + '</div>' +
-        '<div style="display:flex;gap:4px;align-items:flex-end;height:60px;margin-bottom:6px">' + wBars + '</div>' +
-        '<div style="display:flex;justify-content:space-between;font-size:0.65rem;color:var(--muted);margin-bottom:4px">' +
-          '<span>Carga aguda (7d): <strong style="color:var(--text)">' + Math.round(acwr.acute) + '</strong></span>' +
-          '<span>Crônica (28d): <strong style="color:var(--text)">' + Math.round(acwr.chronic) + '</strong></span>' +
+
+        // ── Régua de zonas ──
+        '<div style="margin-bottom:12px">' +
+          '<div style="position:relative;height:18px;border-radius:9px;overflow:visible;display:flex;margin-bottom:6px">' +
+            '<div style="flex:40%;background:#60a5fa;border-radius:9px 0 0 9px;opacity:0.7"></div>' +
+            '<div style="flex:25%;background:#22c55e;opacity:0.85"></div>' +
+            '<div style="flex:10%;background:#eab308;opacity:0.85"></div>' +
+            '<div style="flex:25%;background:#ef4444;border-radius:0 9px 9px 0;opacity:0.7"></div>' +
+            '<div style="position:absolute;top:-3px;left:' + markerPct + '%;transform:translateX(-50%);width:6px;height:24px;background:white;border-radius:3px;box-shadow:0 0 4px rgba(0,0,0,0.5)"></div>' +
+          '</div>' +
+          '<div style="display:flex;font-size:0.55rem;color:var(--muted);justify-content:space-between;padding:0 2px">' +
+            '<span>0.0<br>😴</span><span style="text-align:center">0.8<br>|</span>' +
+            '<span style="text-align:center">1.3<br>|</span><span style="text-align:center">1.5<br>|</span><span style="text-align:right">2.0+<br>🚨</span>' +
+          '</div>' +
         '</div>' +
-        '<div class="hc-bar-wrap"><div class="hc-bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div>' +
-        '<div style="font-size:0.62rem;color:var(--muted);margin-top:5px">ACWR = carga desta semana ÷ média das últimas 4 semanas. Ideal: 0.8 – 1.3</div>';
+
+        // ── Mensagem explicativa ──
+        '<div style="font-size:0.72rem;color:var(--text);background:var(--card2);border-radius:8px;padding:8px 10px;margin-bottom:8px;line-height:1.5">' + msg + '</div>' +
+
+        // ── Recomendação ──
+        '<div style="font-size:0.72rem;background:rgba(255,255,255,0.04);border-left:3px solid ' + col + ';padding:7px 10px;border-radius:0 6px 6px 0;margin-bottom:12px;color:var(--text);line-height:1.4">' +
+          '<strong style="color:' + col + '">Recomendação:</strong> ' + rec +
+        '</div>' +
+
+        // ── Breakdown por esporte ──
+        brkHtml +
+
+        // ── Barras das 4 semanas ──
+        '<div style="font-size:0.65rem;color:var(--muted);margin-bottom:5px">Carga por semana (UA = RPE × min)</div>' +
+        '<div style="display:flex;gap:4px;align-items:flex-end;height:60px;margin-bottom:10px">' + wBars + '</div>' +
+
+        // ── Nota de rodapé ──
+        '<div style="font-size:0.6rem;color:var(--muted);line-height:1.5">' +
+          'ACWR = carga desta semana ÷ média das 4 últimas semanas&nbsp;&nbsp;|&nbsp;&nbsp;Ideal: 0.8 – 1.3<br>' +
+          'UA = Unidade Arbitrária de carga (RPE × duração em minutos). Inclui academia, BJJ e corrida.' +
+        '</div>';
     }  // fecha else
   } catch(e) { cargaHtml = '<div class="evo-empty">Sem dados suficientes.</div>'; }
 
@@ -13753,12 +13853,212 @@ function renderEvoUnificado() {
     }
   } catch(e) { macrosHtml = '<div class="evo-empty">Erro ao carregar macros.</div>'; }
 
+  // ── SEÇÃO 6: Resumo Semanal ─────────────────────────────────
+  let semanaHtml = '';
+  try {
+    function cutD(days) {
+      const d = new Date(brDate().getTime() - days * 86400000);
+      return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    }
+    const cut7  = cutD(7);
+    const cut14 = cutD(14);
+
+    const tw_gym = sessions.filter(s => s.date >= cut7).length;
+    const lw_gym = sessions.filter(s => s.date >= cut14 && s.date < cut7).length;
+    const tw_bjj = jjS.filter(s => s.date >= cut7);
+    const lw_bjj = jjS.filter(s => s.date >= cut14 && s.date < cut7);
+    const tw_bjj_min = tw_bjj.reduce((a,s) => a+(parseInt(s.duration)||0), 0);
+    const lw_bjj_min = lw_bjj.reduce((a,s) => a+(parseInt(s.duration)||0), 0);
+    const tw_run = corridas.filter(s => s.date >= cut7);
+    const lw_run = corridas.filter(s => s.date >= cut14 && s.date < cut7);
+    const tw_run_min = tw_run.reduce((a,s) => a+(parseInt(s.min)||0), 0);
+    const lw_run_min = lw_run.reduce((a,s) => a+(parseInt(s.min)||0), 0);
+    const tw_total = tw_gym + tw_bjj.length + tw_run.length;
+    const lw_total = lw_gym + lw_bjj.length + lw_run.length;
+
+    const macLog2 = getMacrosLog ? getMacrosLog() : {};
+    let thisCal=0,thisDays=0,lastCal=0,lastDays=0;
+    Object.entries(macLog2).forEach(function([d,v]){
+      if(d>=cut7&&v.cal){thisCal+=v.cal;thisDays++;}
+      else if(d>=cut14&&d<cut7&&v.cal){lastCal+=v.cal;lastDays++;}
+    });
+
+    const acwr3 = calcACWR();
+
+    function badge2(curr, prev) {
+      if(!prev||!curr||curr===prev) return '';
+      const up = curr > prev, col = up ? '#22c55e' : '#f87171';
+      return '<span style="color:'+col+';font-size:0.6rem;margin-left:3px">'+(up?'↑':'↓')+Math.abs(curr-prev)+'</span>';
+    }
+
+    const rows6 = [
+      ['🗓️','Atividades totais',   tw_total,                         lw_total],
+      ['🏋️','Academia (treinos)',  tw_gym,                           lw_gym],
+      ['🥋','BJJ (minutos)',       tw_bjj_min,                       lw_bjj_min],
+      ['🏃','Corrida / HIIT (min)',tw_run_min,                       lw_run_min],
+      ['⚡','Carga total (UA)',    Math.round(acwr3.week1||0),       Math.round(acwr3.week2||0)],
+      ['🥗','Kcal/dia (média)',    thisDays?Math.round(thisCal/thisDays):0, lastDays?Math.round(lastCal/lastDays):0],
+    ];
+
+    semanaHtml = '<div style="padding:0 2px">' +
+      rows6.map(function([icon,label,curr,prev]){
+        return '<div style="display:flex;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)">' +
+          '<span style="font-size:1rem;width:26px">'+icon+'</span>' +
+          '<span style="flex:1;font-size:0.72rem;color:var(--muted)">'+label+'</span>' +
+          '<span style="font-size:0.8rem;font-weight:800;color:var(--text)">'+(curr||'—')+badge2(curr,prev)+'</span>' +
+        '</div>';
+      }).join('') +
+      '<div style="font-size:0.58rem;color:var(--muted);margin-top:5px;text-align:right">↑↓ comparado com os 7 dias anteriores</div>' +
+    '</div>';
+  } catch(e) { semanaHtml = '<div class="evo-empty">Sem dados suficientes.</div>'; }
+
+  // ── SEÇÃO 7: Gráfico de Peso ─────────────────────────────────
+  let pesoHtml = '';
+  try {
+    const wLog = JSON.parse(localStorage.getItem('projeto_tatame_daily_weight') || '{}');
+    const wEntries = Object.entries(wLog).sort(function(a,b){return a[0].localeCompare(b[0]);});
+    if (wEntries.length < 2) {
+      pesoHtml = '<div class="evo-empty">Registre ao menos 2 dias de peso para ver o gráfico.</div>';
+    } else {
+      const pts = wEntries.slice(-90);
+      const vals = pts.map(function([,v]){ return parseFloat(v)||0; });
+      const minV = Math.min.apply(null,vals) - 0.5;
+      const maxV = Math.max.apply(null,vals) + 0.5;
+      const W=300, H=80, PAD=10;
+      const xs = pts.map(function(_,i){ return PAD + (i/(pts.length-1))*(W-PAD*2); });
+      const ys = vals.map(function(v){ return PAD + (1-(v-minV)/(maxV-minV))*(H-PAD*2); });
+      let pathD = 'M '+xs[0].toFixed(1)+' '+ys[0].toFixed(1);
+      for(let i=1;i<xs.length;i++) pathD += ' L '+xs[i].toFixed(1)+' '+ys[i].toFixed(1);
+      const fillD = pathD + ' L '+xs[xs.length-1].toFixed(1)+' '+(H-PAD)+' L '+xs[0].toFixed(1)+' '+(H-PAD)+' Z';
+      const lastVal = vals[vals.length-1];
+      const firstVal = vals[0];
+      const diff = lastVal - firstVal;
+      const col = diff <= 0 ? '#22c55e' : '#f87171';
+      const trendTxt = (diff>0?'+':'')+diff.toFixed(1)+' kg vs início';
+      const minIdx = vals.indexOf(Math.min.apply(null,vals));
+      const maxIdx = vals.indexOf(Math.max.apply(null,vals));
+      // Moving average (7-day) for overlay
+      let maPath = '';
+      for(let i=3;i<pts.length;i++) {
+        const slice = vals.slice(Math.max(0,i-3),i+4);
+        const avg = slice.reduce(function(a,b){return a+b;},0)/slice.length;
+        const mx = xs[i], my = PAD + (1-(avg-minV)/(maxV-minV))*(H-PAD*2);
+        maPath += (i===3?'M':'L')+mx.toFixed(1)+' '+my.toFixed(1)+' ';
+      }
+      pesoHtml =
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">' +
+          '<div><span style="font-size:1.6rem;font-weight:900;color:var(--text)">'+lastVal.toFixed(1)+'<span style="font-size:0.8rem;font-weight:400"> kg</span></span>' +
+            '<div style="font-size:0.65rem;color:'+col+'">'+trendTxt+'</div></div>' +
+          '<div style="font-size:0.6rem;color:var(--muted);text-align:right">'+pts.length+' registros<br>'+pts[0][0].slice(5)+' → '+pts[pts.length-1][0].slice(5)+'</div>' +
+        '</div>' +
+        '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;overflow:visible">' +
+          '<defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+col+'" stop-opacity="0.25"/><stop offset="100%" stop-color="'+col+'" stop-opacity="0"/></linearGradient></defs>' +
+          '<path d="'+fillD+'" fill="url(#wg)"/>' +
+          '<path d="'+pathD+'" fill="none" stroke="'+col+'" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>' +
+          (maPath ? '<path d="'+maPath+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' : '') +
+          '<circle cx="'+xs[xs.length-1].toFixed(1)+'" cy="'+ys[ys.length-1].toFixed(1)+'" r="3.5" fill="'+col+'"/>' +
+          '<text x="'+xs[minIdx].toFixed(1)+'" y="'+(ys[minIdx]+11).toFixed(1)+'" text-anchor="middle" font-size="7" fill="#888">'+vals[minIdx].toFixed(1)+'</text>' +
+          '<text x="'+xs[maxIdx].toFixed(1)+'" y="'+(ys[maxIdx]-5).toFixed(1)+'" text-anchor="middle" font-size="7" fill="#888">'+vals[maxIdx].toFixed(1)+'</text>' +
+        '</svg>' +
+        '<div style="display:flex;justify-content:space-between;font-size:0.55rem;color:var(--muted);margin-top:2px">' +
+          '<span>'+pts[0][0].slice(5)+'</span><span>'+pts[Math.floor(pts.length/2)][0].slice(5)+'</span><span>'+pts[pts.length-1][0].slice(5)+'</span>' +
+        '</div>';
+    }
+  } catch(e) { pesoHtml = '<div class="evo-empty">Sem dados de peso.</div>'; }
+
+  // ── SEÇÃO 8: Heatmap de Consistência ─────────────────────────
+  let heatHtml = '';
+  try {
+    const gymDates = new Set(sessions.map(function(s){return s.date;}));
+    const bjjDates = new Set(jjS.map(function(s){return s.date;}));
+    const runDates = new Set(corridas.map(function(s){return s.date;}));
+    const nowD = brDate();
+    const startD = new Date(nowD);
+    startD.setDate(startD.getDate() - startD.getDay() - 12*7);
+    let weekCols = '', curWeek = '';
+    for(let i=0;i<91;i++) {
+      const d = new Date(startD.getTime() + i*86400000);
+      const ds = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+      const g=gymDates.has(ds), b=bjjDates.has(ds), r=runDates.has(ds);
+      const n=(g?1:0)+(b?1:0)+(r?1:0);
+      let bg = 'var(--card2)';
+      if(n>=2 && g && b)  bg='#c084fc';
+      else if(n>=2)       bg='#a78bfa';
+      else if(b)          bg='#f472b6';
+      else if(g)          bg='#818cf8';
+      else if(r)          bg='#34d399';
+      const future = d > nowD;
+      curWeek += '<div style="width:9px;height:9px;border-radius:2px;background:'+bg+';opacity:'+(future?'0.12':'0.9')+'" title="'+ds+'"></div>';
+      if(i%7===6){ weekCols+='<div style="display:flex;flex-direction:column;gap:2px">'+curWeek+'</div>'; curWeek=''; }
+    }
+    const totalDays = gymDates.size + bjjDates.size + runDates.size;
+    heatHtml =
+      '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch">' +
+        '<div style="display:flex;gap:2px;padding-bottom:4px">'+weekCols+'</div>' +
+      '</div>' +
+      '<div style="display:flex;gap:10px;font-size:0.6rem;color:var(--muted);margin-top:6px;flex-wrap:wrap">' +
+        '<span><span style="display:inline-block;width:8px;height:8px;background:#818cf8;border-radius:2px;margin-right:2px;vertical-align:middle"></span>Academia</span>' +
+        '<span><span style="display:inline-block;width:8px;height:8px;background:#f472b6;border-radius:2px;margin-right:2px;vertical-align:middle"></span>BJJ</span>' +
+        '<span><span style="display:inline-block;width:8px;height:8px;background:#34d399;border-radius:2px;margin-right:2px;vertical-align:middle"></span>Corrida</span>' +
+        '<span><span style="display:inline-block;width:8px;height:8px;background:#c084fc;border-radius:2px;margin-right:2px;vertical-align:middle"></span>Duplo</span>' +
+      '</div>';
+  } catch(e) { heatHtml = '<div class="evo-empty">Sem dados.</div>'; }
+
+  // ── SEÇÃO 9: Progressão de Força ─────────────────────────────
+  let forcaHtml = '';
+  try {
+    const allM = typeof getAllMetrics === 'function' ? getAllMetrics() : {};
+    let cards9 = '', found9 = 0;
+    Object.keys(allM).forEach(function(key) {
+      const logs = allM[key];
+      if(!logs||logs.length<2) return;
+      const withW = logs.filter(function(l){return parseFloat(l.weight)>0;});
+      if(withW.length<2) return;
+      const sorted = [...withW].sort(function(a,b){return a.date.localeCompare(b.date);});
+      const latest = parseFloat(sorted[sorted.length-1].weight)||0;
+      const first  = parseFloat(sorted[0].weight)||0;
+      const diff   = latest - first;
+      const col9   = diff>0?'#22c55e':diff<0?'#f87171':'#888';
+      const trend9 = (diff>0?'+':'')+diff.toFixed(1)+' kg';
+      let label9 = '';
+      try { label9 = decodeURIComponent(key).replace(/_/g,' ').split(' ').slice(0,2).map(function(w){return w.charAt(0).toUpperCase()+w.slice(1);}).join(' '); }
+      catch(e2){ label9 = key.split('_').slice(0,2).join(' '); }
+      const sparkPts = sorted.slice(-12);
+      const sVals = sparkPts.map(function(l){return parseFloat(l.weight)||0;});
+      const sMin2 = Math.min.apply(null,sVals)-1, sMax2 = Math.max.apply(null,sVals)+1;
+      const sW=60,sH=24;
+      let spk = sVals.map(function(v,i){
+        const sx=(i/(sVals.length-1))*sW, sy=sH-((v-sMin2)/(sMax2-sMin2))*sH;
+        return (i===0?'M':'L')+sx.toFixed(1)+' '+sy.toFixed(1);
+      }).join(' ');
+      cards9 +=
+        '<div style="flex:1;min-width:130px;background:var(--card2);border-radius:8px;padding:8px 10px">' +
+          '<div style="font-size:0.62rem;color:var(--muted);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+label9+'</div>' +
+          '<div style="display:flex;align-items:flex-end;justify-content:space-between">' +
+            '<div>' +
+              '<span style="font-size:1.05rem;font-weight:900;color:var(--text)">'+latest.toFixed(1)+'</span><span style="font-size:0.6rem;color:var(--muted)"> kg</span>' +
+              '<div style="font-size:0.6rem;color:'+col9+'">'+trend9+'</div>' +
+            '</div>' +
+            (sVals.length>=2?'<svg viewBox="0 0 '+sW+' '+sH+'" style="width:60px;height:24px"><path d="'+spk+'" fill="none" stroke="'+col9+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':'') +
+          '</div>' +
+        '</div>';
+      found9++;
+    });
+    forcaHtml = found9 === 0
+      ? '<div class="evo-empty">Registre cargas nos treinos para ver a progressão.</div>'
+      : '<div style="display:flex;flex-wrap:wrap;gap:6px">'+cards9+'</div>';
+  } catch(e) { forcaHtml = '<div class="evo-empty">Sem dados de força.</div>'; }
+
   // ── MONTA TUDO ───────────────────────────────────────────────
   el.innerHTML =
+    evoSection('📅', 'Semana: Esta vs Anterior', 'Carga', 'analise', semanaHtml) +
     evoSection('🏋️', 'Histórico Academia', 'Ver completo', 'd', acadHtml) +
     evoSection('🥋', 'Histórico BJJ', 'Ver completo', 'h', bjjHtml) +
     evoSection('⚖️', 'Composição Corporal', 'Bioimpedância', 'e', bioHtml) +
     evoSection('📊', 'Carga de Treino (ACWR)', 'Análise', 'analise', cargaHtml) +
+    evoSection('⚖️', 'Evolução do Peso', 'Físico', 'e', pesoHtml) +
+    evoSection('📅', 'Consistência (91 dias)', 'Treinos', 'd', heatHtml) +
+    evoSection('💪', 'Progressão de Força', 'Treinos', 'd', forcaHtml) +
     evoSection('🥗', 'Macros Recentes', 'Nutrição', 'f', macrosHtml);
 }
 
