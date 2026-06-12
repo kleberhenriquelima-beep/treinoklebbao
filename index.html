@@ -14534,5 +14534,44 @@ var _origResetBodyDores = null;
 <!-- input oculto para importar backup -->
 <input type="file" id="importFile" accept=".json" style="display:none" onchange="importBackup(event)">
 
+
+<script>
+// ── Auto-import bioimpedância 12/06/2026 (one-time, não sobrescreve) ──
+(function(){
+  try {
+    var KEY = 'projeto_tatame_bioimpedancia';
+    var TARGET_DATE = '2026-06-12';
+    var arr = [];
+    try { arr = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e2) {}
+    if (arr.some(function(e){ return e.date === TARGET_DATE; })) return;
+    arr.push({
+      date:      TARGET_DATE,
+      weight:    79.85,
+      bmi:       26.4,
+      fatPct:    25.2,
+      fatKg:     20.1,
+      musclePct: 71.0,
+      muscleKg:  56.7,
+      skelPct:   37.9,
+      skelKg:    30.3,
+      waterPct:  52.9,
+      waterKg:   42.2,
+      vfat:      12.0,
+      metab:     1717.8,
+      protein:   14.5,
+      bone:      3.0
+    });
+    arr.sort(function(a,b){ return a.date.localeCompare(b.date); });
+    localStorage.setItem(KEY, JSON.stringify(arr));
+    // Also register daily weight
+    var wLog = {};
+    try { wLog = JSON.parse(localStorage.getItem('projeto_tatame_daily_weight') || '{}'); } catch(e3) {}
+    if (!wLog[TARGET_DATE]) {
+      wLog[TARGET_DATE] = 79.85;
+      localStorage.setItem('projeto_tatame_daily_weight', JSON.stringify(wLog));
+    }
+  } catch(e) {}
+})();
+</script>
 </body>
 </html>
