@@ -113,6 +113,32 @@ select option{background:var(--card)}
 .pill-gold{background:rgba(240,165,0,.2);color:var(--accent)}
 /* Responsive */
 @media(max-width:380px){.stats-grid{grid-template-columns:1fr 1fr}}
+
+/* ===== CRONÔMETRO DE TREINO ===== */
+.chrono-bar {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 -14px 14px;
+}
+.chrono-display {
+  font-size: 1.6rem; font-weight: 900; font-variant-numeric: tabular-nums;
+  color: var(--accent); flex: 1; letter-spacing: 0.05em;
+}
+.chrono-display.running { color: #22c55e; }
+.chrono-display.paused  { color: var(--accent); }
+.chrono-btn {
+  padding: 7px 13px; border-radius: 10px; border: none;
+  font-size: 0.78rem; font-weight: 700; cursor: pointer;
+  transition: opacity 0.15s;
+}
+.chrono-btn:active { opacity: 0.75; }
+.chrono-start  { background: #22c55e; color: #000; }
+.chrono-pause  { background: var(--accent); color: #000; }
+.chrono-stop   { background: var(--card2); color: var(--text); border: 1px solid var(--border); }
+
 </style>
 </head>
 <body>
@@ -151,6 +177,15 @@ select option{background:var(--card)}
     <button class="tab-btn" onclick="showTreinoTab('taf',this)">TAF<br><span style="font-size:9px;font-weight:500;opacity:0.7">Ter/Qui/Sáb</span></button>
     <button class="tab-btn" onclick="showTreinoTab('livre',this)">Livre</button>
   </div>
+
+<!-- Cronômetro de Treino -->
+<div class="chrono-bar" id="chrono-bar">
+  <div class="chrono-display" id="chrono-display">00:00</div>
+  <button class="chrono-btn chrono-start" id="chrono-start-btn" onclick="chronoStart()">▶ Iniciar</button>
+  <button class="chrono-btn chrono-pause" id="chrono-pause-btn" onclick="chronoPause()" style="display:none">⏸ Pausar</button>
+  <button class="chrono-btn chrono-stop"  id="chrono-stop-btn"  onclick="chronoStop()"  style="display:none">⏹ Parar</button>
+</div>
+
   <div id="treino-tab-a" class="tab-pane active"></div>
   <div id="treino-tab-b" class="tab-pane"></div>
   <div id="treino-tab-c" class="tab-pane"></div>
@@ -496,7 +531,7 @@ function daysAgo(days) {
 function renderHome() {
   // Greeting
   var h = new Date().getHours();
-  var greet = h<12?'Bom dia':'h<18'?'Boa tarde':'Boa noite';
+  var greet = h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
   if(h>=12 && h<18) greet='Boa tarde';
   else if(h>=18) greet='Boa noite';
   else greet='Bom dia';
@@ -576,10 +611,15 @@ function renderHome() {
   // Recent
   var recent = [];
   sessions.slice(-3).reverse().forEach(function(s){
-    recent.push({date:s.date,text:'Treino '+s.type+' · '+s.duration+'min · RPE '+(s.rpe||'?')});
+    var tipo = s.type||'Livre';
+    var dur  = s.duration||'?';
+    var rpe  = s.rpe||'?';
+    recent.push({date:s.date,text:'🏋️ Treino '+tipo+' · '+dur+'min · RPE '+rpe});
   });
   jjS.slice(-2).reverse().forEach(function(s){
-    recent.push({date:s.date,text:'BJJ '+s.duration+'min · Int. '+(s.intensity||'?')});
+    var dur = s.duration||'?';
+    var gi  = s.gi?'Gi':'No-gi';
+    recent.push({date:s.date,text:'🥋 BJJ '+dur+'min · '+gi+' · Int. '+(s.intensity||'?')});
   });
   recent.sort(function(a,b){ return b.date.localeCompare(a.date); });
   var html = '';
@@ -1478,6 +1518,65 @@ function renderRunTafHistory() {
           + '</div>';
       }).join('');
 }
+
+// ===== CRONÔMETRO DE TREINO =====
+var _chronoInterval = null;
+var _chronoSeconds  = 0;
+var _chronoRunning  = false;
+
+function chronoFmt(s) {
+  var m = Math.floor(s/60);
+  var sec = s % 60;
+  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+function chronoTick() {
+  _chronoSeconds++;
+  var el = document.getElementById('chrono-display');
+  if(el) el.textContent = chronoFmt(_chronoSeconds);
+}
+function chronoStart() {
+  if(_chronoRunning) return;
+  _chronoRunning = true;
+  _chronoInterval = setInterval(chronoTick, 1000);
+  var d = document.getElementById('chrono-display');
+  if(d) { d.className = 'chrono-display running'; }
+  document.getElementById('chrono-start-btn').style.display = 'none';
+  document.getElementById('chrono-pause-btn').style.display = '';
+  document.getElementById('chrono-stop-btn').style.display  = '';
+}
+function chronoPause() {
+  if(!_chronoRunning) {
+    // Resume
+    chronoStart();
+    document.getElementById('chrono-pause-btn').textContent = '⏸ Pausar';
+    return;
+  }
+  _chronoRunning = false;
+  clearInterval(_chronoInterval);
+  var d = document.getElementById('chrono-display');
+  if(d) d.className = 'chrono-display paused';
+  document.getElementById('chrono-pause-btn').textContent = '▶ Retomar';
+}
+function chronoStop() {
+  _chronoRunning = false;
+  clearInterval(_chronoInterval);
+  var total = _chronoSeconds;
+  _chronoSeconds = 0;
+  var d = document.getElementById('chrono-display');
+  if(d) { d.textContent = '00:00'; d.className = 'chrono-display'; }
+  document.getElementById('chrono-start-btn').style.display = '';
+  document.getElementById('chrono-pause-btn').style.display = 'none';
+  document.getElementById('chrono-stop-btn').style.display  = 'none';
+  document.getElementById('chrono-pause-btn').textContent = '⏸ Pausar';
+  if(total >= 60) {
+    var mins = Math.round(total/60);
+    toast('✅ Treino concluído: ' + mins + ' min!', 3000);
+    // Pre-fill duration in treino livre form if available
+    var durEl = document.getElementById('dur');
+    if(durEl) durEl.value = mins;
+  }
+}
+
 </script>
 
 <script>
