@@ -139,6 +139,56 @@ select option{background:var(--card)}
 .chrono-pause  { background: var(--accent); color: #000; }
 .chrono-stop   { background: var(--card2); color: var(--text); border: 1px solid var(--border); }
 
+
+/* ===== PLANO ALIMENTAR ===== */
+.meal-block { background:var(--card); border-radius:12px; margin-bottom:10px; overflow:hidden; }
+.meal-header { display:flex; align-items:center; gap:10px; padding:12px 14px; cursor:pointer; }
+.meal-header:active { background:var(--card2); }
+.meal-time { font-size:0.72rem; font-weight:700; color:var(--accent); min-width:48px; }
+.meal-name { font-size:0.88rem; font-weight:700; flex:1; }
+.meal-chevron { font-size:0.7rem; color:var(--muted); transition:transform 0.2s; }
+.meal-chevron.open { transform:rotate(90deg); }
+.meal-body { display:none; padding:0 14px 14px; }
+.meal-body.open { display:block; }
+.meal-option { background:var(--card2); border-radius:8px; padding:10px 12px; margin-bottom:8px; }
+.meal-option-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--accent); margin-bottom:6px; }
+.meal-item { font-size:0.82rem; color:var(--text); padding:2px 0; border-bottom:1px solid var(--border); }
+.meal-item:last-child { border:none; }
+.meal-obs { font-size:0.75rem; color:var(--muted); font-style:italic; margin-top:6px; }
+.meal-badge { font-size:0.65rem; background:rgba(240,165,0,0.15); color:var(--accent); padding:2px 8px; border-radius:10px; font-weight:700; }
+
+
+/* ===== NUTRIÇÃO MELHORADA ===== */
+.creatina-btn { width:100%; padding:13px; border-radius:12px; border:2px solid var(--border);
+  background:var(--card2); color:var(--muted); font-size:0.88rem; font-weight:700; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s; }
+.creatina-btn.done { background:rgba(34,197,94,0.15); border-color:#22c55e; color:#22c55e; }
+.prot-bar-wrap { height:10px; background:var(--card2); border-radius:99px; overflow:hidden; margin:6px 0 2px; }
+.prot-bar-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#f0a500,#22c55e); transition:width 0.5s; }
+.adh-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 12px; border-radius:20px;
+  font-size:0.78rem; font-weight:700; }
+.adh-good { background:rgba(34,197,94,0.15); color:#22c55e; }
+.adh-mid  { background:rgba(240,165,0,0.15);  color:var(--accent); }
+.adh-low  { background:rgba(239,68,68,0.15);  color:#ef4444; }
+.meal-check-row { display:flex; align-items:center; gap:10px; padding:10px 14px;
+  border-bottom:1px solid var(--border); cursor:pointer; }
+.meal-check-row:last-child { border:none; }
+.meal-check-row:active { background:var(--card2); }
+.meal-check-box { width:22px; height:22px; border-radius:6px; border:2px solid var(--border);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s; }
+.meal-check-box.checked { background:#22c55e; border-color:#22c55e; color:#000; font-size:13px; font-weight:900; }
+.meal-check-info { flex:1; }
+.meal-check-time { font-size:0.68rem; color:var(--accent); font-weight:700; }
+.meal-check-name { font-size:0.85rem; font-weight:600; }
+.meal-check-opt { font-size:0.72rem; color:var(--muted); margin-top:2px; }
+.opt-selector { display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; padding:0 14px 10px 46px; }
+.opt-pill { font-size:0.7rem; padding:4px 10px; border-radius:20px; border:1px solid var(--border);
+  background:var(--card2); color:var(--muted); cursor:pointer; transition:all 0.15s; }
+.opt-pill.sel { background:rgba(240,165,0,0.2); border-color:var(--accent); color:var(--accent); font-weight:700; }
+.streak-num { font-size:2rem; font-weight:900; color:var(--accent); }
+.notes-textarea { width:100%; background:var(--card2); border:1px solid var(--border); border-radius:10px;
+  color:var(--text); font-size:0.85rem; padding:10px 12px; resize:none; outline:none; box-sizing:border-box; }
+
 </style>
 </head>
 <body>
@@ -273,6 +323,128 @@ select option{background:var(--card)}
 <div class="pane-inner">
   <div class="section-header">🥗 Nutrição</div>
   <div class="section-sub">Metas e registro de macros</div>
+
+  <!-- CREATINA -->
+  <button class="creatina-btn" id="creatina-btn" onclick="toggleCreatina()">
+    <span id="creatina-icon">💊</span>
+    <span id="creatina-txt">Tomar Creatina 7g (06:30)</span>
+  </button>
+
+  <!-- STREAK + ADERÊNCIA -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0">
+    <div class="card" style="text-align:center;padding:12px 8px">
+      <div class="streak-num" id="diet-streak">—</div>
+      <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">🔥 dias seguidos</div>
+    </div>
+    <div class="card" style="text-align:center;padding:12px 8px">
+      <div style="font-size:1.4rem;font-weight:900;color:var(--accent)" id="diet-adh-pct">—</div>
+      <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">📊 aderência semana</div>
+    </div>
+  </div>
+
+  <!-- PROTEÍNA DO DIA -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span style="font-size:0.78rem;font-weight:700">💪 Proteína do dia</span>
+      <span style="font-size:0.78rem;color:var(--muted)" id="prot-label">0 / 160g</span>
+    </div>
+    <div class="prot-bar-wrap"><div class="prot-bar-fill" id="prot-bar" style="width:0%"></div></div>
+    <div style="font-size:0.7rem;color:var(--muted);margin-bottom:8px">Atualiza automaticamente ao marcar refeições</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span style="font-size:0.78rem;font-weight:700">🔥 Calorias do dia</span>
+      <span style="font-size:0.78rem;color:var(--muted)" id="kcal-label">0kcal / 2000kcal</span>
+    </div>
+    <div class="prot-bar-wrap"><div class="prot-bar-fill" id="kcal-bar" style="width:0%;background:linear-gradient(90deg,#6366f1,#f0a500)"></div></div>
+    <div style="font-size:0.7rem;color:var(--muted);margin-top:4px">Atualiza automaticamente ao marcar refeições</div>
+  </div>
+
+  <!-- CHECKLIST DE REFEIÇÕES -->
+  <div class="section-divider">✅ Refeições de hoje</div>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:10px" id="meal-checklist">
+    <div class="meal-check-row" onclick="toggleMealCheck(this,'suplemento')" data-meal="suplemento">
+      <div class="meal-check-box" id="chk-suplemento"></div>
+      <div class="meal-check-info">
+        <div class="meal-check-time">06:30</div>
+        <div class="meal-check-name">💊 Suplemento</div>
+        <div class="meal-check-opt">Creatina 7g + Água 500mL</div>
+      </div>
+    </div>
+    <div class="meal-check-row" onclick="toggleMealCheck(this,'cafe')" data-meal="cafe">
+      <div class="meal-check-box" id="chk-cafe"></div>
+      <div class="meal-check-info">
+        <div class="meal-check-time">07:30</div>
+        <div class="meal-check-name">☀️ Café da manhã</div>
+        <div class="meal-check-opt" id="opt-cafe">Selecionar opção...</div>
+      </div>
+    </div>
+    <div class="opt-selector" id="opts-cafe" style="display:none">
+      <span class="opt-pill" onclick="selectOpt(event,'cafe','Op.1 — Ovos + Carb + Fruta')">Op.1 Tradicional</span>
+      <span class="opt-pill" onclick="selectOpt(event,'cafe','Op.2 — Vitamina Prática')">Op.2 Vitamina</span>
+    </div>
+    <div class="meal-check-row" onclick="toggleMealCheck(this,'lanche1')" data-meal="lanche1">
+      <div class="meal-check-box" id="chk-lanche1"></div>
+      <div class="meal-check-info">
+        <div class="meal-check-time">10:00</div>
+        <div class="meal-check-name">🍎 Lanche da manhã</div>
+        <div class="meal-check-opt" id="opt-lanche1">Selecionar opção...</div>
+      </div>
+    </div>
+    <div class="opt-selector" id="opts-lanche1" style="display:none">
+      <span class="opt-pill" onclick="selectOpt(event,'lanche1','Op.1 — Iogurte + Fruta')">Op.1 Iogurte</span>
+      <span class="opt-pill" onclick="selectOpt(event,'lanche1','Op.2 — Whey Shake')">Op.2 Whey</span>
+    </div>
+    <div class="meal-check-row" onclick="toggleMealCheck(this,'almoco')" data-meal="almoco">
+      <div class="meal-check-box" id="chk-almoco"></div>
+      <div class="meal-check-info">
+        <div class="meal-check-time">13:00</div>
+        <div class="meal-check-name">🍽️ Almoço</div>
+        <div class="meal-check-opt" id="opt-almoco">Selecionar opção...</div>
+      </div>
+    </div>
+    <div class="opt-selector" id="opts-almoco" style="display:none">
+      <span class="opt-pill" onclick="selectOpt(event,'almoco','Op.1 — Arroz + Frango')">Op.1 Tradicional</span>
+      <span class="opt-pill" onclick="selectOpt(event,'almoco','Op.2 — Salada Macarrão')">Op.2 Macarrão</span>
+      <span class="opt-pill" onclick="selectOpt(event,'almoco','Op.3 — Escondidinho')">Op.3 Escondidinho</span>
+    </div>
+    <div class="meal-check-row" onclick="toggleMealCheck(this,'lanche2')" data-meal="lanche2">
+      <div class="meal-check-box" id="chk-lanche2"></div>
+      <div class="meal-check-info">
+        <div class="meal-check-time">18:00</div>
+        <div class="meal-check-name">🥪 Lanche da tarde</div>
+        <div class="meal-check-opt" id="opt-lanche2">Selecionar opção...</div>
+      </div>
+    </div>
+    <div class="opt-selector" id="opts-lanche2" style="display:none">
+      <span class="opt-pill" onclick="selectOpt(event,'lanche2','Op.1 — Whey Shake')">Op.1 Whey</span>
+      <span class="opt-pill" onclick="selectOpt(event,'lanche2','Op.2 — Growth + Fruta')">Op.2 Growth</span>
+      <span class="opt-pill" onclick="selectOpt(event,'lanche2','Op.3 — Sanduíche Natural')">Op.3 Sanduíche</span>
+      <span class="opt-pill" onclick="selectOpt(event,'lanche2','Op.4 — Crepioca')">Op.4 Crepioca</span>
+    </div>
+    <div class="meal-check-row" onclick="toggleMealCheck(this,'jantar')" data-meal="jantar">
+      <div class="meal-check-box" id="chk-jantar"></div>
+      <div class="meal-check-info">
+        <div class="meal-check-time">22:00</div>
+        <div class="meal-check-name">🌙 Jantar</div>
+        <div class="meal-check-opt" id="opt-jantar">Selecionar opção...</div>
+      </div>
+    </div>
+    <div class="opt-selector" id="opts-jantar" style="display:none">
+      <span class="opt-pill" onclick="selectOpt(event,'jantar','Op.1 — Tradicional')">Op.1 Tradicional</span>
+      <span class="opt-pill" onclick="selectOpt(event,'jantar','Op.2 — Smoothie Proteico')">Op.2 Smoothie</span>
+      <span class="opt-pill" onclick="selectOpt(event,'jantar','Op.3 — Macarronada')">Op.3 Macarrão</span>
+      <span class="opt-pill" onclick="selectOpt(event,'jantar','Op.4 — Hambúrguer')">Op.4 Hambúrguer</span>
+    </div>
+  </div>
+
+  <!-- NOTAS PARA CONSULTA -->
+  <div class="section-divider">📝 Notas para próxima consulta</div>
+  <div class="card" style="margin-bottom:10px">
+    <textarea class="notes-textarea" id="consult-notes" rows="4"
+      placeholder="Anote aqui: fome, sintomas, dúvidas para o Nicolas..."></textarea>
+    <button onclick="saveConsultNotes()" style="width:100%;margin-top:8px;padding:10px;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-weight:700;cursor:pointer;font-size:0.85rem">💾 Salvar notas</button>
+    <div id="notes-feedback" style="font-size:0.75rem;color:var(--green);margin-top:6px;display:none">✅ Notas salvas!</div>
+  </div>
+
   <div class="card" id="macro-metas-card">
     <div style="font-weight:600;margin-bottom:12px">Metas Diárias</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -297,6 +469,184 @@ select option{background:var(--card)}
   </div>
   <div class="section-divider">Últimos 7 dias</div>
   <div id="macros-history"></div>
+
+  <div class="section-divider" style="margin-top:20px">📋 Plano Alimentar — Nut. Nicolas Gabriel</div>
+  <div style="font-size:0.75rem;color:var(--muted);margin-bottom:12px">Início: 18/07/2026 · Emagrecimento · Todos os dias</div>
+
+  <!-- 06:30 Suplemento -->
+  <div class="meal-block">
+    <div class="meal-header" onclick="toggleMeal(this)">
+      <span class="meal-time">06:30</span>
+      <span class="meal-name">💊 Suplemento</span>
+      <span class="meal-chevron">▶</span>
+    </div>
+    <div class="meal-body">
+      <div class="meal-option">
+        <div class="meal-item">Água — 500 mL</div>
+        <div class="meal-item">Creatina — 7 g</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07:30 Café da manhã -->
+  <div class="meal-block">
+    <div class="meal-header" onclick="toggleMeal(this)">
+      <span class="meal-time">07:30</span>
+      <span class="meal-name">☀️ Café da manhã</span>
+      <span class="meal-chevron">▶</span>
+    </div>
+    <div class="meal-body">
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 1</div>
+        <div class="meal-item">Pão francês (50g) <span style="color:var(--muted)">ou Tapioca (45g) ou Cuscuz (110g) ou Macaxeira (100g) ou Batata doce (140g) ou Pão de forma (50g)</span></div>
+        <div class="meal-item">Ovos — 2 unidades (100g)</div>
+        <div class="meal-item">Fruta <span style="color:var(--muted)">— Mamão (170g), Maçã (80g), Melão (115g) ou Banana 2un (110g)</span></div>
+      </div>
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 2 — Vitamina Prática 🥤</div>
+        <div class="meal-item">Banana — 1 un grande (55g)</div>
+        <div class="meal-item">Aveia em flocos — 1 colher sopa cheia (15g)</div>
+        <div class="meal-item">Psyllium — 1 colher sopa (10g)</div>
+        <div class="meal-item">Whey Protein — 1 medidor (30g)</div>
+        <div class="meal-item">Leite em pó integral — 1 colher sopa (16g)</div>
+        <div class="meal-obs">Adicione água até virar vitamina (tipo milkshake) ou sorvete (mais grosso)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10:00 Lanche -->
+  <div class="meal-block">
+    <div class="meal-header" onclick="toggleMeal(this)">
+      <span class="meal-time">10:00</span>
+      <span class="meal-name">🍎 Lanche da manhã</span>
+      <span class="meal-chevron">▶</span>
+    </div>
+    <div class="meal-body">
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 1 — Iogurte</div>
+        <div class="meal-item">Fruta <span style="color:var(--muted)">— Uva (80g), Abacaxi (75g), Maçã (80g), Mamão (170g), Melancia (190g), Morango (159g) ou Banana prata (52g)</span></div>
+        <div class="meal-item">Iogurte natural — 1 pote (170g)</div>
+        <div class="meal-item">Granola 2 col. sobremesa (20g) <span style="color:var(--muted)">ou Aveia (30g) ou Paçoca de amendoim (20g)</span></div>
+        <div class="meal-obs">Se não conseguir separar das 07:30, pode consumir junto</div>
+      </div>
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 2 — Whey</div>
+        <div class="meal-item">Whey Protein — 1 medidor (30g)</div>
+        <div class="meal-item">Farinha de aveia — 1 colher sopa (18g)</div>
+        <div class="meal-item">Leite em pó integral — 1 colher sopa (16g)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13:00 Almoço -->
+  <div class="meal-block">
+    <div class="meal-header" onclick="toggleMeal(this)">
+      <span class="meal-time">13:00</span>
+      <span class="meal-name">🍽️ Almoço</span>
+      <span class="meal-chevron">▶</span>
+    </div>
+    <div class="meal-body">
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 1 — Tradicional</div>
+        <div class="meal-item">Salada de legumes cozidos no vapor — 2 col. servir (110g)</div>
+        <div class="meal-item">Salada de folhas e vegetais — à vontade</div>
+        <div class="meal-item">Arroz branco — 3 col. servir (165g)</div>
+        <div class="meal-item">Proteína — Filé de frango (150g) <span style="color:var(--muted)">ou Sobrecoxa s/ pele (100g) ou Tilápia (495g)</span></div>
+      </div>
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 2 — Salada de Macarrão 🍝</div>
+        <div class="meal-item">Macarrão cozido — 4 col. servir (200g)</div>
+        <div class="meal-item">Frango desfiado 6 col. sopa (120g) <span style="color:var(--muted)">ou Patinho (100g)</span></div>
+        <div class="meal-obs">Acompanhamentos: milho, ervilha, tomate-cereja, cenoura ralada, azeitonas, brócolis. Ketchup com moderação, até 10g queijo ralado.</div>
+      </div>
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 3 — Escondidinho 🥘</div>
+        <div class="meal-item">Batata inglesa cozida — 4 col. servir rasas (160g)</div>
+        <div class="meal-item">Frango desfiado 6 col. sopa (120g) <span style="color:var(--muted)">ou Patinho (100g)</span></div>
+        <div class="meal-item">Requeijão cremoso — 1 col. sopa (30g)</div>
+        <div class="meal-item">Muçarela — 1 fatia fina (25g)</div>
+        <div class="meal-obs">Cozinhe as batatas, amasse com requeijão, monte em camadas com carne e queijo. Leve ao forno/airfryer até gratinar.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 18:00 Lanche -->
+  <div class="meal-block">
+    <div class="meal-header" onclick="toggleMeal(this)">
+      <span class="meal-time">18:00</span>
+      <span class="meal-name">🥪 Lanche da tarde</span>
+      <span class="meal-chevron">▶</span>
+    </div>
+    <div class="meal-body">
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 1 — Whey Shake</div>
+        <div class="meal-item">Whey Protein — 2 col. sopa (20g)</div>
+        <div class="meal-item">Leite em pó integral — 1 col. sopa (16g)</div>
+        <div class="meal-item">Farinha de aveia — 1 col. sopa (18g)</div>
+      </div>
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 2 — Yopro / Growth 🥛</div>
+        <div class="meal-item">Bebida Láctea de Proteínas Growth — 1 un (250mL)</div>
+        <div class="meal-item">Fruta — Maçã (130g) <span style="color:var(--muted)">ou Laranja (180g) ou Uva (170g)</span></div>
+      </div>
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 3 — Sanduíche Natural 🥙</div>
+        <div class="meal-item">Pão de forma — 2 fatias (50g)</div>
+        <div class="meal-item">Frango desfiado 3 col. sopa (60g) <span style="color:var(--muted)">ou Atum (48g)</span></div>
+        <div class="meal-item">Requeijão — 1 col. sopa rasa (15g)</div>
+        <div class="meal-item">Cenoura ralada — 2 col. sopa (46g) + Alface — 1 folha</div>
+        <div class="meal-obs">Faça um patê com frango/atum, requeijão e cenoura. Recheie o pão.</div>
+      </div>
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 4 — Crepioca 🫔</div>
+        <div class="meal-item">Ovo — 1 unidade (50g)</div>
+        <div class="meal-item">Tapioca de goma — 2 col. sopa rasas (30g)</div>
+        <div class="meal-item">Frango desfiado (30g) <span style="color:var(--muted)">ou Patinho (20g) ou Atum (32g)</span></div>
+        <div class="meal-item">Muçarela — 1 fatia média (20g)</div>
+        <div class="meal-obs">Misture tapioca com ovo para fazer a massa. Recheie com proteína e queijo. Pode adicionar folhas.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 22:00 Jantar -->
+  <div class="meal-block">
+    <div class="meal-header" onclick="toggleMeal(this)">
+      <span class="meal-time">22:00</span>
+      <span class="meal-name">🌙 Jantar</span>
+      <span class="meal-chevron">▶</span>
+    </div>
+    <div class="meal-body">
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 1 — Tradicional</div>
+        <div class="meal-item">Carboidrato — Inhame (150g) <span style="color:var(--muted)">ou Batata doce (140g) ou Macaxeira (150g) ou Batata inglesa (280g) ou Cuscuz (150g) ou Pão francês (50g)</span></div>
+        <div class="meal-item">Proteína — Tilápia 2 filés (110g) <span style="color:var(--muted)">ou Frango 1 filé grande (120g) ou Patinho (110g) ou Sobrecoxa s/pele (100g) ou 3 ovos (150g)</span></div>
+      </div>
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 2 — Smoothie Proteico 🥤</div>
+        <div class="meal-item">Whey Protein — 1 medidor (30g)</div>
+        <div class="meal-item">Banana — 2 un médias (80g)</div>
+        <div class="meal-item">Leite desnatado em pó — 2 col. sopa (20g)</div>
+        <div class="meal-item">Aveia em flocos — 2 col. sopa (30g)</div>
+        <div class="meal-item">Água — 300 mL</div>
+      </div>
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 3 — Macarronada 🍝</div>
+        <div class="meal-item">Macarrão cozido — 3 col. servir (150g)</div>
+        <div class="meal-item">Patinho grelhado 1 filé (110g) <span style="color:var(--muted)">ou Frango desfiado (160g)</span></div>
+        <div class="meal-item">Coca-cola zero — 1 copo</div>
+        <div class="meal-obs">Molho de tomate/ketchup com moderação. Até 10g queijo ralado.</div>
+      </div>
+      <div class="meal-option">
+        <div class="meal-option-label">Opção 4 — Hambúrguer 🍔</div>
+        <div class="meal-item">Pão francês — 1 unidade (50g)</div>
+        <div class="meal-item">Hambúrguer — 1 médio (100g)</div>
+        <div class="meal-item">Muçarela — 1 fatia (20g)</div>
+        <div class="meal-item">Alface + Tomate (30g) + Cebola (2g)</div>
+        <div class="meal-obs">Ketchup liberado! 🟢</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 </div>
 
@@ -500,7 +850,7 @@ function refreshPane(id) {
   if(id==='pane-home') renderHome();
   if(id==='pane-bjj') { setBJJDate(); renderBJJHistory(); }
   if(id==='pane-corpo') renderBioLast();
-  if(id==='pane-nutricao') { setMacrosDate(); renderMacrosMeta(); renderMacrosHistory(); }
+  if(id==='pane-nutricao') { setMacrosDate(); renderMacrosMeta(); renderMacrosHistory(); initNutricao(); }
   if(id==='pane-evolucao') renderEvo();
 }
 
@@ -1575,6 +1925,276 @@ function chronoStop() {
     var durEl = document.getElementById('dur');
     if(durEl) durEl.value = mins;
   }
+}
+
+
+function toggleMeal(header) {
+  var body = header.nextElementSibling;
+  var chevron = header.querySelector('.meal-chevron');
+  var isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+
+// ===== NUTRIÇÃO MELHORADA =====
+var K_DIET = 'tatame_diet_log'; // {date: {creatina,meals:{suplemento,cafe,...},prot,opts,notes}}
+
+function getDietLog() {
+  try { return JSON.parse(localStorage.getItem(K_DIET)||'{}'); } catch(e){ return {}; }
+}
+function saveDietLog(obj) {
+  localStorage.setItem(K_DIET, JSON.stringify(obj));
+}
+function getDietToday() {
+  var log = getDietLog();
+  var t = todayStr();
+  if(!log[t]) log[t] = { creatina:false, meals:{}, prot:0, opts:{}, notes:'' };
+  return { log:log, today:t, data:log[t] };
+}
+
+function toggleCreatina() {
+  var d = getDietToday();
+  d.data.creatina = !d.data.creatina;
+  d.log[d.today] = d.data;
+  saveDietLog(d.log);
+  renderNutTop();
+  // also sync suplemento checkbox
+  if(d.data.creatina) {
+    var d2 = getDietToday();
+    d2.data.meals['suplemento'] = true;
+    d2.log[d2.today] = d2.data;
+    saveDietLog(d2.log);
+    renderMealChecklist();
+  }
+}
+
+function toggleMealCheck(row, meal) {
+  var d = getDietToday();
+  var isChecked = d.data.meals[meal];
+  d.data.meals[meal] = !isChecked;
+  d.log[d.today] = d.data;
+  saveDietLog(d.log);
+  // toggle opts selector visibility
+  var opts = document.getElementById('opts-'+meal);
+  if(opts) opts.style.display = (!isChecked && opts.children.length) ? 'flex' : 'none';
+  renderMealChecklist();
+  renderNutTop();
+  applyAutoMacros();
+}
+
+function selectOpt(e, meal, label) {
+  e.stopPropagation();
+  var d = getDietToday();
+  d.data.opts[meal] = label;
+  d.data.meals[meal] = true;
+  d.log[d.today] = d.data;
+  saveDietLog(d.log);
+  // mark all pills in this group
+  var container = document.getElementById('opts-'+meal);
+  if(container) container.querySelectorAll('.opt-pill').forEach(function(p){ p.classList.remove('sel'); });
+  e.target.classList.add('sel');
+  var optEl = document.getElementById('opt-'+meal);
+  if(optEl) optEl.textContent = label;
+  renderMealChecklist();
+  renderNutTop();
+  applyAutoMacros();
+}
+
+function saveProtein() {
+  var val = parseFloat(document.getElementById('prot-input').value)||0;
+  var d = getDietToday();
+  d.data.prot = val;
+  d.log[d.today] = d.data;
+  saveDietLog(d.log);
+  document.getElementById('prot-input').value = '';
+  renderNutTop();
+  toast('Proteína registrada!');
+}
+
+function saveConsultNotes() {
+  var notes = (document.getElementById('consult-notes').value||'').trim();
+  var d = getDietToday();
+  d.data.notes = notes;
+  d.log[d.today] = d.data;
+  saveDietLog(d.log);
+  var fb = document.getElementById('notes-feedback');
+  if(fb){ fb.style.display='block'; setTimeout(function(){ fb.style.display='none'; },2000); }
+}
+
+function calcDietStreak() {
+  var log = getDietLog();
+  var streak = 0;
+  var d = new Date();
+  for(var i=0; i<90; i++) {
+    var str = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    var entry = log[str];
+    if(!entry) break;
+    var done = Object.values(entry.meals||{}).filter(Boolean).length;
+    if(done < 3) break;
+    streak++;
+    d.setDate(d.getDate()-1);
+  }
+  return streak;
+}
+
+function calcWeekAdh() {
+  var log = getDietLog();
+  var total = 0, done = 0;
+  var d = new Date();
+  for(var i=0; i<7; i++) {
+    var str = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    total += 6;
+    var entry = log[str];
+    if(entry) done += Object.values(entry.meals||{}).filter(Boolean).length;
+    d.setDate(d.getDate()-1);
+  }
+  return total ? Math.round(done/total*100) : 0;
+}
+
+function renderNutTop() {
+  var d = getDietToday();
+  // Creatina
+  var btn = document.getElementById('creatina-btn');
+  var icon = document.getElementById('creatina-icon');
+  var txt = document.getElementById('creatina-txt');
+  if(btn) {
+    btn.className = 'creatina-btn' + (d.data.creatina ? ' done' : '');
+    if(icon) icon.textContent = d.data.creatina ? '✅' : '💊';
+    if(txt) txt.textContent = d.data.creatina ? 'Creatina tomada hoje!' : 'Tomar Creatina 7g (06:30)';
+  }
+  // Proteína
+  var prot = d.data.prot || 0;
+  var meta = 160;
+  var pct = Math.min(100, Math.round(prot/meta*100));
+  var protBar = document.getElementById('prot-bar');
+  var protLbl = document.getElementById('prot-label');
+  if(protBar) protBar.style.width = pct+'%';
+  if(protLbl) protLbl.textContent = prot+'g / '+meta+'g';
+  // Streak
+  var streakEl = document.getElementById('diet-streak');
+  if(streakEl) streakEl.textContent = calcDietStreak();
+  // Aderência
+  var adhEl = document.getElementById('diet-adh-pct');
+  if(adhEl) {
+    var adh = calcWeekAdh();
+    adhEl.textContent = adh+'%';
+  }
+}
+
+function renderMealChecklist() {
+  var d = getDietToday();
+  var meals = ['suplemento','cafe','lanche1','almoco','lanche2','jantar'];
+  meals.forEach(function(meal) {
+    var box = document.getElementById('chk-'+meal);
+    if(!box) return;
+    var checked = !!d.data.meals[meal];
+    box.className = 'meal-check-box' + (checked ? ' checked' : '');
+    box.textContent = checked ? '✓' : '';
+    // restore selected option label
+    var optEl = document.getElementById('opt-'+meal);
+    if(optEl && d.data.opts[meal]) optEl.textContent = d.data.opts[meal];
+    // restore pill selection
+    var container = document.getElementById('opts-'+meal);
+    if(container && d.data.opts[meal]) {
+      container.querySelectorAll('.opt-pill').forEach(function(p){
+        p.classList.toggle('sel', p.textContent.trim() && d.data.opts[meal].indexOf(p.getAttribute('onclick')) > -1);
+      });
+      if(checked) container.style.display = 'flex';
+    }
+  });
+  // notes
+  var notesEl = document.getElementById('consult-notes');
+  if(notesEl && d.data.notes) notesEl.value = d.data.notes;
+  // protein input
+  var pi = document.getElementById('prot-input');
+  // prot bar will be updated by renderNutTop
+}
+
+function initNutricao() {
+  renderNutTop();
+  renderMealChecklist();
+  applyAutoMacros();
+}
+
+
+// ===== MACROS AUTOMÁTICOS POR REFEIÇÃO =====
+var MEAL_MACROS = {
+  suplemento: { default: { kcal:0, prot:0 } },
+  cafe: {
+    'Op.1 — Ovos + Carb + Fruta': { kcal:360, prot:18 },
+    'Op.2 — Vitamina Prática':     { kcal:343, prot:27 }
+  },
+  lanche1: {
+    'Op.1 — Iogurte + Fruta': { kcal:260, prot:12 },
+    'Op.2 — Whey Shake':       { kcal:265, prot:26 }
+  },
+  almoco: {
+    'Op.1 — Arroz + Frango':    { kcal:430, prot:33 },
+    'Op.2 — Salada Macarrão':   { kcal:392, prot:26 },
+    'Op.3 — Escondidinho':      { kcal:387, prot:30 }
+  },
+  lanche2: {
+    'Op.1 — Whey Shake':          { kcal:225, prot:18 },
+    'Op.2 — Growth + Fruta':      { kcal:250, prot:25 },
+    'Op.3 — Sanduíche Natural':   { kcal:246, prot:14 },
+    'Op.4 — Crepioca':            { kcal:278, prot:16 }
+  },
+  jantar: {
+    'Op.1 — Tradicional':         { kcal:360, prot:28 },
+    'Op.2 — Smoothie Proteico':   { kcal:377, prot:28 },
+    'Op.3 — Macarronada':         { kcal:380, prot:27 },
+    'Op.4 — Hambúrguer':          { kcal:455, prot:25 }
+  }
+};
+
+function calcAutoMacros() {
+  var d = getDietToday();
+  var totalKcal = 0, totalProt = 0;
+  var meals = ['suplemento','cafe','lanche1','almoco','lanche2','jantar'];
+  meals.forEach(function(meal) {
+    if(!d.data.meals[meal]) return;
+    var optLabel = d.data.opts[meal];
+    var mealData = MEAL_MACROS[meal];
+    if(!mealData) return;
+    var macros = optLabel ? mealData[optLabel] : mealData['default'];
+    if(!macros && !optLabel) {
+      // meal checked but no option selected — use average
+      var vals = Object.values(mealData);
+      if(vals.length) {
+        var avgK = vals.reduce(function(a,v){ return a+v.kcal; },0)/vals.length;
+        var avgP = vals.reduce(function(a,v){ return a+v.prot; },0)/vals.length;
+        macros = { kcal:Math.round(avgK), prot:Math.round(avgP) };
+      }
+    }
+    if(macros) { totalKcal += macros.kcal; totalProt += macros.prot; }
+  });
+  return { kcal:totalKcal, prot:totalProt };
+}
+
+function applyAutoMacros() {
+  var auto = calcAutoMacros();
+  // Update protein bar
+  var prot = auto.prot;
+  var metaProt = 160;
+  var pct = Math.min(100, Math.round(prot/metaProt*100));
+  var protBar = document.getElementById('prot-bar');
+  var protLbl = document.getElementById('prot-label');
+  if(protBar) protBar.style.width = pct+'%';
+  if(protLbl) protLbl.textContent = prot+'g / '+metaProt+'g';
+  // Update calorie bar
+  var metaKcal = 2000;
+  var pctK = Math.min(100, Math.round(auto.kcal/metaKcal*100));
+  var kcalBar = document.getElementById('kcal-bar');
+  var kcalLbl = document.getElementById('kcal-label');
+  if(kcalBar) kcalBar.style.width = pctK+'%';
+  if(kcalLbl) kcalLbl.textContent = auto.kcal+'kcal / '+metaKcal+'kcal';
+  // Also save protein so it persists
+  var d = getDietToday();
+  d.data.prot = prot;
+  d.data.kcal = auto.kcal;
+  d.log[d.today] = d.data;
+  saveDietLog(d.log);
 }
 
 </script>
